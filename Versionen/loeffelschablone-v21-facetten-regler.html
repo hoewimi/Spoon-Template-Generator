@@ -1,0 +1,1472 @@
+<title>Löffelschablone</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: Werkbank – Regler links, Schablone auf einer Schneidematte rechts; einspaltig auf dem Handy */
+:root {
+  --bg: #eef1ee;
+  --panel: #ffffff;
+  --fg: #1c2622;
+  --muted: #5b6a63;
+  --line: #d2dad5;
+  --accent: #2e6a56;
+  --accent-fg: #ffffff;
+  --mat: #24463b;
+  --mat-line: rgba(255,255,255,.08);
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111715; --panel: #19211e; --fg: #e2eae6; --muted: #93a39b; --line: #2b3732;
+    --accent: #72b99e; --accent-fg: #0c1411; --mat: #17302a; --mat-line: rgba(255,255,255,.06);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111715; --panel: #19211e; --fg: #e2eae6; --muted: #93a39b; --line: #2b3732;
+  --accent: #72b99e; --accent-fg: #0c1411; --mat: #17302a; --mat-line: rgba(255,255,255,.06);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 24px 40px;
+}
+.wrap { max-width: 1280px; margin: 0 auto; display: grid; gap: 20px; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; }
+.langs { display: flex; gap: 2px; }
+header { padding-right: clamp(130px, 21vw, 252px); }
+.langs button { font: 600 12px var(--font-mono); letter-spacing: .04em; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 6px; padding: 5px 9px; cursor: pointer; }
+.langs button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.langs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 4vw, 36px); letter-spacing: -.01em; margin: 0; text-wrap: balance; }
+.lede { color: var(--muted); margin: 0; max-width: 60ch; }
+.app { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 20px; align-items: start; }
+
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px; display: grid; gap: 20px; }
+.types { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.types button {
+  font: 500 14px/1.2 var(--font-body); color: var(--fg); background: transparent;
+  border: 1px solid var(--line); border-radius: 7px; padding: 10px 8px; cursor: pointer; text-align: left;
+}
+.types button small { display: block; color: var(--muted); font: 400 12px var(--font-mono); margin-top: 2px; }
+.types button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.types button[aria-pressed="true"] small { color: inherit; opacity: .8; }
+.types button:focus-visible, .btn:focus-visible, input[type=range]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.grp { border-top: 1px solid var(--line); }
+.grp summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font: 600 11px var(--font-body); text-transform: uppercase; letter-spacing: .09em; color: var(--muted); }
+.grp summary::-webkit-details-marker { display: none; }
+.grp summary::after { content: ""; width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin-right: 4px; transition: transform .15s; }
+.grp[open] summary::after { transform: rotate(-135deg); }
+.grp summary:hover { color: var(--fg); }
+.grp summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.grp-body { display: grid; gap: 12px; padding-bottom: 14px; }
+@media (prefers-reduced-motion: reduce) { .grp summary::after { transition: none; } }
+.field { display: grid; gap: 2px; }
+.field .row { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.field label { font-size: 14px; }
+.field output { font: 500 14px var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.field .hint { font-size: 12px; color: var(--muted); }
+.flabel { font-size: 14px; }
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 4px; margin-top: 4px; max-height: 236px; overflow-y: auto; padding: 2px; }
+.gallery button { display: grid; justify-items: center; gap: 0; color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 6px; padding: 4px 2px 3px; cursor: pointer; font: 500 10px var(--font-mono); }
+.gallery button.own { border-style: dashed; }
+.upl { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.upbtn { font: 500 12px var(--font-body); color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 6px; padding: 5px 9px; cursor: pointer; }
+.upbtn input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.upbtn:focus-within, .upbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.gallery button svg { width: 100%; height: 30px; }
+.gallery button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.gallery button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 4px; }
+.seg button { font: 500 13px var(--font-body); color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 6px; padding: 7px 4px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
+
+.stage { display: grid; gap: 12px; min-width: 0; }
+.mat {
+  background-color: var(--mat);
+  background-image: linear-gradient(var(--mat-line) 1px, transparent 1px), linear-gradient(90deg, var(--mat-line) 1px, transparent 1px);
+  background-size: 28px 28px; border-radius: 10px; padding: clamp(14px, 3vw, 32px);
+}
+.mat { display: grid; justify-items: center; position: relative; }
+.v3d { position: fixed; z-index: 20; top: calc(env(safe-area-inset-top, 0px) + 12px); right: max(12px, env(safe-area-inset-right, 0px)); width: clamp(120px, 20vw, 240px); background: rgba(10, 22, 18, .55); border: 1px solid rgba(255,255,255,.14); border-radius: 8px; overflow: hidden; backdrop-filter: blur(3px); }
+.v3d-head { display: flex; justify-content: space-between; align-items: center; padding: 4px 6px 4px 9px; color: #e8efe9; font: 600 11px var(--font-body); letter-spacing: .09em; }
+.v3d-head button { font: 500 11px var(--font-body); color: #e8efe9; background: transparent; border: 1px solid rgba(255,255,255,.25); border-radius: 5px; padding: 2px 7px; cursor: pointer; }
+.v3d-head button:focus-visible { outline: 2px solid #9fd6bf; outline-offset: 1px; }
+#c3d { display: block; width: 100%; aspect-ratio: 1; cursor: grab; touch-action: none; }
+#c3d:active { cursor: grabbing; }
+.sheet { width: min(100%, 560px); background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25), 0 8px 24px rgba(0,0,0,.25); }
+.sheet svg { display: block; width: 100%; height: auto; }
+/* Zoom in der Vorschau: gezoomt zum Verschieben greifen */
+.sheet.zoomed { cursor: grab; }
+.sheet.zoomed.panning { cursor: grabbing; }
+/* Zoom-Anzeige: Mini-Übersicht mit Rahmen, Zoomstufe und Knopf „Ganzes Blatt“, nur sichtbar wenn gezoomt */
+.zbadge { position: absolute; z-index: 5; top: 12px; left: 12px; display: grid; justify-items: center; gap: 6px; padding: 8px; background: rgba(10, 22, 18, .6); border: 1px solid rgba(255,255,255,.14); border-radius: 8px; color: #e8efe9; backdrop-filter: blur(3px); }
+.zmini svg { display: block; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.4); }
+.zlvl { font: 600 13px var(--font-mono); font-variant-numeric: tabular-nums; line-height: 1; }
+.zbadge button { font: 500 11px var(--font-body); color: #e8efe9; background: transparent; border: 1px solid rgba(255,255,255,.25); border-radius: 5px; padding: 3px 8px; cursor: pointer; white-space: nowrap; }
+.zbadge button:focus-visible { outline: 2px solid #9fd6bf; outline-offset: 1px; }
+
+.facts { display: flex; flex-wrap: wrap; gap: 8px 28px; font-size: 14px; }
+.facts div { display: grid; }
+.facts dt { font: 600 11px var(--font-body); text-transform: uppercase; letter-spacing: .09em; color: var(--muted); }
+.facts dd { margin: 0; font: 500 15px var(--font-mono); font-variant-numeric: tabular-nums; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { font: 600 14px var(--font-body); border-radius: 7px; padding: 10px 16px; cursor: pointer; border: 1px solid var(--accent); }
+.btn.primary { background: var(--accent); color: var(--accent-fg); }
+.btn.secondary { background: transparent; color: var(--fg); border-color: var(--line); }
+.btn:disabled { opacity: .5; cursor: default; }
+.btn.rnd { width: 100%; margin-top: 8px; padding: 8px 12px; font-size: 13px; }
+.status { font-size: 13px; color: var(--muted); }
+.warn { margin: 0; font-size: 13px; max-width: 70ch; padding: 8px 12px; border-left: 3px solid #c58a2a; background: color-mix(in srgb, #c58a2a 12%, transparent); }
+.note { font-size: 13px; color: var(--muted); margin: 0; max-width: 70ch; }
+
+/* ---------- Desktop: Vorschau bleibt neben den Reglern sichtbar ---------- */
+@media (min-width: 761px) {
+  .stage { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); }
+  .sheet { width: min(100%, 560px, calc((100vh - 330px) / 1.415)); }
+  .sheet.tall { width: min(100%, 560px, calc((100vh - 330px) / 2.87)); }
+}
+@media (min-width: 761px) and (max-width: 960px) { .app { grid-template-columns: 290px minmax(0, 1fr); } }
+/* Angaben, Hinweise und Speichern unter bzw. neben der Vorschau */
+.side { display: grid; gap: 12px; align-content: start; min-width: 0; }
+/* ---------- Breite Fenster: Vorschau füllt die Fensterhöhe, Angaben und Speichern rechts daneben, unterhalb des 3D-Fensters ---------- */
+@media (min-width: 1100px) {
+  .wrap { max-width: 1600px; }
+  .stage { height: calc(100vh - 32px); grid-template-columns: minmax(0, 1fr) clamp(220px, 20vw, 280px); }
+  .mat { container-type: size; min-height: 0; padding: 12px; align-content: center; }
+  .sheet { width: min(100cqw, 100cqh / 1.415); }
+  .sheet.tall { width: min(100cqw, 100cqh / 2.867); }
+  /* oben Platz für das 3D-Fenster lassen; reicht die Höhe nicht, scrollt die Spalte, Speichern steht zuerst */
+  .side { align-self: stretch; align-content: safe end; overflow-y: auto; padding-top: calc(clamp(120px, 20vw, 240px) + 32px); }
+  .side .actions { order: -1; }
+}
+
+/* ---------- Handy: Vorschau oben angeheftet, Regler darunter, Speichern unten ---------- */
+@media (max-width: 760px) {
+  body { padding-block: 12px calc(84px + env(safe-area-inset-bottom, 0px)); }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 40; background: var(--bg); }
+  header { padding-right: 0; gap: 6px 12px; align-items: center; }
+  header h1 { order: 1; }
+  .langs { order: 2; margin-left: auto; }
+  .lede { order: 3; flex-basis: 100%; }
+  h1 { font-size: 22px; }
+  .lede { font-size: 13px; }
+  .app { display: flex; flex-direction: column; gap: 12px; }
+  .stage { display: contents; }
+  .mat { order: 0; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; padding: 8px; border-radius: 10px; box-shadow: 0 6px 16px rgba(0,0,0,.18); display: flex; justify-content: center; align-items: flex-start; gap: 8px; }
+  .sheet { width: auto; height: min(36vh, 320px); }
+  .sheet svg { height: 100%; width: auto; }
+  .v3d { position: static; flex: 0 0 auto; width: min(32vw, 130px); }
+  .panel { order: 1; padding: 14px; }
+  .side { display: contents; }
+  .facts, .warn, .note { order: 2; }
+  .types { grid-template-columns: repeat(4, 1fr); }
+  .types button { padding: 8px 5px; font-size: 13px; text-align: center; }
+  .actions { position: fixed; z-index: 30; left: 0; right: 0; bottom: 0; gap: 8px; background: var(--panel); border-top: 1px solid var(--line); padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+  .actions .btn { flex: 1 1 0; min-height: 44px; }
+  .actions .status { flex-basis: 100%; order: 2; font-size: 12px; }
+  .actions .status:empty { display: none; }
+}
+/* Touch-Bedienung: größere Ziele */
+@media (pointer: coarse) {
+  input[type=range] { height: 32px; }
+  .gallery { grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); }
+  .gallery button { min-height: 52px; }
+  .grp summary { padding: 14px 0; }
+  .upbtn, .langs button, .v3d-head button { min-height: 36px; }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="langs" id="langs" role="group" aria-label="Sprache">
+      <button type="button" data-lang="de" lang="de">DE</button><button type="button" data-lang="nl" lang="nl">NL</button><button type="button" data-lang="en" lang="en">EN</button><button type="button" data-lang="fr" lang="fr">FR</button><button type="button" data-lang="sv" lang="sv">SV</button><button type="button" data-lang="es" lang="es">ES</button><button type="button" data-lang="it" lang="it">IT</button>
+    </div>
+    <h1 data-i="title">Löffelschablone</h1>
+    <p class="lede" data-i="lede">Löffelart wählen, Maße anpassen, Schablone in Originalgröße als PDF oder SVG speichern.</p>
+  </header>
+
+  <div class="app">
+    <aside class="panel" data-ia="settings" aria-label="Einstellungen">
+      <div>
+        <div class="types" id="types" role="group" data-ia="spoonType" aria-label="Löffelart"></div>
+        <button class="btn secondary rnd" id="rndBtn" type="button" data-i="random">Zufallsdesign</button>
+      </div>
+      <div id="fields"></div>
+    </aside>
+
+    <main class="stage">
+      <div class="mat">
+        <div class="sheet" id="sheet" data-ia="preview" aria-label="Vorschau der Schablone"></div>
+        <div class="zbadge" id="zbadge" hidden>
+          <div class="zmini" id="zmini" aria-hidden="true"></div>
+          <span class="zlvl" id="zlvl"></span>
+          <button type="button" id="zreset" data-i="zoomReset">Ganzes Blatt</button>
+        </div>
+        <div class="v3d" id="v3d">
+          <div class="v3d-head"><span>3D</span><button type="button" id="v3dToggle" aria-expanded="true" aria-controls="c3d" data-i="hide">Ausblenden</button></div>
+          <canvas id="c3d" data-ia="view3d" aria-label="3D-Ansicht des Löffels, zum Drehen ziehen"></canvas>
+        </div>
+      </div>
+      <div class="side">
+      <dl class="facts" id="facts"></dl>
+      <p class="warn" id="warn" data-i="warn" hidden>Crank über 15°: Bei geradfaserigem Holz entsteht an Hals und Laffenspitze Kurzfaser. Besser einen gebogenen Ast verwenden, dessen Wuchs der Kröpfung folgt.</p>
+      <p class="warn" id="warnMax" hidden></p>
+      <p class="warn" id="warnMouth" data-i="warnMouth" hidden></p>
+      <p class="warn" id="warnDepth" data-i="warnDepth" hidden></p>
+      <div class="actions">
+        <button class="btn primary" id="pdfBtn" type="button" data-i="pdf" disabled>PDF speichern</button>
+        <button class="btn secondary" id="svgBtn" type="button" data-i="svg" disabled>SVG speichern</button>
+        <button class="btn secondary" id="copyBtn" type="button" data-i="copy" hidden>SVG-Code kopieren</button>
+        <span class="status" id="status" role="status"></span>
+      </div>
+      <p class="note" data-i="note">Beim Drucken „Tatsächliche Größe“ bzw. 100 % wählen und den 50‑mm‑Balken nachmessen. Die Draufsicht zeigt den abgewickelten Umriss, die Seitenansicht die echte Biegung. Die Knicklinie verbindet beide Ansichten; im Stiel stehen sie auf gleicher Höhe. Die Faser des Rohlings sollte entlang des Stiels laufen.</p>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ---------- Sprachen ---------- */
+const I18N = {
+  de: {
+    title: "Löffelschablone", lede: "Löffelart wählen, Maße anpassen, Schablone in Originalgröße als PDF oder SVG speichern.",
+    settings: "Einstellungen", spoonType: "Löffelart", preview: "Vorschau der Schablone", lang: "Sprache",
+    hide: "Ausblenden", show: "Einblenden", view3d: "3D-Ansicht des Löffels, zum Drehen ziehen",
+    warn: "Crank über 15°: Bei geradfaserigem Holz entsteht an Hals und Laffenspitze Kurzfaser. Besser einen gebogenen Ast verwenden, dessen Wuchs der Kröpfung folgt.",
+    pdf: "PDF speichern", svg: "SVG speichern", copy: "SVG-Code kopieren",
+    note: "Beim Drucken „Tatsächliche Größe“ bzw. 100 % wählen und den 50‑mm‑Balken nachmessen. Die Draufsicht zeigt den abgewickelten Umriss, die Seitenansicht die echte Biegung. Die Knicklinie verbindet beide Ansichten; im Stiel stehen sie auf gleicher Höhe. Die Faser des Rohlings sollte entlang des Stiels laufen.",
+    blankMin: "Rohling mindestens", drop: "Drop", paper: "Blattgröße", portrait: "hoch",
+    types: { ess: "Esslöffel", koch: "Kochlöffel", tee: "Kaffeelöffel", kelle: "Schöpfkelle" },
+    files: { ess: "essloeffel", koch: "kochloeffel", tee: "kaffeeloeffel", kelle: "schoepfkelle", base: "loeffelschablone" },
+    groups: { gesamt: "Gesamt", laffe: "Laffe", stiel: "Stiel", seite: "Seitenprofil" },
+    fields: {
+      L: ["Gesamtlänge"], bl: ["Laffenlänge"], bw: ["Laffenbreite"],
+      bd: ["Laffentiefe", "Tiefe der Mulde, ohne Wandstärke"],
+      p: ["Breiteste Stelle", "Anteil der Laffenlänge, von der Spitze gemessen"],
+      bs: ["Laffenform"], nw: ["Halsbreite"], ew: ["Größte Griffbreite"], he: ["Griffende"],
+      th: ["Stielstärke am Hals", "Zum Griffende hin wird der Stiel dünner"],
+      ca: ["Crank-Winkel θ", "Winkel zwischen Laffenrand-Sehne und Stielachse. Kochlöffel 0–15°, Esslöffel 15–20°, Servierlöffel bis 30°, Kellen 60–90°"],
+      kp: ["Knickposition", "Anteil der Laffenlänge, vom hinteren Laffenende gemessen. Löffel 25–33 %, Kellen nahe am Hals"],
+      kr: ["Übergang am Knick", "Je größer, desto weicher die Rundung"],
+      hc: ["Stielkrümmung", "Positiv: Griffende biegt zur Laffenseite. Negativ: S-Form"],
+      fc: ["Facettenlinien am Hals"],
+      fs: ["Facettenstärke", "Leicht: schmale Fase an den Kanten. Achteckig: Querschnitt mit etwa acht gleichen Flächen."],
+      fr: ["Facettenbereich", "Hals: kurze Facette, die zu Laffe und Stiel hin ausläuft. Ganzer Stiel: bis kurz vor die Griffendform."],
+      fw: ["Facettenbreite", "Breite der Fase an der breitesten Stelle. Der Höchstwert ergibt einen achteckigen Querschnitt."],
+      fa: ["Facettenbeginn", "Abstand vom Laffenende bis zum Beginn der Facette."],
+      fl: ["Facettenlänge", "Länge der Facette entlang des Stiels, höchstens bis kurz vor die Griffendform."],
+      fv: ["Breiteste Stelle der Facette", "Anteil der Facettenlänge bis zur größten Breite; danach läuft sie spitz zum Griff aus."],
+      pp: ["Papier bei langen Schablonen"],
+      hd: ["Händigkeit", "Spiegelt asymmetrische Laffenformen. Die Vorlagen sind für Rechtshänder gezeichnet."]
+    },
+    shapes: { ei: "Spitz", rund: "Rund", schaufel: "Gerade", gerade: "Gerade", spitz: "Spitz" }, shapeNo: "Form",
+    specs: ["Gesamtlänge", "Stiellänge", "Laffenbreite", "Laffenlänge", "Crank-Winkel", "Drop", "Stielstärke"],
+    check: "50 mm · nachmessen", printAt: f => `Mit 100 % auf ${f} drucken`, units: "Maße in mm", grain: "Faser längs zum Stiel",
+    glue: n => `Kante von Seite ${n} hier anlegen`, pageNo: (i, n) => `Seite ${i}/${n}`, tooWide: " (zu breit für A4)",
+    blank: "Rohling", warn1: "Crank über 15°:", warn2: "gebogenen Ast verwenden", bend: "Knick", facets: "Facetten", fcOn: "An", fcOff: "Aus", fsL: "Leicht", fsA: "Achteckig", frH: "Hals", frS: "Ganzer Stiel", saw: "Sägeschnitt ca. 10 mm",
+    caMax: x => `Bei dieser Knickposition sind höchstens ${x}° möglich, sonst klappt die Laffenspitze über. Knick näher an den Hals legen.`, caMaxS: x => `Crank max. ${x}° bei dieser Knickposition`,
+    saved: (f, x) => `${f} gespeichert${x}.`, handed: "Datei übergeben.", declined: "Speichern abgebrochen.",
+    busy: "Es ist schon ein Speichern-Dialog offen.", failed: "Speichern hat nicht geklappt. Bitte erneut versuchen.",
+    noSave: "Speichern ist in dieser Ansicht nicht verfügbar. Du kannst den SVG-Code kopieren.",
+    own: "eigene Form", upload: "Eigene Form hochladen", remove: "Eigene Form entfernen", upHintBowl: "SVG oder Bild: dunkle Umrisslinie oder gefüllte Form auf hellem bzw. transparentem Grund, Spitze oben, Hals unten. Die Größe ist egal, es zählen nur die Proportionen.", upHintEnd: "SVG oder Bild: Griffende oben, Ansatz am Stiel unten, unten darf die Linie offen sein. Die Breite unten wird an den Stiel angepasst.", uploaded: c => `Form ${c} hinzugefügt.`, uploadFail: "Die Datei konnte nicht als Form gelesen werden. Bitte eine einzelne dunkle Umrisslinie auf hellem Grund verwenden.", shapesLbl: "Formen",
+    hdR: "Rechtshänder", hdL: "Linkshänder", random: "Zufallsdesign", share: "Laffenanteil", guide: "Richtwert",
+    warnMouth: "Laffe größer als etwa 45 × 65 mm: Für einen Esslöffel ist das zu groß für den Mund.", warnDepth: "Laffe tiefer als 8 mm: Die Oberlippe erreicht den Boden der Mulde nicht, der Löffel lässt sich schlecht leer essen.",
+    copied: "SVG-Code kopiert.", copyFail: "Kopieren nicht möglich.",
+    zoomHint: "Mausrad: zoomen · Ziehen: verschieben · Doppelklick: ganzes Blatt", zoomReset: "Ganzes Blatt"
+  },
+  nl: {
+    title: "Lepelsjabloon", lede: "Kies het type lepel, pas de maten aan en sla het sjabloon op ware grootte op als PDF of SVG.",
+    settings: "Instellingen", spoonType: "Type lepel", preview: "Voorbeeld van het sjabloon", lang: "Taal",
+    hide: "Verbergen", show: "Tonen", view3d: "3D-weergave van de lepel, sleep om te draaien",
+    warn: "Crank boven 15°: bij recht gegroeid hout ontstaat bij de hals en de punt van de kom korte vezel. Gebruik liever een gebogen tak waarvan de groei de knik volgt.",
+    pdf: "PDF opslaan", svg: "SVG opslaan", copy: "SVG-code kopiëren",
+    note: "Kies bij het afdrukken ‘Werkelijke grootte’ of 100 % en meet de balk van 50 mm na. Het bovenaanzicht toont de uitgeslagen omtrek, het zijaanzicht de echte buiging. De kniklijn verbindt beide aanzichten; bij de steel staan ze op dezelfde hoogte. De vezel van het werkstuk moet in de lengte van de steel lopen.",
+    blankMin: "Werkstuk minimaal", drop: "Drop", paper: "Papierformaat", portrait: "staand",
+    types: { ess: "Eetlepel", koch: "Kooklepel", tee: "Koffielepel", kelle: "Pollepel" },
+    files: { ess: "eetlepel", koch: "kooklepel", tee: "koffielepel", kelle: "pollepel", base: "lepelsjabloon" },
+    groups: { gesamt: "Algemeen", laffe: "Kom", stiel: "Steel", seite: "Zijprofiel" },
+    fields: {
+      L: ["Totale lengte"], bl: ["Lengte van de kom"], bw: ["Breedte van de kom"],
+      bd: ["Diepte van de kom", "Diepte van de holte, zonder wanddikte"],
+      p: ["Breedste punt", "Aandeel van de komlengte, gemeten vanaf de punt"],
+      bs: ["Vorm van de kom"], nw: ["Halsbreedte"], ew: ["Grootste greepbreedte"], he: ["Einde van de greep"],
+      th: ["Steeldikte bij de hals", "Naar het einde toe wordt de steel dunner"],
+      ca: ["Crankhoek θ", "Hoek tussen de koorde van de komrand en de as van de steel. Kooklepel 0–15°, eetlepel 15–20°, opscheplepel tot 30°, pollepels 60–90°"],
+      kp: ["Positie van de knik", "Aandeel van de komlengte, gemeten vanaf de achterkant van de kom. Lepels 25–33 %, pollepels dicht bij de hals"],
+      kr: ["Overgang bij de knik", "Hoe groter, hoe zachter de ronding"],
+      hc: ["Kromming van de steel", "Positief: het einde van de greep buigt naar de kant van de kom. Negatief: S-vorm"],
+      fc: ["Facetlijnen bij de hals"],
+      fs: ["Sterkte van de facetten", "Licht: smalle afschuining aan de randen. Achthoekig: doorsnede met ongeveer acht gelijke vlakken."],
+      fr: ["Bereik van de facetten", "Hals: korte facet die naar de kom en de steel uitloopt. Hele steel: tot vlak voor de vorm van het greepeinde."],
+      fw: ["Facetbreedte", "Breedte van de afschuining op het breedste punt. De hoogste waarde geeft een achthoekige doorsnede."],
+      fa: ["Begin van de facet", "Afstand van het einde van de kom tot het begin van de facet."],
+      fl: ["Lengte van de facet", "Lengte van de facet langs de steel, hoogstens tot vlak voor de vorm van het greepeinde."],
+      fv: ["Breedste punt van de facet", "Deel van de facetlengte tot de grootste breedte; daarna loopt de facet spits uit naar de greep."],
+      pp: ["Papier bij lange sjablonen"],
+      hd: ["Voorkeurshand", "Spiegelt asymmetrische komvormen. De voorbeelden zijn getekend voor rechtshandigen."]
+    },
+    shapes: { ei: "Spits", rund: "Rond", schaufel: "Recht", gerade: "Recht", spitz: "Spits" }, shapeNo: "Vorm",
+    specs: ["Totale lengte", "Steellengte", "Breedte kom", "Lengte kom", "Crankhoek", "Drop", "Steeldikte"],
+    check: "50 mm · nameten", printAt: f => `Afdrukken op 100 % op ${f}`, units: "Maten in mm", grain: "Vezel in de lengte van de steel",
+    glue: n => `Rand van pagina ${n} hier aanleggen`, pageNo: (i, n) => `Pagina ${i}/${n}`, tooWide: " (te breed voor A4)",
+    blank: "Werkstuk", warn1: "Crank boven 15°:", warn2: "gebogen tak gebruiken", bend: "Knik", facets: "Facetten", fcOn: "Aan", fcOff: "Uit", fsL: "Licht", fsA: "Achthoekig", frH: "Hals", frS: "Hele steel", saw: "Zaagsnede ca. 10 mm",
+    caMax: x => `Bij deze knikpositie is hoogstens ${x}° mogelijk, anders klapt de punt van de kom om. Leg de knik dichter bij de hals.`, caMaxS: x => `Crank max. ${x}° bij deze knikpositie`,
+    saved: (f, x) => `${f} opgeslagen${x}.`, handed: "Bestand doorgegeven.", declined: "Opslaan geannuleerd.",
+    busy: "Er is al een opslagvenster open.", failed: "Opslaan is niet gelukt. Probeer het opnieuw.",
+    noSave: "Opslaan is in deze weergave niet beschikbaar. Je kunt de SVG-code kopiëren.",
+    own: "eigen vorm", upload: "Eigen vorm uploaden", remove: "Eigen vorm verwijderen", upHintBowl: "SVG of afbeelding: donkere omtreklijn of gevulde vorm op een lichte of transparante achtergrond, punt boven, hals onder. Het formaat maakt niet uit, alleen de verhoudingen tellen.", upHintEnd: "SVG of afbeelding: einde van de greep boven, aansluiting op de steel onder, onderaan mag de lijn open zijn. De breedte onderaan wordt aan de steel aangepast.", uploaded: c => `Vorm ${c} toegevoegd.`, uploadFail: "Het bestand kon niet als vorm worden gelezen. Gebruik één donkere omtreklijn op een lichte achtergrond.", shapesLbl: "Vormen",
+    hdR: "Rechtshandig", hdL: "Linkshandig", random: "Willekeurig ontwerp", share: "Aandeel kom", guide: "richtwaarde",
+    warnMouth: "Kom groter dan ca. 45 × 65 mm: voor een eetlepel te groot voor de mond.", warnDepth: "Kom dieper dan 8 mm: de bovenlip bereikt de bodem van de holte niet, de lepel is moeilijk leeg te eten.",
+    copied: "SVG-code gekopieerd.", copyFail: "Kopiëren is niet mogelijk.",
+    zoomHint: "Muiswiel: zoomen · Slepen: verschuiven · Dubbelklik: hele blad", zoomReset: "Hele blad"
+  },
+  en: {
+    title: "Spoon Template", lede: "Choose a spoon type, adjust the measurements and save the template at full size as PDF or SVG.",
+    settings: "Settings", spoonType: "Spoon type", preview: "Template preview", lang: "Language",
+    hide: "Hide", show: "Show", view3d: "3D view of the spoon, drag to rotate",
+    warn: "Crank above 15°: in straight-grained wood this creates short grain at the neck and the bowl tip. Better use a bent branch whose growth follows the crank.",
+    pdf: "Save PDF", svg: "Save SVG", copy: "Copy SVG code",
+    note: "When printing, choose “Actual size” or 100 % and measure the 50 mm bar. The top view shows the flattened outline, the side view the real bend. The crank line links both views; along the handle they line up. The grain of the blank should run along the handle.",
+    blankMin: "Minimum blank", drop: "Drop", paper: "Paper size", portrait: "portrait",
+    types: { ess: "Eating spoon", koch: "Cooking spoon", tee: "Coffee spoon", kelle: "Ladle" },
+    files: { ess: "eating-spoon", koch: "cooking-spoon", tee: "coffee-spoon", kelle: "ladle", base: "spoon-template" },
+    groups: { gesamt: "Overall", laffe: "Bowl", stiel: "Handle", seite: "Side profile" },
+    fields: {
+      L: ["Overall length"], bl: ["Bowl length"], bw: ["Bowl width"],
+      bd: ["Bowl depth", "Depth of the hollow, without wall thickness"],
+      p: ["Widest point", "Share of the bowl length, measured from the tip"],
+      bs: ["Bowl shape"], nw: ["Neck width"], ew: ["Maximum handle width"], he: ["Handle end"],
+      th: ["Handle thickness at the neck", "The handle gets thinner towards its end"],
+      ca: ["Crank angle θ", "Angle between the bowl rim chord and the handle axis. Cooking spoon 0–15°, eating spoon 15–20°, serving spoon up to 30°, ladles 60–90°"],
+      kp: ["Crank position", "Share of the bowl length, measured from the back of the bowl. Spoons 25–33 %, ladles close to the neck"],
+      kr: ["Transition at the crank", "The larger, the softer the curve"],
+      hc: ["Handle curve", "Positive: the handle end bends towards the bowl side. Negative: S shape"],
+      fc: ["Facet lines at the neck"],
+      fs: ["Facet size", "Light: narrow chamfer on the edges. Octagonal: cross-section with about eight equal faces."],
+      fr: ["Facet range", "Neck: short facet that runs out towards bowl and handle. Whole handle: up to just before the handle end shape."],
+      fw: ["Facet width", "Width of the chamfer at its widest point. The highest value gives an octagonal cross-section."],
+      fa: ["Facet start", "Distance from the end of the bowl to the start of the facet."],
+      fl: ["Facet length", "Length of the facet along the handle, at most up to just before the handle end shape."],
+      fv: ["Widest point of the facet", "Share of the facet length up to the greatest width; after that it tapers to a point towards the handle."],
+      pp: ["Paper for long templates"],
+      hd: ["Handedness", "Mirrors asymmetric bowl shapes. The originals are drawn for right-handers."]
+    },
+    shapes: { ei: "Pointed", rund: "Round", schaufel: "Straight", gerade: "Straight", spitz: "Pointed" }, shapeNo: "Shape",
+    specs: ["Overall length", "Handle length", "Bowl width", "Bowl length", "Crank angle", "Drop", "Handle thickness"],
+    check: "50 mm · check", printAt: f => `Print at 100 % on ${f}`, units: "Dimensions in mm", grain: "Grain along the handle",
+    glue: n => `Place edge of page ${n} here`, pageNo: (i, n) => `Page ${i}/${n}`, tooWide: " (too wide for A4)",
+    blank: "Blank", warn1: "Crank above 15°:", warn2: "use a bent branch", bend: "Bend", facets: "Facets", fcOn: "On", fcOff: "Off", fsL: "Light", fsA: "Octagonal", frH: "Neck", frS: "Whole handle", saw: "Saw cut approx. 10 mm",
+    caMax: x => `At this bend position at most ${x}° is possible, otherwise the bowl tip folds over. Move the bend closer to the neck.`, caMaxS: x => `Crank max. ${x}° at this bend position`,
+    saved: (f, x) => `${f} saved${x}.`, handed: "File handed over.", declined: "Saving cancelled.",
+    busy: "A save dialog is already open.", failed: "Saving didn't work. Please try again.",
+    noSave: "Saving isn't available in this view. You can copy the SVG code.",
+    own: "own shape", upload: "Upload your own shape", remove: "Remove own shape", upHintBowl: "SVG or image: dark outline or filled shape on a light or transparent background, tip at the top, neck at the bottom. Size doesn't matter, only the proportions count.", upHintEnd: "SVG or image: handle end at the top, joint with the handle at the bottom, the line may be open there. The bottom width is matched to the handle.", uploaded: c => `Shape ${c} added.`, uploadFail: "The file couldn't be read as a shape. Please use a single dark outline on a light background.", shapesLbl: "Shapes",
+    hdR: "Right-handed", hdL: "Left-handed", random: "Random design", share: "Bowl share", guide: "guide",
+    warnMouth: "Bowl larger than about 45 × 65 mm: too big for the mouth on an eating spoon.", warnDepth: "Bowl deeper than 8 mm: the upper lip can't reach the bottom of the hollow, so the spoon is hard to empty.",
+    copied: "SVG code copied.", copyFail: "Copying isn't possible.",
+    zoomHint: "Mouse wheel: zoom · Drag: pan · Double-click: whole sheet", zoomReset: "Whole sheet"
+  },
+  fr: {
+    title: "Gabarit de cuillère", lede: "Choisissez le type de cuillère, ajustez les dimensions et enregistrez le gabarit en taille réelle au format PDF ou SVG.",
+    settings: "Réglages", spoonType: "Type de cuillère", preview: "Aperçu du gabarit", lang: "Langue",
+    hide: "Masquer", show: "Afficher", view3d: "Vue 3D de la cuillère, faites glisser pour la tourner",
+    warn: "Crank au-delà de 15° : dans un bois à fil droit, le fil devient court au col et à la pointe du cuilleron. Mieux vaut une branche courbe dont la croissance suit la cassure.",
+    pdf: "Enregistrer en PDF", svg: "Enregistrer en SVG", copy: "Copier le code SVG",
+    note: "À l'impression, choisissez « Taille réelle » ou 100 % et mesurez la barre de 50 mm. La vue de dessus montre le contour déplié, la vue de côté la courbure réelle. La ligne de cassure relie les deux vues ; le long du manche, elles sont alignées. Le fil de l'ébauche doit suivre le manche.",
+    blankMin: "Ébauche minimale", drop: "Drop", paper: "Format du papier", portrait: "portrait",
+    types: { ess: "Cuillère à soupe", koch: "Cuillère de cuisine", tee: "Cuillère à café", kelle: "Louche" },
+    files: { ess: "cuillere-a-soupe", koch: "cuillere-de-cuisine", tee: "cuillere-a-cafe", kelle: "louche", base: "gabarit-cuillere" },
+    groups: { gesamt: "Général", laffe: "Cuilleron", stiel: "Manche", seite: "Profil latéral" },
+    fields: {
+      L: ["Longueur totale"], bl: ["Longueur du cuilleron"], bw: ["Largeur du cuilleron"],
+      bd: ["Profondeur du cuilleron", "Profondeur du creux, sans épaisseur de paroi"],
+      p: ["Point le plus large", "Part de la longueur du cuilleron, mesurée depuis la pointe"],
+      bs: ["Forme du cuilleron"], nw: ["Largeur du col"], ew: ["Largeur max. du manche"], he: ["Bout du manche"],
+      th: ["Épaisseur du manche au col", "Le manche s'affine vers son extrémité"],
+      ca: ["Angle de crank θ", "Angle entre la corde du bord du cuilleron et l'axe du manche. Cuillère de cuisine 0–15°, cuillère à soupe 15–20°, cuillère de service jusqu'à 30°, louches 60–90°"],
+      kp: ["Position de la cassure", "Part de la longueur du cuilleron, mesurée depuis l'arrière du cuilleron. Cuillères 25–33 %, louches près du col"],
+      kr: ["Transition à la cassure", "Plus la valeur est grande, plus l'arrondi est doux"],
+      hc: ["Courbure du manche", "Positif : le bout du manche se courbe vers le côté du cuilleron. Négatif : forme en S"],
+      fc: ["Lignes de facettes au col"],
+      fs: ["Taille des facettes", "Légères : chanfrein étroit sur les arêtes. Octogonales : section à environ huit faces égales."],
+      fr: ["Zone des facettes", "Col : facette courte qui s'estompe vers le cuilleron et le manche. Tout le manche : jusque juste avant la forme du bout du manche."],
+      fw: ["Largeur des facettes", "Largeur du chanfrein à l'endroit le plus large. La valeur maximale donne une section octogonale."],
+      fa: ["Début des facettes", "Distance entre la fin du cuilleron et le début de la facette."],
+      fl: ["Longueur des facettes", "Longueur de la facette le long du manche, au plus jusque juste avant la forme du bout du manche."],
+      fv: ["Point le plus large de la facette", "Part de la longueur de la facette jusqu'à la plus grande largeur ; ensuite elle s'affine en pointe vers le manche."],
+      pp: ["Papier pour les longs gabarits"],
+      hd: ["Latéralité", "Inverse les formes de cuilleron asymétriques. Les modèles sont dessinés pour les droitiers."]
+    },
+    shapes: { ei: "Pointu", rund: "Rond", schaufel: "Droit", gerade: "Droit", spitz: "Pointu" }, shapeNo: "Forme",
+    specs: ["Longueur totale", "Longueur du manche", "Largeur cuilleron", "Longueur cuilleron", "Angle de crank", "Drop", "Épaisseur manche"],
+    check: "50 mm · à vérifier", printAt: f => `Imprimer à 100 % sur ${f}`, units: "Cotes en mm", grain: "Fil le long du manche",
+    glue: n => `Placer ici le bord de la page ${n}`, pageNo: (i, n) => `Page ${i}/${n}`, tooWide: " (trop large pour A4)",
+    blank: "Ébauche", warn1: "Crank au-delà de 15° :", warn2: "utiliser une branche courbe", bend: "Cassure", facets: "Facettes", fcOn: "Oui", fcOff: "Non", fsL: "Légères", fsA: "Octogonales", frH: "Col", frS: "Tout le manche", saw: "Trait de scie env. 10 mm",
+    caMax: x => `À cette position de cassure, ${x}° au maximum sont possibles, sinon la pointe du cuilleron se replie. Rapprochez la cassure du col.`, caMaxS: x => `Crank max. ${x}° à cette position de cassure`,
+    saved: (f, x) => `${f} enregistré${x}.`, handed: "Fichier transmis.", declined: "Enregistrement annulé.",
+    busy: "Une fenêtre d'enregistrement est déjà ouverte.", failed: "L'enregistrement a échoué. Veuillez réessayer.",
+    noSave: "L'enregistrement n'est pas disponible dans cette vue. Vous pouvez copier le code SVG.",
+    own: "forme perso", upload: "Importer une forme", remove: "Supprimer la forme", upHintBowl: "SVG ou image : contour foncé ou forme pleine sur fond clair ou transparent, pointe en haut, col en bas. La taille n'a pas d'importance, seules les proportions comptent.", upHintEnd: "SVG ou image : bout du manche en haut, jonction avec le manche en bas, la ligne peut y rester ouverte. La largeur du bas est adaptée au manche.", uploaded: c => `Forme ${c} ajoutée.`, uploadFail: "Le fichier n'a pas pu être lu comme une forme. Utilisez un seul contour foncé sur fond clair.", shapesLbl: "Formes",
+    hdR: "Droitier", hdL: "Gaucher", random: "Design aléatoire", share: "Part du cuilleron", guide: "repère",
+    warnMouth: "Cuilleron de plus d'environ 45 × 65 mm : trop grand pour la bouche pour une cuillère à soupe.", warnDepth: "Cuilleron de plus de 8 mm de profondeur : la lèvre supérieure n'atteint pas le fond du creux, la cuillère se vide mal.",
+    copied: "Code SVG copié.", copyFail: "Impossible de copier.",
+    zoomHint: "Molette : zoomer · Glisser : déplacer · Double-clic : page entière", zoomReset: "Page entière"
+  },
+  sv: {
+    title: "Skedmall", lede: "Välj skedtyp, anpassa måtten och spara mallen i full storlek som PDF eller SVG.",
+    settings: "Inställningar", spoonType: "Skedtyp", preview: "Förhandsvisning av mallen", lang: "Språk",
+    hide: "Dölj", show: "Visa", view3d: "3D-vy av skeden, dra för att vrida",
+    warn: "Crank över 15°: i rakvuxet virke blir fibrerna korta vid halsen och skålens spets. Använd hellre en krokvuxen gren vars växt följer knäcken.",
+    pdf: "Spara PDF", svg: "Spara SVG", copy: "Kopiera SVG-kod",
+    note: "Välj ”Faktisk storlek” eller 100 % vid utskrift och mät 50 mm-stapeln. Ovanvyn visar den utvikta konturen, sidovyn den verkliga böjen. Knäcklinjen förbinder båda vyerna; längs skaftet ligger de i höjd med varandra. Ämnets fibrer ska löpa längs skaftet.",
+    blankMin: "Minsta ämne", drop: "Drop", paper: "Pappersformat", portrait: "stående",
+    types: { ess: "Matsked", koch: "Grytsked", tee: "Kaffesked", kelle: "Slev" },
+    files: { ess: "matsked", koch: "grytsked", tee: "kaffesked", kelle: "slev", base: "skedmall" },
+    groups: { gesamt: "Allmänt", laffe: "Skål", stiel: "Skaft", seite: "Sidoprofil" },
+    fields: {
+      L: ["Total längd"], bl: ["Skålens längd"], bw: ["Skålens bredd"],
+      bd: ["Skålens djup", "Urholkningens djup, utan godstjocklek"],
+      p: ["Bredaste punkt", "Andel av skålens längd, mätt från spetsen"],
+      bs: ["Skålens form"], nw: ["Halsbredd"], ew: ["Största skaftbredd"], he: ["Skaftände"],
+      th: ["Skaftets tjocklek vid halsen", "Skaftet blir tunnare mot änden"],
+      ca: ["Crankvinkel θ", "Vinkel mellan korda längs skålens kant och skaftets axel. Grytsked 0–15°, matsked 15–20°, serveringssked upp till 30°, slevar 60–90°"],
+      kp: ["Knäckens läge", "Andel av skålens längd, mätt från skålens bakkant. Skedar 25–33 %, slevar nära halsen"],
+      kr: ["Övergång vid knäcken", "Ju större, desto mjukare rundning"],
+      hc: ["Skaftets krökning", "Positiv: skaftänden böjer mot skålens sida. Negativ: S-form"],
+      fc: ["Fasettlinjer vid halsen"],
+      fs: ["Fasetternas storlek", "Lätta: smal fas på kanterna. Åttkantiga: tvärsnitt med ungefär åtta lika stora ytor."],
+      fr: ["Fasetternas område", "Hals: kort fasett som löper ut mot skålen och skaftet. Hela skaftet: ända fram till skaftändens form."],
+      fw: ["Fasettens bredd", "Fasens bredd på det bredaste stället. Högsta värdet ger ett åttkantigt tvärsnitt."],
+      fa: ["Fasettens början", "Avstånd från skålens slut till fasettens början."],
+      fl: ["Fasettens längd", "Fasettens längd längs skaftet, högst fram till skaftändens form."],
+      fv: ["Fasettens bredaste ställe", "Andel av fasettens längd fram till största bredden; därefter löper den ut i en spets mot skaftet."],
+      pp: ["Papper för långa mallar"],
+      hd: ["Hänthet", "Spegelvänder asymmetriska skålformer. Förlagorna är ritade för högerhänta."]
+    },
+    shapes: { ei: "Spetsig", rund: "Rund", schaufel: "Rak", gerade: "Rak", spitz: "Spetsig" }, shapeNo: "Form",
+    specs: ["Total längd", "Skaftlängd", "Skålbredd", "Skållängd", "Crankvinkel", "Drop", "Skafttjocklek"],
+    check: "50 mm · kontrollmät", printAt: f => `Skriv ut i 100 % på ${f}`, units: "Mått i mm", grain: "Fibrer längs skaftet",
+    glue: n => `Lägg kanten på sida ${n} här`, pageNo: (i, n) => `Sida ${i}/${n}`, tooWide: " (för bred för A4)",
+    blank: "Ämne", warn1: "Crank över 15°:", warn2: "använd krokvuxen gren", bend: "Knäck", facets: "Fasetter", fcOn: "På", fcOff: "Av", fsL: "Lätta", fsA: "Åttkantiga", frH: "Hals", frS: "Hela skaftet", saw: "Sågsnitt ca 10 mm",
+    caMax: x => `Vid detta knäckläge är högst ${x}° möjligt, annars viks skålens spets bakåt. Flytta knäcken närmare halsen.`, caMaxS: x => `Crank max. ${x}° vid detta knäckläge`,
+    saved: (f, x) => `${f} sparad${x}.`, handed: "Filen har lämnats över.", declined: "Sparandet avbröts.",
+    busy: "Ett spara-fönster är redan öppet.", failed: "Det gick inte att spara. Försök igen.",
+    noSave: "Det går inte att spara i den här vyn. Du kan kopiera SVG-koden.",
+    own: "egen form", upload: "Ladda upp egen form", remove: "Ta bort egen form", upHintBowl: "SVG eller bild: mörk kontur eller fylld form på ljus eller transparent bakgrund, spetsen uppåt, halsen nedåt. Storleken spelar ingen roll, bara proportionerna räknas.", upHintEnd: "SVG eller bild: skaftänden uppåt, anslutningen till skaftet nedåt, linjen får vara öppen där. Bredden nedtill anpassas till skaftet.", uploaded: c => `Form ${c} har lagts till.`, uploadFail: "Filen kunde inte läsas som form. Använd en enda mörk kontur på ljus bakgrund.", shapesLbl: "Former",
+    hdR: "Högerhänt", hdL: "Vänsterhänt", random: "Slumpad design", share: "Skålens andel", guide: "riktvärde",
+    warnMouth: "Skålen större än ca 45 × 65 mm: för stor för munnen på en matsked.", warnDepth: "Skålen djupare än 8 mm: överläppen når inte botten av urholkningen, skeden blir svår att tömma.",
+    copied: "SVG-koden har kopierats.", copyFail: "Det gick inte att kopiera.",
+    zoomHint: "Mushjul: zooma · Dra: flytta · Dubbelklick: hela arket", zoomReset: "Hela arket"
+  },
+  es: {
+    title: "Plantilla de cuchara", lede: "Elige el tipo de cuchara, ajusta las medidas y guarda la plantilla a tamaño real en PDF o SVG.",
+    settings: "Ajustes", spoonType: "Tipo de cuchara", preview: "Vista previa de la plantilla", lang: "Idioma",
+    hide: "Ocultar", show: "Mostrar", view3d: "Vista 3D de la cuchara, arrastra para girarla",
+    warn: "Crank superior a 15°: en madera de fibra recta se forma fibra corta en el cuello y en la punta del cazo. Mejor usar una rama curva cuyo crecimiento siga el quiebre.",
+    pdf: "Guardar PDF", svg: "Guardar SVG", copy: "Copiar código SVG",
+    note: "Al imprimir, elige «Tamaño real» o 100 % y mide la barra de 50 mm. La vista superior muestra el contorno desplegado; la lateral, la curvatura real. La línea de quiebre une ambas vistas; a lo largo del mango quedan a la misma altura. La fibra del taco debe ir a lo largo del mango.",
+    blankMin: "Taco mínimo", drop: "Drop", paper: "Tamaño de papel", portrait: "vertical",
+    types: { ess: "Cuchara de mesa", koch: "Cuchara de cocina", tee: "Cucharilla de café", kelle: "Cucharón" },
+    files: { ess: "cuchara-de-mesa", koch: "cuchara-de-cocina", tee: "cucharilla-de-cafe", kelle: "cucharon", base: "plantilla-cuchara" },
+    groups: { gesamt: "General", laffe: "Cazo", stiel: "Mango", seite: "Perfil lateral" },
+    fields: {
+      L: ["Longitud total"], bl: ["Longitud del cazo"], bw: ["Anchura del cazo"],
+      bd: ["Profundidad del cazo", "Profundidad del hueco, sin grosor de pared"],
+      p: ["Punto más ancho", "Fracción de la longitud del cazo, medida desde la punta"],
+      bs: ["Forma del cazo"], nw: ["Anchura del cuello"], ew: ["Anchura máx. del mango"], he: ["Remate del mango"],
+      th: ["Grosor del mango en el cuello", "El mango se adelgaza hacia el extremo"],
+      ca: ["Ángulo de crank θ", "Ángulo entre la cuerda del borde del cazo y el eje del mango. Cuchara de cocina 0–15°, de mesa 15–20°, de servir hasta 30°, cucharones 60–90°"],
+      kp: ["Posición del quiebre", "Fracción de la longitud del cazo, medida desde la parte trasera del cazo. Cucharas 25–33 %, cucharones cerca del cuello"],
+      kr: ["Transición en el quiebre", "Cuanto mayor, más suave la curva"],
+      hc: ["Curvatura del mango", "Positivo: el extremo del mango se curva hacia el lado del cazo. Negativo: forma de S"],
+      fc: ["Líneas de facetas en el cuello"],
+      fs: ["Tamaño de las facetas", "Ligeras: chaflán estrecho en las aristas. Octogonales: sección con unas ocho caras iguales."],
+      fr: ["Zona de las facetas", "Cuello: faceta corta que se desvanece hacia el cazo y el mango. Todo el mango: hasta justo antes del remate del mango."],
+      fw: ["Anchura de las facetas", "Anchura del chaflán en su punto más ancho. El valor máximo da una sección octogonal."],
+      fa: ["Inicio de las facetas", "Distancia desde el final del cazo hasta el inicio de la faceta."],
+      fl: ["Longitud de las facetas", "Longitud de la faceta a lo largo del mango, como máximo hasta justo antes del remate del mango."],
+      fv: ["Punto más ancho de la faceta", "Parte de la longitud de la faceta hasta la anchura máxima; después se afina en punta hacia el mango."],
+      pp: ["Papel para plantillas largas"],
+      hd: ["Lateralidad", "Invierte las formas de cazo asimétricas. Los modelos están dibujados para diestros."]
+    },
+    shapes: { ei: "Puntiaguda", rund: "Redonda", schaufel: "Recta", gerade: "Recto", spitz: "Puntiagudo" }, shapeNo: "Forma",
+    specs: ["Longitud total", "Longitud del mango", "Anchura del cazo", "Longitud del cazo", "Ángulo de crank", "Drop", "Grosor del mango"],
+    check: "50 mm · comprobar", printAt: f => `Imprimir al 100 % en ${f}`, units: "Medidas en mm", grain: "Fibra a lo largo del mango",
+    glue: n => `Colocar aquí el borde de la página ${n}`, pageNo: (i, n) => `Página ${i}/${n}`, tooWide: " (demasiado ancha para A4)",
+    blank: "Taco", warn1: "Crank superior a 15°:", warn2: "usar una rama curva", bend: "Quiebre", facets: "Facetas", fcOn: "Sí", fcOff: "No", fsL: "Ligeras", fsA: "Octogonales", frH: "Cuello", frS: "Todo el mango", saw: "Corte de sierra aprox. 10 mm",
+    caMax: x => `En esta posición del quiebre solo son posibles ${x}° como máximo; si no, la punta del cazo se dobla hacia atrás. Acerca el quiebre al cuello.`, caMaxS: x => `Crank máx. ${x}° en esta posición del quiebre`,
+    saved: (f, x) => `${f} guardado${x}.`, handed: "Archivo entregado.", declined: "Guardado cancelado.",
+    busy: "Ya hay una ventana de guardado abierta.", failed: "No se pudo guardar. Inténtalo de nuevo.",
+    noSave: "No se puede guardar en esta vista. Puedes copiar el código SVG.",
+    own: "forma propia", upload: "Subir forma propia", remove: "Quitar forma propia", upHintBowl: "SVG o imagen: contorno oscuro o forma rellena sobre fondo claro o transparente, punta arriba, cuello abajo. El tamaño da igual, solo cuentan las proporciones.", upHintEnd: "SVG o imagen: remate del mango arriba, unión con el mango abajo; ahí la línea puede quedar abierta. La anchura inferior se ajusta al mango.", uploaded: c => `Forma ${c} añadida.`, uploadFail: "El archivo no se pudo leer como forma. Usa un único contorno oscuro sobre fondo claro.", shapesLbl: "Formas",
+    hdR: "Diestro", hdL: "Zurdo", random: "Diseño aleatorio", share: "Proporción del cazo", guide: "referencia",
+    warnMouth: "Cazo mayor de unos 45 × 65 mm: demasiado grande para la boca en una cuchara de mesa.", warnDepth: "Cazo de más de 8 mm de profundidad: el labio superior no llega al fondo del hueco y cuesta vaciar la cuchara.",
+    copied: "Código SVG copiado.", copyFail: "No se puede copiar.",
+    zoomHint: "Rueda del ratón: zoom · Arrastrar: mover · Doble clic: hoja completa", zoomReset: "Hoja completa"
+  },
+  it: {
+    title: "Dima per cucchiai", lede: "Scegli il tipo di cucchiaio, regola le misure e salva la dima a grandezza reale in PDF o SVG.",
+    settings: "Impostazioni", spoonType: "Tipo di cucchiaio", preview: "Anteprima della dima", lang: "Lingua",
+    hide: "Nascondi", show: "Mostra", view3d: "Vista 3D del cucchiaio, trascina per ruotarlo",
+    warn: "Crank oltre 15°: nel legno a fibra dritta si crea fibra corta al collo e sulla punta della coppa. Meglio usare un ramo curvo la cui crescita segua la piega.",
+    pdf: "Salva PDF", svg: "Salva SVG", copy: "Copia codice SVG",
+    note: "In stampa scegli «Dimensioni effettive» o 100 % e misura la barra da 50 mm. La vista dall'alto mostra il contorno sviluppato, quella laterale la curvatura reale. La linea di piega collega le due viste; lungo il manico sono alla stessa altezza. La fibra del pezzo deve correre lungo il manico.",
+    blankMin: "Pezzo minimo", drop: "Drop", paper: "Formato carta", portrait: "verticale",
+    types: { ess: "Cucchiaio da tavola", koch: "Cucchiaio da cucina", tee: "Cucchiaino da caffè", kelle: "Mestolo" },
+    files: { ess: "cucchiaio-da-tavola", koch: "cucchiaio-da-cucina", tee: "cucchiaino-da-caffe", kelle: "mestolo", base: "dima-cucchiaio" },
+    groups: { gesamt: "Generale", laffe: "Coppa", stiel: "Manico", seite: "Profilo laterale" },
+    fields: {
+      L: ["Lunghezza totale"], bl: ["Lunghezza della coppa"], bw: ["Larghezza della coppa"],
+      bd: ["Profondità della coppa", "Profondità dell'incavo, senza spessore della parete"],
+      p: ["Punto più largo", "Quota della lunghezza della coppa, misurata dalla punta"],
+      bs: ["Forma della coppa"], nw: ["Larghezza del collo"], ew: ["Larghezza max. del manico"], he: ["Estremità del manico"],
+      th: ["Spessore del manico al collo", "Il manico si assottiglia verso l'estremità"],
+      ca: ["Angolo di crank θ", "Angolo tra la corda del bordo della coppa e l'asse del manico. Cucchiaio da cucina 0–15°, da tavola 15–20°, da portata fino a 30°, mestoli 60–90°"],
+      kp: ["Posizione della piega", "Quota della lunghezza della coppa, misurata dal retro della coppa. Cucchiai 25–33 %, mestoli vicino al collo"],
+      kr: ["Raccordo alla piega", "Più è grande, più morbida è la curva"],
+      hc: ["Curvatura del manico", "Positivo: l'estremità del manico si piega verso il lato della coppa. Negativo: forma a S"],
+      fc: ["Linee delle sfaccettature al collo"],
+      fs: ["Dimensione delle sfaccettature", "Leggere: smusso stretto sugli spigoli. Ottagonali: sezione con circa otto facce uguali."],
+      fr: ["Zona delle sfaccettature", "Collo: sfaccettatura corta che sfuma verso la coppa e il manico. Tutto il manico: fino a poco prima della forma dell'estremità."],
+      fw: ["Larghezza delle sfaccettature", "Larghezza dello smusso nel punto più largo. Il valore massimo dà una sezione ottagonale."],
+      fa: ["Inizio delle sfaccettature", "Distanza dalla fine della coppa all'inizio della sfaccettatura."],
+      fl: ["Lunghezza delle sfaccettature", "Lunghezza della sfaccettatura lungo il manico, al massimo fino a poco prima della forma dell'estremità."],
+      fv: ["Punto più largo della sfaccettatura", "Parte della lunghezza della sfaccettatura fino alla larghezza massima; poi si assottiglia a punta verso il manico."],
+      pp: ["Carta per dime lunghe"],
+      hd: ["Lateralità", "Specchia le forme asimmetriche della coppa. I modelli sono disegnati per destrorsi."]
+    },
+    shapes: { ei: "Appuntita", rund: "Tonda", schaufel: "Dritta", gerade: "Dritta", spitz: "Appuntita" }, shapeNo: "Forma",
+    specs: ["Lunghezza totale", "Lunghezza manico", "Larghezza coppa", "Lunghezza coppa", "Angolo di crank", "Drop", "Spessore manico"],
+    check: "50 mm · verificare", printAt: f => `Stampare al 100 % su ${f}`, units: "Misure in mm", grain: "Fibra lungo il manico",
+    glue: n => `Appoggiare qui il bordo della pagina ${n}`, pageNo: (i, n) => `Pagina ${i}/${n}`, tooWide: " (troppo larga per A4)",
+    blank: "Pezzo", warn1: "Crank oltre 15°:", warn2: "usare un ramo curvo", bend: "Piega", facets: "Sfaccettature", fcOn: "Sì", fcOff: "No", fsL: "Leggere", fsA: "Ottagonali", frH: "Collo", frS: "Tutto il manico", saw: "Taglio di sega ca. 10 mm",
+    caMax: x => `In questa posizione della piega sono possibili al massimo ${x}°, altrimenti la punta della coppa si ripiega. Avvicina la piega al collo.`, caMaxS: x => `Crank max. ${x}° in questa posizione della piega`,
+    saved: (f, x) => `${f} salvato${x}.`, handed: "File consegnato.", declined: "Salvataggio annullato.",
+    busy: "C'è già una finestra di salvataggio aperta.", failed: "Salvataggio non riuscito. Riprova.",
+    noSave: "Il salvataggio non è disponibile in questa vista. Puoi copiare il codice SVG.",
+    own: "forma propria", upload: "Carica forma propria", remove: "Rimuovi forma propria", upHintBowl: "SVG o immagine: contorno scuro o forma piena su sfondo chiaro o trasparente, punta in alto, collo in basso. Le dimensioni non contano, contano solo le proporzioni.", upHintEnd: "SVG o immagine: estremità del manico in alto, attacco al manico in basso, lì la linea può restare aperta. La larghezza in basso viene adattata al manico.", uploaded: c => `Forma ${c} aggiunta.`, uploadFail: "Il file non è stato letto come forma. Usa un unico contorno scuro su sfondo chiaro.", shapesLbl: "Forme",
+    hdR: "Destrorso", hdL: "Mancino", random: "Design casuale", share: "Quota della coppa", guide: "riferimento",
+    warnMouth: "Coppa più grande di circa 45 × 65 mm: troppo grande per la bocca in un cucchiaio da tavola.", warnDepth: "Coppa più profonda di 8 mm: il labbro superiore non raggiunge il fondo dell'incavo e il cucchiaio si svuota male.",
+    copied: "Codice SVG copiato.", copyFail: "Impossibile copiare.",
+    zoomHint: "Rotella del mouse: zoom · Trascina: sposta · Doppio clic: foglio intero", zoomReset: "Foglio intero"
+  }
+};
+let lang = "de";
+try {
+  const sv = localStorage.getItem("loeffel-lang");
+  const nav = (navigator.language || "de").slice(0, 2).toLowerCase();
+  lang = I18N[sv] ? sv : I18N[nav] ? nav : "de";
+} catch (e) {}
+const T = k => I18N[lang][k];
+
+const PRESETS = {
+  ess:   { L: 170, bl: 58, bw: 42, bd: 7,  p: 44, nw: 12, ew: 24, th: 10, ca: 18, kp: 30, kr: 25, hc: 4,  bs: "ei",       he: "rund", fc: "an", fw: 2, fa: 0, fl: 28, fv: 25, pp: "a3", hd: "r" },
+  koch:  { L: 280, bl: 70, bw: 50, bd: 7,  p: 50, nw: 14, ew: 26, th: 14, ca: 5,  kp: 30, kr: 25, hc: 3,  bs: "schaufel", he: "spitz", fc: "an", fw: 2, fa: 0, fl: 52, fv: 25, pp: "a3", hd: "r" },
+  tee:   { L: 135, bl: 40, bw: 28, bd: 6,  p: 44, nw: 7,  ew: 17, th: 7,  ca: 15, kp: 30, kr: 15, hc: -3, bs: "ei",       he: "rund", fc: "an", fw: 1, fa: 0, fl: 25, fv: 25, pp: "a3", hd: "r" },
+  kelle: { L: 330, bl: 95, bw: 85, bd: 40, p: 50, nw: 18, ew: 28, th: 16, ca: 60, kp: 5,  kr: 35, hc: 6,  bs: "rund",     he: "gerade", fc: "an", fw: 2.5, fa: 0, fl: 58, fv: 25, pp: "a3", hd: "r" }
+};
+// Richtwerte für den Laffenanteil (Laffenlänge / Gesamtlänge) je Löffelart
+const SHARE = { ess: "≈ 33 %", koch: "≈ 25 %", tee: "≈ 30 %", kelle: "≤ 25 %" };
+const GROUPS = [
+  { id: "gesamt", fields: [
+    { k: "L", min: 100, max: 350 },
+    { k: "pp", choice: [["a3", "A3"], ["2a4", "2 × A4"]] } ] },
+  { id: "laffe", fields: [
+    { k: "bl", min: 25, max: 130 },
+    { k: "bw", min: 18, max: 110 },
+    { k: "bd", min: 2, max: 45 },
+    { k: "p",  label: "Breiteste Stelle", min: 30, max: 60, unit: "%" },
+    { k: "bs", gallery: true },
+    { k: "hd", choice: [["r", "hdR"], ["l", "hdL"]] } ] },
+  { id: "stiel", fields: [
+    { k: "nw", min: 6, max: 30 },
+    { k: "ew", min: 10, max: 45 },
+    { k: "he", gallery: true },
+    { k: "fc", choice: [["an", "fcOn"], ["aus", "fcOff"]] },
+    { k: "fw", min: 0.5, max: 12, step: 0.5 },
+    { k: "fa", min: 0, max: 80 },
+    { k: "fl", min: 15, max: 300 },
+    { k: "fv", min: 10, max: 60, unit: "%" } ] },
+  { id: "seite", fields: [
+    { k: "th", min: 5, max: 25 },
+    { k: "ca", min: 0, max: 90, unit: "°" },
+    { k: "kp", min: 0, max: 50, unit: "%" },
+    { k: "kr", min: 0, max: 40 },
+    { k: "hc", min: -20, max: 20 } ] }
+];
+
+let state = { type: "ess", P: { ...PRESETS.ess } };
+try {
+  const s = JSON.parse(localStorage.getItem("loeffel-state") || "null");
+  if (s && PRESETS[s.type] && s.P) state = { type: s.type, P: { ...PRESETS[s.type], ...s.P } };
+  // Einstellungen bis Version 20: fs (leicht/acht) und fr (hals/stiel) in Regler umrechnen
+  if (s && s.P && s.P.fw === undefined && s.P.fs === "acht") state.P.fw = 12;
+  if (s && s.P && s.P.fl === undefined && s.P.fr === "stiel") { state.P.fl = 300; state.P.fv = 10; }
+  delete state.P.fs; delete state.P.fr;
+  state.P.L = Math.min(state.P.L, 350);
+} catch (e) {}
+
+/* ---------- Geometrie (alle Werte in mm) ---------- */
+/* Laffenformen 1–34 aus „Bowldesign.pdf“, 35–42 aus dem Formenblatt: halbe Breite (links/rechts bzw. beidseitig) in 101 Schritten von der Spitze zum Hals, Gesamtbreite = 1000 */
+const BOWLS = {
+1:[0.71,[47,118,158,189,215,237,257,275,291,306,320,333,345,357,368,378,388,397,405,413,420,427,434,440,446,451,456,461,466,470,473,477,480,483,486,488,490,492,494,495,497,498,499,499,500,500,500,500,500,499,498,498,497,495,494,492,490,488,485,482,479,476,472,468,464,459,454,449,444,438,432,425,418,411,404,395,387,378,369,359,349,338,327,315,303,291,277,264,249,234,218,202,185,167,147,128,107,84,60,35,6]],
+2:[0.791,[53,120,159,189,213,235,254,271,287,301,315,327,339,350,361,371,380,389,397,405,413,420,427,433,439,444,449,454,458,463,466,470,473,477,480,482,485,487,489,491,493,495,496,497,498,499,499,500,500,500,500,500,499,499,498,497,496,495,493,491,490,488,485,483,481,478,475,472,468,464,460,456,451,446,441,435,430,424,417,410,402,395,386,377,368,358,346,335,323,309,295,280,262,245,223,202,175,147,111,71,12],[42,112,154,185,211,233,252,270,286,300,314,327,338,350,360,370,379,388,396,404,411,418,425,431,437,442,447,452,457,461,465,469,473,476,479,482,485,487,489,491,493,495,496,497,498,499,499,500,500,500,500,500,499,499,498,497,496,495,493,491,490,488,485,483,481,478,475,472,468,464,460,456,451,446,441,435,430,424,417,410,402,395,386,377,368,358,346,335,323,309,295,280,262,245,223,202,175,147,111,71,12]],
+3:[0.71,[47,118,158,189,215,237,257,275,291,306,320,333,345,357,368,378,388,397,405,413,420,427,434,440,446,451,456,461,466,470,473,477,480,483,486,488,490,492,494,495,497,498,499,499,500,500,500,500,500,499,498,498,497,495,494,492,490,488,485,482,479,476,472,468,464,459,454,449,444,438,432,425,418,411,404,395,387,378,369,359,349,338,327,315,303,291,277,264,249,234,218,202,185,167,147,128,107,84,60,35,6]],
+4:[0.74,[50,126,169,201,228,252,272,290,307,322,337,350,362,374,384,394,403,411,419,427,434,441,448,453,459,464,469,473,477,480,484,486,489,491,493,495,497,498,499,499,500,500,500,500,499,498,498,496,495,494,492,490,488,485,483,480,477,474,470,466,462,458,453,448,442,436,429,422,415,407,399,390,381,371,361,351,341,330,319,307,295,283,271,259,246,233,219,205,191,177,163,148,133,118,103,87,71,55,38,21,4]],
+5:[1.015,[32,102,147,182,212,237,260,280,298,315,330,344,358,370,381,391,401,410,418,427,434,441,447,453,459,464,469,473,477,482,485,488,491,493,495,497,498,499,500,500,500,500,499,499,498,496,495,493,491,488,486,483,479,476,472,468,464,459,454,449,443,437,431,424,417,410,402,394,386,377,368,359,349,335,321,307,293,279,264,249,233,217,200,180,162,146,130,115,101,87,75,63,52,42,33,25,18,12,7,3,0]],
+6:[1.32,[22,50,70,89,107,125,141,157,172,186,201,214,227,240,252,264,275,286,296,307,317,326,335,344,353,361,369,377,384,392,398,405,411,417,423,429,434,439,444,449,453,458,462,465,469,473,476,478,481,484,486,488,490,492,494,495,497,498,499,500,500,500,499,498,497,495,493,491,488,485,482,478,474,470,465,460,454,449,442,435,428,420,411,402,392,382,370,358,345,331,316,300,281,262,239,215,187,155,120,73,13]],
+7:[1.326,[4,23,42,59,76,93,109,124,139,153,168,181,195,208,221,233,245,256,268,279,289,300,310,320,329,339,348,356,365,373,381,388,396,403,409,416,423,428,434,440,445,450,455,459,464,468,471,475,478,481,484,486,489,491,493,494,496,498,498,499,499,500,500,500,499,498,496,494,492,490,487,483,480,476,471,466,461,456,449,443,436,428,420,411,402,391,380,368,356,342,327,310,293,273,252,227,199,168,129,81,15]],
+8:[1.353,[4,22,41,59,78,96,114,132,149,167,183,198,213,228,243,256,270,283,295,307,319,330,341,352,362,372,381,390,399,408,416,423,431,438,444,451,456,462,467,472,476,480,484,487,490,493,495,497,498,499,500,500,500,499,498,497,496,494,492,489,487,484,480,477,473,469,464,459,454,448,442,436,429,422,414,406,397,388,377,367,355,344,330,317,301,285,268,249,228,206,180,151,130,117,108,103,101,101,102,65,19]],
+9:[1.313,[6,35,61,85,108,129,150,169,187,204,221,237,252,267,280,294,306,318,330,341,352,362,372,381,390,398,406,414,421,428,435,441,447,452,457,462,467,471,475,478,482,485,487,490,492,494,496,497,498,499,500,500,499,498,497,495,493,491,489,486,483,480,476,472,468,464,459,454,448,442,436,429,423,415,407,398,390,380,370,359,347,335,321,308,292,276,257,238,217,193,167,140,121,109,101,97,95,97,96,66,13]],
+10:[1.317,[7,36,62,85,107,126,145,163,179,195,210,224,238,251,263,275,287,298,308,318,328,337,346,355,363,371,379,386,393,400,407,413,419,425,430,436,441,445,450,455,459,463,467,471,474,477,481,484,487,489,492,494,496,499,500,500,500,499,498,497,496,494,492,489,487,484,480,476,472,468,463,457,452,445,438,431,422,414,404,394,382,370,356,341,324,306,287,265,241,214,185,156,132,114,102,98,97,96,95,91,49]],
+11:[1.222,[169,182,195,208,220,232,244,255,266,277,287,297,307,317,326,335,344,353,361,369,377,385,392,399,407,414,420,426,432,438,444,449,454,458,463,468,471,475,479,482,485,488,490,492,494,496,497,498,499,500,501,500,499,498,498,497,496,493,490,488,485,483,479,474,470,465,461,456,449,443,436,429,423,415,406,397,388,379,370,359,347,335,323,311,299,285,270,255,240,225,208,190,172,153,135,116,94,72,49,27,5],[-151,-79,-26,17,57,88,119,145,171,192,214,232,251,268,283,298,312,325,338,349,360,371,381,390,399,407,415,423,430,437,443,449,455,460,465,469,474,478,481,485,488,491,493,495,497,499,500,501,500,500,499,499,498,496,495,493,490,488,485,482,478,474,470,466,461,456,450,445,438,432,425,417,410,402,394,385,376,366,356,346,335,324,312,300,288,275,261,247,233,218,202,186,169,151,133,114,95,74,53,30,5]],
+12:[1.324,[172,187,201,214,227,240,251,263,274,285,296,306,316,326,335,344,353,362,370,378,386,393,400,407,413,420,426,432,438,443,448,453,458,462,466,470,474,477,480,483,486,488,491,493,494,496,498,498,499,500,501,500,500,500,500,498,496,494,491,487,484,480,476,471,466,461,455,449,443,436,429,422,414,405,397,387,378,367,357,345,333,320,307,293,278,262,245,228,211,193,176,159,141,124,107,89,72,55,37,20,3],[-132,-56,-7,33,67,97,124,148,171,193,212,231,249,265,281,296,311,324,337,350,362,374,385,395,404,413,421,429,436,443,450,456,461,466,471,475,479,483,486,489,492,494,496,498,499,500,501,501,501,500,499,499,498,496,494,492,489,486,483,479,475,470,466,461,455,449,443,436,429,422,414,406,398,389,380,370,360,349,338,326,314,301,287,273,259,243,226,209,192,174,157,140,122,105,88,72,56,41,26,13,3]],
+13:[1.392,[4,23,40,58,74,91,107,122,137,152,166,181,194,208,221,234,246,258,270,282,293,304,314,325,335,345,354,363,372,381,390,397,405,413,420,426,433,439,445,451,456,462,466,470,475,479,482,485,488,491,493,495,496,498,499,500,500,500,500,499,498,496,495,493,490,487,484,481,478,473,468,461,455,447,439,430,421,411,400,389,377,365,352,339,325,310,295,278,262,244,227,208,189,168,148,126,104,80,56,31,5]],
+14:[1.313,[147,160,172,185,197,210,222,235,246,256,267,278,289,300,310,320,329,338,348,357,366,374,382,389,397,405,413,419,425,431,438,444,450,454,459,464,468,473,477,480,483,486,489,492,494,495,497,498,500,500,500,500,500,499,498,497,495,494,491,488,485,482,478,473,469,465,459,453,447,441,434,426,419,410,401,393,382,372,361,350,338,325,312,298,283,268,251,233,213,196,179,161,144,127,109,92,74,57,40,22,5],[-120,-47,5,48,85,117,145,171,196,217,238,256,274,290,306,320,333,347,358,369,380,389,399,408,416,423,431,438,444,450,455,461,465,469,474,478,481,484,487,490,492,494,496,497,499,500,501,501,500,499,498,497,495,493,490,488,485,482,478,474,470,465,460,455,449,444,437,431,424,417,409,401,392,383,374,364,354,342,331,319,307,294,280,266,250,235,219,204,188,172,157,141,126,110,95,79,64,48,33,17,2]],
+15:[1.886,[289,354,390,416,435,451,463,473,480,487,491,494,497,498,499,498,498,498,498,498,499,499,499,499,499,499,500,500,500,500,500,500,500,500,500,500,500,500,500,500,500,500,499,499,499,499,499,498,498,498,498,497,497,496,496,496,495,494,494,493,492,492,491,490,489,488,486,485,483,482,480,477,474,471,468,465,462,459,455,450,445,439,433,426,419,410,402,392,382,370,358,344,327,306,282,253,220,182,140,91,22]],
+16:[1.0,[43,108,146,175,200,222,240,258,274,288,302,314,327,338,348,358,368,377,385,393,401,408,415,421,428,434,439,444,449,454,459,463,467,470,474,477,480,483,485,488,490,492,493,495,496,497,498,499,499,500,500,500,499,499,498,497,496,495,493,492,490,488,485,483,480,477,474,470,467,463,459,454,449,444,439,434,428,421,415,408,401,393,385,377,368,358,348,338,327,314,302,288,274,258,240,222,200,175,146,108,43]],
+17:[1.198,[19,60,88,112,132,151,168,184,199,213,227,240,252,264,276,287,298,308,319,328,338,348,357,366,374,382,389,397,404,411,417,423,429,435,441,446,451,456,460,465,469,472,476,480,483,486,488,491,493,495,496,498,499,499,500,500,500,499,499,498,496,495,493,491,488,485,482,479,475,471,467,462,458,452,447,441,435,428,422,414,407,399,390,381,372,362,352,341,329,317,304,290,275,259,241,222,201,177,149,110,44]],
+18:[0.824,[75,193,266,324,367,387,400,410,418,426,432,438,443,448,452,456,459,462,466,468,471,474,476,478,480,482,484,486,487,489,490,491,493,494,495,496,496,497,498,498,499,499,500,500,500,499,498,497,496,495,493,491,489,487,485,482,479,477,474,470,467,463,459,455,450,445,440,435,429,423,417,411,404,397,390,382,374,366,357,348,338,328,318,307,296,284,272,258,245,230,216,200,184,166,148,128,108,85,62,35,5]],
+19:[1.042,[39,119,167,202,231,256,276,295,311,325,338,350,361,372,382,392,401,409,417,424,431,438,444,449,454,459,463,468,471,475,478,481,484,487,489,491,493,494,496,497,498,499,499,500,500,500,500,499,499,498,497,496,495,493,492,490,488,485,483,480,477,474,470,466,462,458,454,449,444,438,433,427,421,414,408,401,394,387,379,371,363,354,346,337,327,317,307,296,285,274,262,249,235,221,206,190,173,154,133,109,81]],
+20:[1.274,[24,72,101,124,144,161,178,193,208,222,235,248,261,272,284,295,305,316,325,335,344,353,361,369,377,385,392,399,406,412,418,424,430,435,441,446,450,455,459,463,467,471,474,477,481,483,486,488,490,492,494,495,497,498,499,499,500,500,500,500,499,499,498,497,495,493,490,488,484,480,476,472,467,461,456,449,443,436,428,420,412,403,393,383,372,361,349,336,323,308,292,274,255,235,213,189,163,135,105,72,24]],
+21:[0.869,[40,107,148,180,207,230,251,269,286,301,316,328,341,352,362,372,381,390,398,406,413,420,426,432,438,444,448,453,458,462,466,469,473,477,479,482,485,487,490,492,493,495,497,498,499,500,500,500,499,499,498,497,496,494,492,490,488,486,483,481,477,474,471,467,463,458,454,449,443,438,432,426,419,412,405,397,389,380,370,361,350,339,327,315,302,290,276,263,249,235,220,204,188,171,153,133,108,81,56,31,5]],
+22:[1.265,[62,165,232,285,312,333,349,363,375,386,395,402,409,414,419,424,429,434,438,442,446,450,453,457,460,463,466,469,471,474,476,478,481,483,484,486,488,489,491,492,493,494,495,496,497,498,498,499,499,499,500,500,500,500,500,500,499,499,499,498,498,497,496,495,495,493,492,491,490,489,487,486,484,482,480,478,476,472,468,463,457,450,443,434,424,413,401,386,371,353,332,309,282,249,209,153,128,114,106,101,93]],
+23:[1.301,[200,289,326,350,369,383,394,404,412,418,422,427,431,435,438,441,443,446,449,451,453,456,458,460,463,465,467,469,471,473,475,477,479,481,483,485,487,489,490,491,493,494,495,496,496,497,498,499,499,499,500,500,500,500,500,500,499,499,498,497,497,496,494,493,492,490,488,486,484,482,479,476,473,470,466,462,458,454,449,442,435,427,417,407,395,381,366,349,329,307,281,249,207,169,132,113,105,101,100,96,81],[-50,58,122,170,210,244,275,302,326,349,367,382,395,406,417,426,434,441,447,452,457,461,464,467,469,471,473,475,477,479,480,482,484,485,487,488,489,491,492,493,494,495,496,496,497,498,498,499,499,500,500,500,500,500,500,500,499,499,498,497,496,495,494,493,491,490,488,486,484,482,479,476,473,470,466,462,458,453,448,442,436,430,422,414,404,393,380,363,344,322,298,269,233,177,120,100,90,85,83,81,73]],
+24:[1.092,[55,135,181,215,243,267,288,306,322,336,350,362,373,384,393,402,409,417,424,430,437,442,448,453,458,463,467,471,475,478,482,485,487,490,492,494,495,497,498,499,499,500,500,500,500,499,498,497,496,495,493,491,489,487,484,482,479,475,472,468,464,459,455,449,444,438,432,425,419,411,404,396,387,378,369,359,349,339,328,316,305,292,279,266,252,238,224,209,194,178,162,146,129,113,97,82,66,50,35,19,3]],
+25:[0.966,[41,114,160,195,224,249,271,291,309,325,340,353,366,378,389,399,408,417,425,433,439,446,453,458,463,469,473,477,481,485,488,491,493,495,496,498,499,499,500,500,500,500,499,498,497,496,494,492,490,488,485,482,479,475,472,468,463,459,454,448,443,436,430,423,416,408,400,391,382,372,362,352,341,329,317,304,290,275,260,244,227,210,192,175,159,143,128,113,99,86,73,62,51,41,33,25,18,12,7,3,0]],
+26:[1.4,[30,72,97,116,132,148,165,180,194,209,222,235,248,259,271,282,293,303,313,322,332,341,349,357,365,373,380,387,394,400,407,413,419,425,430,435,440,445,449,454,458,462,466,469,473,476,479,482,484,487,489,491,493,495,496,498,499,500,500,499,499,498,497,497,495,493,491,490,487,485,482,479,475,471,467,463,458,452,447,441,434,427,419,411,402,393,382,371,359,346,332,317,300,282,261,238,213,183,147,102,31]],
+27:[1.091,[5,31,56,81,107,132,158,183,209,234,255,275,293,309,324,337,350,362,374,384,394,403,411,420,427,434,441,447,453,458,463,468,472,476,480,484,487,490,492,494,496,498,499,500,500,500,499,498,497,495,494,492,490,488,485,483,479,476,473,469,465,460,456,451,445,440,434,428,421,414,406,399,390,382,372,362,351,340,325,310,296,281,266,252,237,222,208,193,179,164,149,135,120,105,91,76,61,47,32,18,3]],
+28:[1.262,[28,84,117,143,166,185,203,219,234,248,261,273,284,294,304,313,322,331,340,348,356,363,371,378,385,392,398,404,411,416,422,428,433,438,442,447,452,456,460,464,467,471,474,477,480,483,485,488,490,492,494,495,497,498,499,499,500,500,500,499,499,498,498,496,495,493,491,490,487,484,481,479,475,471,467,463,457,452,446,440,433,426,418,410,401,391,381,370,358,345,330,315,298,280,259,236,210,180,144,100,29]],
+29:[1.245,[85,192,249,289,319,343,363,378,391,400,406,410,415,419,423,426,430,434,438,441,444,448,451,454,457,460,463,465,468,470,473,475,477,479,481,483,485,487,488,490,491,492,494,495,496,497,497,498,499,499,500,500,500,500,500,500,499,499,498,498,497,496,495,493,492,490,488,486,483,480,477,473,469,464,460,454,448,441,433,425,416,407,396,384,372,358,343,327,308,288,265,238,207,169,127,112,102,96,94,90,77]],
+30:[1.221,[382,386,390,394,397,400,403,406,409,412,414,417,419,422,424,427,429,432,434,436,439,441,443,445,447,450,452,454,456,458,460,462,464,466,468,470,472,474,476,478,480,481,483,485,487,489,491,492,494,496,497,498,499,500,500,500,500,499,499,498,496,495,493,491,488,485,482,479,475,471,467,462,457,451,445,439,432,425,417,409,401,391,381,371,359,347,330,313,295,278,260,243,226,208,191,173,156,138,121,104,86]],
+31:[1.207,[106,237,301,342,368,378,383,388,392,395,399,402,405,408,411,414,417,420,422,425,428,430,433,435,438,440,443,445,448,450,452,455,457,459,462,464,466,468,471,473,475,477,480,482,484,486,488,490,492,495,497,498,499,500,500,500,500,499,498,497,496,494,492,490,488,485,482,478,474,470,465,460,455,449,443,437,430,422,414,406,397,387,377,366,355,342,327,310,292,274,256,238,220,202,184,166,149,131,113,95,77]],
+32:[1.224,[38,152,219,266,303,331,353,370,382,389,394,399,405,410,415,419,424,428,433,436,440,444,448,452,455,458,462,465,467,470,473,475,478,480,482,484,486,488,490,491,492,494,495,496,497,498,498,499,499,500,500,500,500,500,500,499,499,498,497,497,496,494,493,492,490,489,487,485,483,481,479,476,474,471,468,465,461,452,442,432,422,411,399,388,376,364,352,336,316,297,278,258,239,219,200,180,161,141,122,103,83]],
+33:[1.201,[56,151,214,265,299,323,342,357,369,380,388,396,402,407,411,415,419,422,425,428,431,434,437,439,442,444,446,449,451,453,455,457,459,462,464,466,468,470,471,473,475,477,479,481,483,484,486,488,490,491,493,495,496,498,499,500,500,500,500,499,498,497,495,493,491,489,486,482,479,475,471,466,461,455,449,443,435,428,420,411,402,392,382,370,358,345,330,312,295,277,259,242,224,207,189,171,154,136,118,101,83]],
+34:[1.365,[230,331,377,404,422,434,443,448,452,457,461,464,468,471,474,477,479,482,484,486,488,489,491,492,494,495,496,497,497,498,499,499,500,500,500,500,500,500,500,500,499,499,498,498,497,496,495,495,493,492,491,489,487,484,482,479,476,472,469,466,462,459,455,451,447,444,440,436,432,428,424,420,415,411,406,401,395,390,383,377,370,363,355,346,337,327,315,303,288,270,244,218,191,164,137,116,106,102,100,97,87],[-83,27,90,139,180,215,247,276,301,326,348,369,389,408,425,443,455,465,474,481,486,490,492,493,494,496,497,497,498,499,499,500,500,500,500,500,500,499,499,498,498,497,496,495,494,493,491,490,488,486,485,483,481,478,476,474,471,468,466,463,459,456,453,449,446,442,438,434,429,425,420,416,411,406,400,395,389,383,377,371,364,358,351,344,336,326,314,299,282,261,236,208,179,150,126,114,108,104,103,104,93]],
+35:[1.403,[43,113,147,170,184,198,210,223,235,245,256,262,271,284,289,301,310,315,323,332,339,346,352,356,364,369,375,381,386,391,397,401,405,410,415,420,423,429,432,437,439,446,450,454,460,460,463,466,472,472,474,476,480,481,486,489,489,491,494,494,497,497,494,497,498,500,500,500,497,497,500,500,500,497,494,491,489,485,483,477,472,466,459,451,442,431,420,409,392,375,359,342,321,302,279,258,231,208,184,166,151]],
+36:[1.271,[25,178,227,250,272,286,297,307,314,323,333,340,349,356,364,371,374,379,386,389,394,399,405,410,415,420,423,427,431,435,439,443,446,448,452,455,457,460,462,466,469,471,472,475,477,478,482,484,483,485,490,490,490,491,495,495,497,495,497,497,497,497,497,497,497,497,498,500,499,495,495,492,492,488,487,482,480,477,476,472,464,462,453,444,433,426,413,393,376,360,343,326,308,284,265,245,219,200,181,166,151]],
+37:[1.382,[13,208,260,287,302,314,327,338,347,360,366,372,380,387,392,399,401,410,417,419,423,427,433,435,441,444,446,449,453,454,459,462,462,468,468,473,473,475,478,478,484,484,487,487,488,489,491,489,489,492,492,492,492,495,495,497,497,500,500,497,497,497,495,495,495,497,492,492,489,489,487,482,481,478,476,473,469,462,455,448,441,433,422,414,400,389,375,362,349,337,322,307,286,268,252,230,214,197,181,164,151]],
+38:[1.249,[48,107,139,159,179,200,219,235,249,264,277,289,299,314,323,334,344,354,363,371,381,388,396,405,411,419,426,431,434,439,444,449,457,459,464,470,470,475,475,480,482,485,487,490,492,493,494,495,497,497,500,500,500,500,499,500,498,500,500,500,500,496,495,491,488,484,482,477,472,469,466,460,456,450,445,440,434,425,418,410,398,391,381,374,364,354,343,332,318,304,292,277,259,247,229,217,202,190,177,165,152]],
+39:[1.056,[28,116,152,181,210,231,250,267,280,296,308,321,332,342,353,363,371,380,390,397,407,414,419,425,432,433,439,444,449,454,459,463,467,470,474,474,479,482,485,486,488,491,493,495,493,494,496,496,495,496,498,495,495,495,495,495,493,493,492,488,488,484,482,479,477,474,471,466,460,457,452,449,444,439,433,426,423,415,408,401,395,385,379,368,360,349,339,328,313,302,290,277,266,256,243,228,213,200,186,170,157]],
+40:[1.308,[77,241,325,377,412,434,451,459,467,472,475,479,482,485,485,487,487,488,490,490,492,492,492,492,495,495,495,495,495,496,495,497,497,497,497,500,500,497,497,497,497,497,497,495,495,495,495,494,495,494,490,490,492,488,490,488,487,487,486,482,482,479,477,474,473,472,469,466,462,458,454,449,444,440,433,428,425,419,415,406,397,392,383,375,365,354,344,333,326,313,299,286,272,257,240,227,211,192,177,162,151]],
+41:[1.27,[96,212,283,426,432,418,442,466,479,488,490,496,498,500,500,498,500,500,499,500,499,498,500,500,500,495,495,495,492,490,490,490,488,487,485,485,483,480,480,478,477,475,473,471,471,468,466,463,463,460,458,458,453,450,449,446,444,441,439,436,436,431,429,426,424,421,418,414,409,404,401,397,393,387,383,376,370,365,360,354,348,341,333,326,319,311,302,294,284,278,266,255,246,236,228,215,204,192,180,167,154]],
+42:[1.248,[106,242,300,332,359,375,394,409,418,422,431,433,436,445,448,452,458,462,463,467,471,473,476,480,483,486,488,490,491,493,495,495,498,498,497,500,500,500,499,498,498,498,499,495,495,493,494,493,493,493,490,490,488,488,488,485,483,483,481,480,475,473,471,468,466,463,460,458,454,450,446,441,436,431,426,421,416,410,406,398,390,381,375,368,362,355,347,335,322,310,298,285,273,258,243,225,211,197,181,167,153]]
+};
+
+/* Griffenden aus dem Formenblatt: halbe Breite in 61 Schritten vom Griffende bis zum Ansatz (Ansatz = 1000), erster Wert = Länge/Breite */
+const ENDS = {
+1:[1.866,[46,146,212,255,292,328,366,402,430,447,445,422,394,395,441,503,544,565,580,599,617,635,650,659,668,682,697,708,716,726,740,757,768,777,789,798,806,818,826,833,846,859,867,872,880,894,906,913,918,924,933,941,947,956,966,972,980,990,999,999,990]],
+2:[2.03,[64,156,209,242,278,314,340,360,383,407,427,446,466,484,496,497,474,445,457,521,597,641,663,683,704,722,728,735,752,768,780,788,797,810,820,830,843,856,868,878,884,894,903,909,918,928,935,942,945,948,954,960,970,980,986,993,996,996,999,999,983]],
+3:[1.82,[23,124,190,238,279,316,356,393,424,452,481,505,521,524,507,500,543,604,634,645,656,668,672,656,652,690,737,760,772,783,798,812,820,828,842,856,866,875,887,897,905,909,916,927,933,937,947,954,959,964,967,967,970,976,982,987,990,994,1000,999,990]],
+4:[2.149,[66,134,195,246,292,336,369,380,360,342,370,431,482,510,530,538,538,555,574,588,604,609,601,608,639,670,687,698,710,724,737,746,754,765,776,788,806,823,832,836,845,857,867,876,890,900,908,918,930,942,949,952,960,963,966,976,989,998,1002,999,989]],
+5:[1.924,[194,340,446,501,516,514,512,514,512,483,431,412,452,496,508,506,498,477,474,492,504,503,484,472,498,529,542,548,555,564,575,581,586,600,618,634,648,658,671,690,708,727,749,768,785,803,826,851,876,904,931,954,974,990,999,1002,1002,1002,1002,999,991]],
+6:[1.615,[73,177,256,321,382,433,466,482,489,490,488,484,475,449,407,388,405,420,422,422,416,392,371,381,400,406,410,415,421,429,439,450,462,475,492,509,530,552,577,604,633,666,700,736,774,809,840,868,896,928,956,976,987,990,993,998,1000,1000,1003,1000,982]],
+7:[6.556,[556,922,1107,1156,1185,1218,1252,1292,1333,1364,1386,1401,1416,1435,1453,1472,1481,1490,1500,1497,1505,1515,1512,1514,1519,1528,1538,1528,1510,1490,1481,1472,1453,1444,1438,1414,1373,1342,1324,1302,1285,1265,1236,1213,1194,1185,1168,1132,1103,1083,1074,1065,1051,1047,1033,1009,1008,1015,1017,1000,926]],
+8:[2.233,[13,291,443,510,549,567,571,572,576,582,587,586,574,558,540,509,476,454,436,426,421,416,409,406,406,408,414,418,424,435,446,458,475,493,510,533,555,577,604,629,649,675,708,740,770,799,826,848,869,894,913,926,938,949,963,977,987,994,1000,999,989]],
+9:[1.953,[152,335,470,562,612,614,580,536,503,512,568,626,654,667,683,699,711,723,737,751,762,774,786,796,799,806,818,826,834,845,850,856,867,878,885,891,898,904,913,926,938,946,954,961,964,966,972,976,977,977,980,986,992,999,1002,1002,1004,1006,1004,999,989]],
+10:[1.521,[149,366,500,560,573,558,536,512,506,524,558,597,633,665,691,715,741,764,782,798,813,828,842,854,866,878,888,897,903,910,916,922,932,936,938,944,950,958,965,968,968,969,971,970,970,973,978,979,979,982,986,989,989,991,994,991,992,997,1000,997,989]],
+11:[1.935,[157,299,406,477,517,522,506,486,474,492,568,682,799,910,1008,1096,1168,1204,1212,1206,1203,1200,1191,1182,1176,1171,1166,1164,1166,1161,1153,1149,1148,1149,1147,1137,1127,1124,1124,1121,1111,1101,1095,1088,1088,1090,1085,1078,1072,1064,1056,1049,1043,1037,1030,1026,1022,1013,1007,1000,980]],
+12:[2.368,[44,98,240,371,444,490,519,529,522,501,473,457,487,560,642,721,797,865,925,984,1045,1093,1114,1118,1114,1108,1109,1118,1122,1120,1114,1110,1114,1114,1110,1114,1118,1118,1114,1104,1098,1100,1100,1094,1086,1078,1074,1070,1060,1054,1053,1048,1044,1040,1033,1029,1022,1007,1004,1000,971]],
+13:[1.798,[121,380,555,631,637,616,592,566,541,524,515,512,518,526,533,549,578,613,646,676,708,742,775,803,828,856,882,904,926,946,962,974,986,998,1007,1015,1023,1026,1026,1029,1038,1047,1052,1053,1050,1048,1048,1048,1045,1042,1045,1048,1045,1038,1030,1026,1022,1018,1012,999,982]],
+14:[2.269,[42,299,425,461,482,504,532,566,600,638,679,719,766,828,899,974,1046,1111,1170,1216,1233,1228,1225,1221,1214,1204,1190,1180,1173,1166,1158,1150,1139,1130,1128,1128,1125,1114,1104,1100,1095,1083,1074,1068,1062,1057,1053,1047,1040,1034,1026,1020,1016,1016,1016,1016,1016,1014,1008,996,974]],
+15:[6.235,[235,920,1343,1568,1685,1711,1686,1656,1629,1583,1542,1510,1463,1426,1404,1383,1363,1339,1316,1300,1288,1263,1224,1193,1167,1145,1137,1137,1124,1101,1085,1071,1064,1062,1059,1059,1059,1059,1052,1035,1032,1049,1049,1030,1020,1020,1020,1020,1020,1020,1020,1020,1014,1008,1014,1024,1029,1024,1020,1000,941]],
+16:[2.508,[1000,1094,1168,1238,1308,1361,1400,1441,1478,1482,1458,1426,1398,1375,1352,1328,1308,1290,1273,1259,1244,1225,1206,1191,1180,1172,1163,1155,1144,1132,1128,1127,1123,1115,1109,1098,1085,1080,1076,1065,1057,1055,1051,1044,1040,1038,1031,1020,1016,1019,1022,1015,1004,1003,1006,1003,1004,1008,1006,997,968]]
+};
+const ss = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+const lerpArr = (a, t) => { const f = Math.min(1, Math.max(0, t)) * (a.length - 1), i = Math.min(a.length - 2, Math.floor(f)); return (a[i] + (a[i + 1] - a[i]) * (f - i)) / 1000; };
+/* ---------- Eigene Formen (im Browser gespeichert) ---------- */
+// u<n> = eigene Laffe [ar, links, rechts], w<n> = eigenes Griffende [ar, profil]; Nummern laufen fort und werden nie wiederverwendet
+let CUSTOM = { nb: 1, ne: 1, bowls: {}, ends: {} };
+try { const c = JSON.parse(localStorage.getItem("loeffel-custom") || "null"); if (c && c.bowls && c.ends) CUSTOM = c; } catch (e) {}
+const saveCustom = () => { try { localStorage.setItem("loeffel-custom", JSON.stringify(CUSTOM)); } catch (e) {} };
+const bowlData = v => v && v[0] === "d" ? BOWLS[v.slice(1)] : v && v[0] === "u" ? CUSTOM.bowls[v.slice(1)] : null;
+const endData = v => v && v[0] === "e" ? ENDS[v.slice(1)] : v && v[0] === "w" ? CUSTOM.ends[v.slice(1)] : null;
+if (state.P.bs[0] === "u" && !bowlData(state.P.bs)) state.P.bs = PRESETS[state.type].bs;
+if (state.P.he[0] === "w" && !endData(state.P.he)) state.P.he = PRESETS[state.type].he;
+// Fortlaufende Kennungen: Laffen L01…, Griffenden G01…
+const NB = Object.keys(BOWLS).length, NE = Object.keys(ENDS).length;
+function shapeCode(v) {
+  if (["ei", "rund", "schaufel", "gerade", "spitz"].includes(v)) return null;
+  const pad = n => String(n).padStart(2, "0");
+  if (v[0] === "d") return "L" + pad(3 + Number(v.slice(1)));
+  if (v[0] === "u") return "L" + pad(3 + NB + Number(v.slice(1)));
+  if (v[0] === "e") return "G" + pad(3 + Number(v.slice(1)));
+  if (v[0] === "w") return "G" + pad(3 + NE + Number(v.slice(1)));
+  return null;
+}
+const bowlCode = v => shapeCode(v) || "L" + String(["ei", "rund", "schaufel"].indexOf(v) + 1).padStart(2, "0");
+const endCode = v => shapeCode(v) || "G" + String(["rund", "gerade", "spitz"].indexOf(v) + 1).padStart(2, "0");
+
+// Liest aus einem Bild (SVG, PNG, JPG) die Umrisslinie: Spitze bzw. Griffende oben, Ansatz unten.
+function profileFromImage(img, kind) {
+  const sc = 600 / Math.max(img.naturalWidth || img.width || 600, img.naturalHeight || img.height || 600);
+  const W = Math.max(20, Math.round((img.naturalWidth || 600) * sc)), H = Math.max(20, Math.round((img.naturalHeight || 600) * sc));
+  const cv = document.createElement("canvas"); cv.width = W + 8; cv.height = H + 8;
+  const ctx = cv.getContext("2d"); ctx.drawImage(img, 4, 4, W, H);
+  const px = ctx.getImageData(0, 0, cv.width, cv.height).data, w = cv.width, h = cv.height;
+  const transparentBg = px[3] < 40;
+  let ink = new Uint8Array(w * h);
+  for (let i = 0; i < w * h; i++) {
+    const a = px[i * 4 + 3], lum = 0.3 * px[i * 4] + 0.59 * px[i * 4 + 1] + 0.11 * px[i * 4 + 2];
+    ink[i] = transparentBg ? (a > 100 ? 1 : 0) : (a > 40 && lum < 160 ? 1 : 0);
+  }
+  // kleine Lücken in der Linie schließen
+  for (let pass = 0; pass < 2; pass++) {
+    const n = ink.slice();
+    for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) if (!ink[y * w + x] && (ink[y * w + x - 1] || ink[y * w + x + 1] || ink[(y - 1) * w + x] || ink[(y + 1) * w + x])) n[y * w + x] = 1;
+    ink = n;
+  }
+  let y0 = -1, y1 = -1;
+  for (let y = 0; y < h; y++) { let any = false; for (let x = 0; x < w; x++) if (ink[y * w + x]) { any = true; break; } if (any) { if (y0 < 0) y0 = y; y1 = y; } }
+  if (y0 < 0 || y1 - y0 < 20) throw new Error("empty");
+  if (kind === "end") {
+    // offene Unterkante schließen: unterste Zeile mit zwei getrennten Linien
+    for (let y = y1; y > y0; y--) {
+      let runs = 0, prev = 0, lx = -1, rx = -1;
+      for (let x = 0; x < w; x++) { const v = ink[y * w + x]; if (v && !prev) runs++; if (v) { if (lx < 0) lx = x; rx = x; } prev = v; }
+      if (runs >= 2) { for (let x = lx; x <= rx; x++) ink[y * w + x] = 1; for (let yy = y + 1; yy <= y1; yy++) for (let x = 0; x < w; x++) ink[yy * w + x] = 0; y1 = y; break; }
+    }
+  }
+  // Außenbereich von den Rändern aus füllen; alles andere gehört zur Form
+  const out = new Uint8Array(w * h), stack = [];
+  for (let x = 0; x < w; x++) { stack.push(x, (h - 1) * w + x); }
+  for (let y = 0; y < h; y++) { stack.push(y * w, y * w + w - 1); }
+  while (stack.length) { const i = stack.pop(); if (out[i] || ink[i]) continue; out[i] = 1; const x = i % w, y = (i / w) | 0; if (x > 0) stack.push(i - 1); if (x < w - 1) stack.push(i + 1); if (y > 0) stack.push(i - w); if (y < h - 1) stack.push(i + w); }
+  const rows = [];
+  for (let y = y0; y <= y1; y++) { let l = -1, r = -1; for (let x = 0; x < w; x++) if (!out[y * w + x]) { if (l < 0) l = x; r = x; } rows.push([l, r]); }
+  const nb = Math.max(2, Math.round(rows.length * 0.04)), tail = rows.slice(-nb);
+  const axis = tail.reduce((s, [l, r]) => s + (l + r) / 2, 0) / tail.length;
+  const sample = (arr, n) => Array.from({ length: n }, (_, i) => { const f = i / (n - 1) * (arr.length - 1), k = Math.min(arr.length - 2, Math.floor(f)); return arr[k] + (arr[k + 1] - arr[k]) * (f - k); });
+  if (kind === "bowl") {
+    const maxW = Math.max(...rows.map(([l, r]) => r - l + 1));
+    const L = sample(rows.map(([l]) => Math.max(0, axis - l + 0.5)), 101).map(v => Math.round(v / maxW * 1000));
+    const R = sample(rows.map(([, r]) => Math.max(0, r - axis + 0.5)), 101).map(v => Math.round(v / maxW * 1000));
+    return [Math.round(rows.length / maxW * 1000) / 1000, L, R];
+  }
+  const hw = rows.map(([l, r]) => (r - l + 1) / 2), ref = tail.reduce((s, [l, r]) => s + (r - l + 1) / 2, 0) / tail.length;
+  return [Math.round(rows.length / (2 * ref) * 1000) / 1000, sample(hw, 61).map(v => Math.round(v / ref * 1000))];
+}
+function loadShapeFile(file, kind) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => { try { resolve(profileFromImage(img, kind)); } catch (e) { reject(e); } finally { URL.revokeObjectURL(url); } };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("load")); };
+    img.src = url;
+  });
+}
+
+// Liefert für t = 0 (Spitze) … 1 (Hals) die halbe Breite links und rechts (Gesamtbreite max. 1) und ein Tiefenprofil
+// Asymmetrisch = linke und rechte Hälfte weichen um mehr als 3 % der Breite voneinander ab
+const isAsym = bs => { const D = bowlData(bs); return !!(D && D[2] && D[1].some((v, i) => Math.abs(v - D[2][i]) > 30)); };
+// mirror: linke und rechte Hälfte tauschen (Linkshänder)
+function bowlProfile(bs, p, mirror) {
+  const D = bowlData(bs);
+  if (D) {
+    const A = mirror && D[2] ? D[2] : D[1], B = mirror && D[2] ? D[1] : D[2];
+    const lr = t => t < 0 || t > 1 ? [0, 0] : B ? [lerpArr(A, t), lerpArr(B, t)] : [lerpArr(A, t), lerpArr(A, t)];
+    const depth = t => { if (t <= 0 || t >= 1) return 0; const [l, r] = lr(t); return (l + r) * Math.sqrt(Math.min(1, t / 0.3)) * Math.sqrt(Math.min(1, (1 - t) / 0.2)); };
+    return { lr, depth, ar: D[0] };
+  }
+  const SH = { ei: { nt: 2, k: 0.3 }, rund: { nt: 2.2, k: 0.05 }, schaufel: { nt: 4.5, k: -0.05 } }[bs] || { nt: 2.2, k: 0.05 };
+  const rawEgg = t => {
+    if (t <= 0 || t >= 1) return 0;
+    const su = t < p ? -(p - t) / p : (t - p) / (1 - p), n = su < 0 ? SH.nt : 2.2;
+    return Math.pow(Math.max(0, 1 - Math.pow(Math.abs(su), n)), 1 / n) * (1 + SH.k * su);
+  };
+  let mx = 0;
+  for (let i = 1; i < 400; i++) mx = Math.max(mx, rawEgg(i / 400));
+  const depth = t => rawEgg(t) / mx;
+  return { lr: t => [depth(t) / 2, depth(t) / 2], depth, ar: 1.35 };
+}
+
+function buildScene(P, name) {
+  const L = P.L, bl = Math.min(P.bl, L * 0.6), bw = P.bw, bd = P.bd, p = P.p / 100;
+  const nw = Math.min(P.nw, bw * 0.8), ew = P.ew, th = P.th, hc = P.hc;
+  const mir = P.hd === "l" && isAsym(P.bs);
+  const BP = bowlProfile(P.bs, p, mir);
+  const N = 500;
+  const xs = Array.from({ length: N + 1 }, (_, i) => L * (1 - Math.cos(Math.PI * i / N)) / 2);
+
+  // Draufsicht: halbe Breite entlang der Länge (x = Abstand von der Laffenspitze)
+  const bowlL = x => bw * BP.lr(x / bl)[0], bowlR = x => bw * BP.lr(x / bl)[1];
+  const handleHW = x => {
+    if (x < bl * 0.55) return 0;
+    const s = Math.max(0, (x - bl) / (L - bl));
+    let b = nw / 2 + (ew / 2 - nw / 2) * ss(0.03, 0.78, s);
+    const d = L - x;
+    const E = endData(P.he);
+    if (E) {
+      // Ist der Stiel zu kurz für die ganze Vorlage, wird nur ihr vorderer Teil in Originalproportion verwendet
+      const full = E[0] * ew, cap = Math.min(full, (L - bl) * 0.6), fr = cap / full, xj = L - cap;
+      if (d < cap) {
+        const sj = Math.max(0, (xj - bl) / (L - bl)), bj = nw / 2 + (ew / 2 - nw / 2) * ss(0.03, 0.78, sj);
+        b = bj * lerpArr(E[1], d / cap * fr) / lerpArr(E[1], fr);
+      }
+    } else if (P.he === "gerade") {
+      const r = Math.min(4, b * 0.45);
+      if (d < r) b = b - r + Math.sqrt(Math.max(0, r * r - (r - d) * (r - d)));
+    } else if (P.he === "spitz") {
+      const cap = Math.min(ew * 0.9, (L - bl) * 0.25);
+      if (d < cap) b *= 0.12 + 0.88 * Math.pow(d / cap, 0.85);
+    } else {
+      const cap = Math.min(b * 1.1, (L - bl) * 0.3);
+      if (d < cap) { const q = (cap - d) / cap; b *= Math.sqrt(Math.max(0, 1 - q * q)); }
+    }
+    return b;
+  };
+  const neckSmooth = (fn, sigma) => {
+    const st = 0.25, n = Math.ceil(L / st), r = Math.ceil(3 * sigma / st);
+    const raw = Array.from({ length: n + 1 }, (_, i) => fn(i * st));
+    const ker = Array.from({ length: 2 * r + 1 }, (_, j) => Math.exp(-Math.pow((j - r) * st / sigma, 2) / 2));
+    const blur = raw.map((_, i) => { let a = 0, w = 0; for (let j = -r; j <= r; j++) { const k = i + j; if (k < 0 || k > n) continue; a += raw[k] * ker[j + r]; w += ker[j + r]; } return a / w; });
+    return x => { const i = Math.min(n, Math.max(0, Math.round(x / st))); const w = Math.exp(-Math.pow((x - bl) / (bl * 0.3 + 4), 2)); return fn(x) * (1 - w) + blur[i] * w; };
+  };
+  const hwL = neckSmooth(x => Math.max(bowlL(x), handleHW(x)), nw * 0.3 + 1.5);
+  const hwR = neckSmooth(x => Math.max(bowlR(x), handleHW(x)), nw * 0.3 + 1.5);
+
+  // Seitenprofil als echte Biegung: Die Mittellinie wird über ihre Bogenlänge s (0 = Laffenspitze, L = Griffende)
+  // aus dem Tangentenwinkel psi(s) aufgebaut. Vor dem Knick ist die Laffe um alpha gedreht, am Knick ein Kreisbogen
+  // mit dem Übergangsradius, im Stiel die Stielkrümmung. Ober- und Unterkante liegen senkrecht zur Mittellinie.
+  // Crank-Winkel θ = Winkel zwischen Laffenrand-Sehne (Oberkante, Spitze → hinteres Laffenende) und Stielachse (Knick → Griffende).
+  const th0 = P.ca * Math.PI / 180, xk = bl * (1 - P.kp / 100);
+  const psiH = x => x > bl ? Math.atan(-2 * hc * (x - bl) / Math.pow(L - bl, 2)) : 0;
+  let alpha = 0, arc = 0;
+  const psi = x => {
+    const f = arc > 0 ? Math.min(1, Math.max(0, (xk + arc / 2 - x) / arc)) : (x < xk ? 1 : 0);
+    return alpha * f + psiH(x);
+  };
+  const ds = 0.25, nC = Math.ceil(L / ds);
+  let CX = [], CZ = [];
+  const buildC = () => {
+    CX = [0]; CZ = [0];
+    for (let i = 1; i <= nC; i++) { const a = psi((i - 0.5) * ds); CX.push(CX[i - 1] + Math.cos(a) * ds); CZ.push(CZ[i - 1] + Math.sin(a) * ds); }
+    const k = Math.round(xk / ds), ox = xk - CX[k], oz = -CZ[k];
+    CX = CX.map(v => v + ox); CZ = CZ.map(v => v + oz);
+  };
+  const cAt = x => { const f = Math.min(nC, Math.max(0, x / ds)), i = Math.min(nC - 1, Math.floor(f)), t = f - i; return [CX[i] + (CX[i + 1] - CX[i]) * t, CZ[i] + (CZ[i + 1] - CZ[i]) * t]; };
+  const off = (x, n) => { const c = cAt(x), a = psi(x); return [c[0] - Math.sin(a) * n, c[1] + Math.cos(a) * n]; };
+  const half = x => {
+    const nb = Math.exp(-Math.pow((x - bl * 1.08) / ((L - bl) * 0.15 + 8), 2));
+    const u = Math.max(0, (x - bl) / (L - bl));
+    const T = th * (1 + 0.25 * nb) * (1 - 0.5 * ss(0.1, 1, u));
+    let h = 1.5 + (T / 2 - 1.5) * ss(bl * 0.3, bl * 1.05, x);
+    const cap = th * 0.4, d = L - x;
+    if (d < cap) { const q = (cap - d) / cap; h = Math.max(0.3, h * Math.sqrt(Math.max(0, 1 - q * q))); }
+    return h;
+  };
+  const belly = neckSmooth(x => Math.max((bd + 3) * BP.depth(x / bl), half(x)), th * 0.35 + 2);
+  const topP = x => off(x, -half(x));
+  const botP = x => off(x, belly(x));
+  // alpha per Bisektion so bestimmen, dass der gemessene Winkel genau θ ist
+  const angleRS = () => {
+    const a = topP(0), b2 = topP(bl), c = cAt(xk), e = cAt(L);
+    return Math.atan2(-(b2[1] - a[1]), b2[0] - a[0]) * -1 - Math.atan2(e[1] - c[1], e[0] - c[0]);
+  };
+  let lo = -0.6, hi = 2.6;
+  for (let it = 0; it < 36; it++) {
+    alpha = (lo + hi) / 2;
+    arc = Math.min(P.kr * Math.abs(alpha), 1.8 * Math.min(xk, L - xk));
+    buildC();
+    if (angleRS() < th0) lo = alpha; else hi = alpha;
+  }
+  // Laffe vor dem Knick höchstens 90° drehen, sonst klappt die Spitze über; dann gilt der tatsächlich erreichte Winkel
+  let caMax = null;
+  if (alpha > Math.PI / 2) { alpha = Math.PI / 2; arc = Math.min(P.kr * alpha, 1.8 * Math.min(xk, L - xk)); buildC(); const r = Math.round(angleRS() * 180 / Math.PI); if (r < P.ca) caMax = r; }
+  const caAct = caMax === null ? P.ca : caMax;
+
+  const hLs = xs.map(hwL), hRs = xs.map(hwR), tops = xs.map(topP), bots = xs.map(botP);
+  const allP = tops.concat(bots);
+  const maxL = Math.max(...hLs), maxR = Math.max(...hRs);
+  const zMin = Math.min(...allP.map(q => q[1])), zMax = Math.max(...allP.map(q => q[1]));
+  const yMinS = Math.min(0, ...allP.map(q => q[0])), yMaxS = Math.max(L, ...allP.map(q => q[0]));
+  const sideW = zMax - zMin, topW = maxL + maxR, ext = yMaxS - yMinS;
+  // Drop: Abstand des Griffendes (Mittellinie) von der Laffenrand-Sehne
+  const rA = topP(0), rB = topP(bl), pE = cAt(L);
+  const drop = Math.round(Math.abs((rB[0] - rA[0]) * (pE[1] - rA[1]) - (rB[1] - rA[1]) * (pE[0] - rA[0])) / Math.hypot(rB[0] - rA[0], rB[1] - rA[1]));
+
+  // Blatt hochkant: A4, sonst A3 oder (Schalter pp) ein langes Blatt aus 2 × A4 mit Überlappung ov, Seitenanfänge in off
+  const head = 64, m = 15, gap = 14, ov = 20;
+  const fits = (pw, ph) => head + ext + m <= ph && sideW + topW + 2 * gap + 2 * m <= pw;
+  const pg = fits(210, 297) ? { W: 210, H: 297, fmt: "a4", label: "A4 " + T("portrait") }
+    : P.pp === "2a4" && fits(210, 2 * 297 - ov) ? { W: 210, H: 2 * 297 - ov, fmt: "a4", label: "2 × A4 " + T("portrait"), off: [0, 297 - ov], PH: 297 }
+    : { W: 297, H: 420, fmt: "a3", label: "A3 " + T("portrait") + (P.pp === "2a4" ? T("tooWide") : "") };
+  const W = pg.W, H = pg.H;
+
+  const items = [];
+  const poly = (pts, style, closed) => items.push({ t: "poly", pts, style, closed });
+  const text = (x, y, str, size, anchor = "start", bold = false, rot = 0) => items.push({ t: "text", x, y, str, size, anchor, bold, rot });
+
+  // Datenblock
+  text(m, m + 5, mir ? `${name} · ${T("hdL")}` : name, 4.4, "start", true);
+  const specs = [
+    [T("specs")[0], L], [T("specs")[1], Math.round(L - bl)], [T("specs")[2], bw],
+    [T("specs")[3], Math.round(bl)], [T("specs")[4], caAct, "°"], [T("specs")[5], drop], [T("specs")[6], th]
+  ];
+  specs.push([T("shapesLbl"), `${bowlCode(P.bs)} · ${endCode(P.he)}`, ""]);
+  specs.forEach(([k, v, u], i) => { const y = m + 12 + i * 4.6; text(m, y, k, 3); text(m + 46, y, v + (u === undefined ? " mm" : u), 3, "end"); });
+  const sbx = W / 2 - 25, sby = m + 8;
+  poly([[sbx, sby], [sbx + 50, sby]], "bar");
+  for (let k = 0; k <= 50; k += 10) poly([[sbx + k, sby], [sbx + k, sby + (k % 50 ? 1.6 : 3)]], "thin");
+  text(W / 2, sby + 7, T("check"), 2.8, "middle");
+  text(W / 2, sby + 12, T("printAt")(pg.off ? "2 × A4" : pg.fmt.toUpperCase()), 2.8, "middle");
+  text(W - m, m + 5, T("units"), 2.8, "end");
+  text(W - m, m + 10, T("grain"), 2.8, "end");
+  text(W - m, m + 15, `${T("blank")} ${Math.ceil(yMaxS - Math.min(...allP.map(q => q[0])))} × ${Math.ceil(topW)} × ${Math.ceil(sideW)}`, 2.8, "end");
+  if (P.ca > 15) { text(W - m, m + 22, T("warn1"), 2.8, "end", true); text(W - m, m + 27, T("warn2"), 2.8, "end"); }
+  if (caMax !== null) text(W - m, m + 34, T("caMaxS")(caMax), 2.8, "end", true);
+
+  // Ansichten nebeneinander
+  const y0 = head + Math.max(0, (H - head - m - ext) / 2) - yMinS;
+  const gx = (W - (sideW + topW + 2 * gap)) / 2;
+  const sx = gx - zMin, dimX = gx + sideW + gap, cx = dimX + gap + maxL;
+
+  const pt = q => [sx + q[1], y0 + q[0]];
+  poly(tops.map(pt).concat(bots.slice().reverse().map(pt)), "cut", true);
+  const hollow = Array.from({ length: 241 }, (_, i) => {
+    const x = 2.5 + bl * 0.92 * (1 - Math.cos(Math.PI * i / 240)) / 2;
+    return pt(off(x, -half(x) + bd * BP.depth((x - 2.5) / (bl * 0.92))));
+  });
+  if (hollow.length > 2 && bd > 0) poly(hollow, "hair", false);
+
+  // Bezugslinien des Crank: Laffenrand-Sehne R, Stielachse S, Knick- und Stoppschnittlinie
+  const extL = (a, b, e1, e2) => { const dx = b[0] - a[0], dy = b[1] - a[1], n = Math.hypot(dx, dy); return [[a[0] - dx / n * e1, a[1] - dy / n * e1], [b[0] + dx / n * e2, b[1] + dy / n * e2]]; };
+  poly(extL(pt(topP(0)), pt(topP(bl)), 4, 10), "ref");
+  poly(extL(pt(cAt(xk)), pt(cAt(L)), 18, 3), "ref");
+  text(sx + zMin - 3, y0 + xk + 1, `Crank ${caAct}°`, 3, "end", true);
+  poly([[sx + zMin - 2, y0 + xk], [sx + zMax + 2, y0 + xk]], "knick");
+  poly([[cx - maxL - 2, y0 + xk], [cx + maxR + 2, y0 + xk]], "knick");
+  text(cx + maxR + 4, y0 + xk - 0.6, T("bend"), 2.6, "start", true);
+  text(cx + maxR + 4, y0 + xk + 3.6, T("saw"), 2.6);
+
+  poly([[dimX, y0], [dimX, y0 + L]], "thin");
+  poly([[dimX - 1.2, y0 + 2.5], [dimX, y0], [dimX + 1.2, y0 + 2.5]], "thin");
+  poly([[dimX - 1.2, y0 + L - 2.5], [dimX, y0 + L], [dimX + 1.2, y0 + L - 2.5]], "thin");
+  text(dimX - 1.6, y0 + L / 2, `${L} mm`, 3, "middle", false, -90);
+
+  poly([[cx, y0 - 10], [cx, Math.min(H - m, y0 + L + 10)]], "center");
+  const outline = xs.map((x, i) => [cx - hLs[i], y0 + x]).concat(xs.map((x, i) => [cx + hRs[i], y0 + x]).reverse());
+  poly(outline, "cut", true);
+  const inner = [];
+  xs.forEach(x => { const t = (x - 2.5) / (bl - 8); if (t < 0 || t > 1) return; const [l, r] = BP.lr(t); if (l + r > 0.01) inner.push([x, l * (bw - 5), r * (bw - 5)]); });
+  if (inner.length > 2 && bd > 0) poly(inner.map(([x, l]) => [cx - l, y0 + x]).concat(inner.map(([x, , r]) => [cx + r, y0 + x]).reverse()), "hair", true);
+
+  // Facetten als 45°-Fasen mit Fasenbreite c(x) = k · kleinste halbe Abmessung, gezeichnet nur in der Draufsicht
+  // (leicht k = 0,3; achteckig k = 1 − tan 22,5° ≈ 0,586, Kante bei ≈ 41 %). c steigt am Laffenende kurz und weich an
+  // und läuft zum Griff hin spitz aus; an beiden Enden treffen die Linien die Kontur. Bereich: Hals (von bl über ein Viertel der Stiellänge, mind. 25 mm, höchstens
+  // bis L − 0,35·(L − bl)) oder ganzer Stiel (bis 4 mm vor die Griffendform, nie kürzer als der Hals-Bereich)
+  // Höchstens achteckiger Querschnitt (Kante bei ≈ 41 % der halben Breite)
+  const facK = 1 - Math.tan(Math.PI / 8);
+  const facEnd = (() => { const E = endData(P.he); if (E) return Math.min(E[0] * ew, (L - bl) * 0.6); if (P.he === "gerade") return 4; if (P.he === "spitz") return Math.min(ew * 0.9, (L - bl) * 0.25); return Math.min(ew * 0.55, (L - bl) * 0.3); })();
+  // Bereich: Beginn fa nach dem Laffenende, Länge fl, höchstens bis kurz vor die Griffendform, mindestens 10 mm lang
+  const facMax = Math.max(bl + 10, L - facEnd - 4);
+  const facXa = Math.min(bl + P.fa, facMax - 10), facXb = Math.max(facXa + 10, Math.min(facXa + P.fl, facMax));
+  // Größte Breite nach fv % der Länge, danach spitz zulaufend bis facXb
+  const facP = P.fv / 100 * (facXb - facXa);
+  const facE = x => P.fc !== "an" || x <= facXa || x >= facXb ? 0 : x < facXa + facP ? ss(0, facP, x - facXa) : Math.pow((facXb - x) / (facXb - facXa - facP), 1.2);
+  const facC = x => { const e = facE(x); return e ? e * Math.min(P.fw, facK * Math.min(hwL(x), hwR(x), half(x), belly(x))) : 0; };
+  if (P.fc === "an") {
+    const fx = Array.from({ length: 121 }, (_, i) => facXa + (facXb - facXa) * i / 120);
+    poly(fx.map(x => [cx - hwL(x) + facC(x), y0 + x]), "facet");
+    poly(fx.map(x => [cx + hwR(x) - facC(x), y0 + x]), "facet");
+    // Schraffur der Fasenflächen: kurze schräge Striche von der Kontur zur Facettenlinie, alle 1,6 mm, wo die Fase mind. 0,5 mm breit ist
+    for (let x = facXa + 0.8; x < facXb; x += 1.6) {
+      const c = facC(x); if (c < 0.5) continue;
+      const x2 = Math.min(facXb, x + c), c2 = facC(x2);
+      poly([[cx - hwL(x), y0 + x], [cx - hwL(x2) + c2, y0 + x2]], "hatch");
+      poly([[cx + hwR(x), y0 + x], [cx + hwR(x2) - c2, y0 + x2]], "hatch");
+    }
+    text(cx + Math.max(...fx.map(hwR)) + 3, y0 + (facXa + facXb) / 2 + 1, T("facets"), 2.6, "start", true);
+  }
+
+  // 2 × A4: Anlegelinien an beiden Seitenkanten der Überlappung, Passkreuze in ihrer Mitte, Seitenzahlen
+  if (pg.off) {
+    const ya = pg.off[1], yb = pg.PH, yc = (ya + yb) / 2;
+    poly([[4, ya], [W - 4, ya]], "dash"); poly([[4, yb], [W - 4, yb]], "dash");
+    text(m, ya - 1.5, T("glue")(2), 2.6, "start", true); text(W - m, ya - 1.5, T("pageNo")(1, 2), 2.6, "end", true);
+    text(m, yb + 4, T("glue")(1), 2.6, "start", true); text(W - m, yb + 4, T("pageNo")(2, 2), 2.6, "end", true);
+    [10, W - 10].forEach(x => {
+      poly([[x - 4, yc], [x + 4, yc]], "thin"); poly([[x, yc - 4], [x, yc + 4]], "thin");
+      poly(Array.from({ length: 24 }, (_, i) => [x + 2.5 * Math.cos(i * Math.PI / 12), yc + 2.5 * Math.sin(i * Math.PI / 12)]), "thin", true);
+    });
+  }
+
+  const blank = { l: Math.ceil(yMaxS - Math.min(...allP.map(q => q[0]))), w: Math.ceil(topW), h: Math.ceil(sideW) };
+  // Daten für die 3D-Ansicht (jeder 4. Messpunkt)
+  const geo = xs.filter((_, i) => i % 4 === 0 || i === N).map((x, k) => {
+    const i = Math.min(N, k * 4);
+    const hol = bd > 0 ? bd * BP.depth((x - 2.5) / (bl * 0.92)) : 0;
+    const c = cAt(x);
+    return [c[0], c[1], psi(x), hLs[i], hRs[i], -half(x), belly(x), hol, half(x), facC(x), facE(x)];
+  });
+  return { W, H, items, blank, page: pg, geo, L, drop, caMax };
+}
+
+/* ---------- Ausgabe ---------- */
+const STYLE = {
+  cut:    { w: 0.45, dash: null },
+  hair:   { w: 0.15, dash: null },
+  ref:    { w: 0.18, dash: [1.5, 1.2] },
+  knick:  { w: 0.3,  dash: [4, 1.2, 0.8, 1.2] },
+  thin:   { w: 0.2,  dash: null },
+  bar:    { w: 0.8,  dash: null },
+  dash:   { w: 0.25, dash: [2, 1.2] },
+  center: { w: 0.18, dash: [2.5, 1.8] },
+  facet:  { w: 0.25, dash: [1, 0.8] },
+  hatch:  { w: 0.1,  dash: null },
+  fill:   { w: 0, dash: null, fill: true }
+};
+const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+const f = n => n.toFixed(2);
+
+function toSVG(sc) {
+  let out = "";
+  for (const it of sc.items) {
+    if (it.t === "poly") {
+      const st = STYLE[it.style];
+      const d = "M" + it.pts.map(p => f(p[0]) + " " + f(p[1])).join(" L") + (it.closed ? " Z" : "");
+      out += st.fill
+        ? `<path d="${d}" fill="#222222"/>`
+        : `<path d="${d}" fill="none" stroke="#222222" stroke-width="${st.w}" stroke-linejoin="round" stroke-linecap="round"${st.dash ? ` stroke-dasharray="${st.dash.join(" ")}"` : ""}/>`;
+    } else {
+      out += `<text x="${f(it.x)}" y="${f(it.y)}" font-family="Helvetica, Arial, sans-serif" font-size="${it.size}" font-weight="${it.bold ? 700 : 400}" text-anchor="${it.anchor}" fill="#222222"${it.rot ? ` transform="rotate(${it.rot} ${f(it.x)} ${f(it.y)})"` : ""}${it.bold && it.size < 3 ? ' letter-spacing="0.3"' : ""}>${esc(it.str)}</text>`;
+    }
+  }
+  const o = sc.page.off;
+  if (!o) return `<svg xmlns="http://www.w3.org/2000/svg" width="${f(sc.W)}mm" height="${f(sc.H)}mm" viewBox="0 0 ${f(sc.W)} ${f(sc.H)}"><rect width="${f(sc.W)}" height="${f(sc.H)}" fill="#ffffff"/>` + out + "</svg>";
+  // 2 × A4: Seiten untereinander mit grauer Fuge, jede auf ihr Blatt beschnitten und gerahmt
+  const PH = sc.page.PH, G = 8, TH = o.length * PH + (o.length - 1) * G;
+  let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${f(sc.W)}mm" height="${f(TH)}mm" viewBox="0 0 ${f(sc.W)} ${f(TH)}"><defs><clipPath id="pgclip"><rect width="${f(sc.W)}" height="${f(PH)}"/></clipPath></defs><rect width="${f(sc.W)}" height="${f(TH)}" fill="#c8c8c8"/>`;
+  o.forEach((dy, i) => {
+    svg += `<g transform="translate(0 ${f(i * (PH + G))})"><rect width="${f(sc.W)}" height="${f(PH)}" fill="#ffffff" stroke="#999999" stroke-width="0.3"/><g clip-path="url(#pgclip)"><g transform="translate(0 ${f(-dy)})">${out}</g></g></g>`;
+  });
+  return svg + "</svg>";
+}
+
+function toPDF(sc) {
+  const doc = new window.jspdf.jsPDF({ unit: "mm", format: sc.page.fmt, orientation: "portrait" });
+  // 2 × A4: je Seite um ihren Anfang dy verschoben; was über die Seite hinausragt, schneidet das Blattformat ab
+  (sc.page.off || [0]).forEach((dy, pi) => {
+  if (pi) doc.addPage(sc.page.fmt, "portrait");
+  const ph = sc.page.PH || sc.H, vis = ys => ys.some(y => y >= dy - 5) && ys.some(y => y <= dy + ph + 5);
+  doc.setDrawColor(34, 34, 34); doc.setFillColor(34, 34, 34); doc.setTextColor(34, 34, 34);
+  doc.setLineJoin("round"); doc.setLineCap("round");
+  for (const it of sc.items) {
+    if (!vis(it.t === "poly" ? it.pts.map(q => q[1]) : [it.y])) continue;
+    if (it.t === "poly") {
+      const st = STYLE[it.style];
+      const deltas = [];
+      for (let i = 1; i < it.pts.length; i++) deltas.push([it.pts[i][0] - it.pts[i - 1][0], it.pts[i][1] - it.pts[i - 1][1]]);
+      if (!st.fill) { doc.setLineWidth(st.w); doc.setLineDashPattern(st.dash || [], 0); }
+      doc.lines(deltas, it.pts[0][0], it.pts[0][1] - dy, [1, 1], st.fill ? "F" : "S", !!it.closed);
+    } else {
+      doc.setFont("helvetica", it.bold ? "bold" : "normal");
+      doc.setFontSize(it.size * 2.835);
+      if (it.rot) {
+        const w = doc.getTextWidth(it.str);
+        doc.text(it.str, it.x, it.y - dy + w / 2, { angle: 90 });
+      } else {
+        doc.text(it.str, it.x, it.y - dy, { align: it.anchor === "middle" ? "center" : it.anchor === "end" ? "right" : "left" });
+      }
+    }
+  }
+  });
+  return { buf: doc.output("arraybuffer"), page: sc.page.label };
+}
+
+/* ---------- Oberfläche ---------- */
+const $ = id => document.getElementById(id);
+let scene;
+
+function renderTypes() {
+  $("types").innerHTML = Object.entries(PRESETS).map(([k, v]) =>
+    `<button type="button" data-k="${k}" aria-pressed="${k === state.type}">${T("types")[k]}<small>${v.L} mm</small></button>`).join("");
+}
+const SHAPES = () => ["ei", "rund", "schaufel"].concat(Object.keys(BOWLS).map(k => "d" + k), Object.keys(CUSTOM.bowls).map(k => "u" + k));
+function thumb(bs) {
+  const pr = bowlProfile(bs, 0.44), h = Math.min(30, 36 * pr.ar), w = h / pr.ar, top = 17 - h / 2, n = 48, l = [], r = [];
+  for (let j = 0; j <= n; j++) { const t = Math.min(0.9995, Math.max(0.0005, j / n)), [a, b] = pr.lr(t), y = top + h * j / n; l.push(`${(20 - a * w).toFixed(1)} ${y.toFixed(1)}`); r.unshift(`${(20 + b * w).toFixed(1)} ${y.toFixed(1)}`); }
+  return `<svg viewBox="0 0 40 34" aria-hidden="true"><path d="M20 ${top.toFixed(1)} L${l.join(" L")} L20 ${(top + h).toFixed(1)} L${r.join(" L")} Z" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>`;
+}
+const ENDSHAPES = () => ["rund", "gerade", "spitz"].concat(Object.keys(ENDS).map(k => "e" + k), Object.keys(CUSTOM.ends).map(k => "w" + k));
+function endThumb(he) {
+  const E = endData(he);
+  let pr;
+  if (E) pr = d => lerpArr(E[1], d);
+  else if (he === "gerade") pr = d => d < 0.12 ? 0.8 + 0.2 * Math.sqrt(d / 0.12) : 1;
+  else if (he === "spitz") pr = d => d < 0.45 ? 0.12 + 0.88 * Math.pow(d / 0.45, 0.85) : 1;
+  else pr = d => d < 0.45 ? Math.sqrt(1 - Math.pow((0.45 - d) / 0.45, 2)) : 1;
+  const ar = Math.min(E ? E[0] : 2, 2.6), h = 28, w = Math.min(14, h / ar), n = 40, l = [], r = [];
+  for (let j = 0; j <= n; j++) { const v = pr(j / n) * w / 2, y = 3 + h * j / n; l.push(`${(20 - v).toFixed(1)} ${y.toFixed(1)}`); r.unshift(`${(20 + v).toFixed(1)} ${y.toFixed(1)}`); }
+  return `<svg viewBox="0 0 40 34" aria-hidden="true"><path d="M${l.join(" L")} M${r.join(" L")} M${l[0]} L${r[r.length - 1]}" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>`;
+}
+function renderFields() {
+  // Auf dem Handy sind beim ersten Besuch nur „Gesamt“ und „Laffe“ offen
+  let closed = window.matchMedia && matchMedia("(max-width: 760px)").matches ? ["stiel", "seite"] : [];
+  try { const c = localStorage.getItem("loeffel-closed"); if (c) closed = JSON.parse(c); } catch (e) {}
+  $("fields").innerHTML = GROUPS.map(g => `<details class="grp" data-g="${g.id}"${closed.includes(g.id) ? "" : " open"}><summary>${T("groups")[g.id]}</summary><div class="grp-body">` + g.fields.map(fd => fd.gallery ?
+    `<div class="field"><span class="flabel" id="l-${fd.k}">${T("fields")[fd.k][0]}</span><div class="gallery" role="group" aria-labelledby="l-${fd.k}">` +
+      (fd.k === "bs" ? SHAPES() : ENDSHAPES()).map(v => {
+        const code = fd.k === "bs" ? bowlCode(v) : endCode(v), own = v[0] === "u" || v[0] === "w";
+        const t = T("shapes")[v] ? `${code} · ${T("shapes")[v]}` : own ? `${code} · ${T("own")}` : code;
+        return `<button type="button" data-ck="${fd.k}" data-v="${v}" title="${t}" class="${own ? "own" : ""}">${fd.k === "bs" ? thumb(v) : endThumb(v)}<span>${code}</span></button>`; }).join("") + `</div>
+      <div class="upl"><label class="upbtn"><input type="file" accept=".svg,.png,.jpg,.jpeg,.webp,image/*" data-up="${fd.k}">${T("upload")}</label><button type="button" class="upbtn" data-del="${fd.k}" hidden>${T("remove")}</button></div>
+      <span class="hint">${T(fd.k === "bs" ? "upHintBowl" : "upHintEnd")}</span></div>` :
+    fd.choice ?
+    `<div class="field" id="fld-${fd.k}"><span class="flabel" id="l-${fd.k}">${T("fields")[fd.k][0]}</span><div class="seg" role="group" aria-labelledby="l-${fd.k}">` +
+      fd.choice.map(([v, t]) => `<button type="button" data-ck="${fd.k}" data-v="${v}">${T(t) || t}</button>`).join("") + `</div>${T("fields")[fd.k][1] ? `<span class="hint">${T("fields")[fd.k][1]}</span>` : ""}</div>` :
+    `<div class="field" id="fld-${fd.k}"><div class="row"><label for="f-${fd.k}">${T("fields")[fd.k][0]}</label><output id="o-${fd.k}" for="f-${fd.k}"></output></div>
+     <input type="range" id="f-${fd.k}" data-k="${fd.k}" min="${fd.min}" max="${fd.max}" step="${fd.step || 1}">
+     ${T("fields")[fd.k][1] ? `<span class="hint">${T("fields")[fd.k][1]}</span>` : ""}</div>`).join("") + `</div></details>`).join("");
+  $("fields").querySelectorAll("details").forEach(d => d.addEventListener("toggle", () => {
+    const shut = [...$("fields").querySelectorAll("details:not([open])")].map(x => x.dataset.g);
+    try { localStorage.setItem("loeffel-closed", JSON.stringify(shut)); } catch (e) {}
+  }));
+}
+function syncFields() {
+  $("fld-p").hidden = !!bowlData(state.P.bs);
+  $("fld-hd").hidden = !isAsym(state.P.bs);
+  ["fw", "fa", "fl", "fv"].forEach(k => $("fld-" + k).hidden = state.P.fc !== "an");
+  document.querySelectorAll("[data-del]").forEach(b => { const v = state.P[b.dataset.del]; b.hidden = !(v[0] === "u" || v[0] === "w"); });
+  GROUPS.forEach(g => g.fields.forEach(fd => {
+    if (fd.choice || fd.gallery) { document.querySelectorAll(`[data-ck="${fd.k}"]`).forEach(b => b.setAttribute("aria-pressed", b.dataset.v === state.P[fd.k])); return; }
+    $("f-" + fd.k).value = state.P[fd.k];
+    $("o-" + fd.k).textContent = state.P[fd.k].toLocaleString(lang) + " " + (fd.unit || "mm");
+  }));
+}
+function update() {
+  const name = T("types")[state.type];
+  scene = buildScene(state.P, name);
+  $("sheet").innerHTML = toSVG(scene);
+  $("sheet").classList.toggle("tall", !!scene.page.off);
+  zoomRefresh();
+  update3D(scene);
+  const b = scene.blank;
+  $("facts").innerHTML =
+    `<div><dt>${T("blankMin")}</dt><dd>${b.l} × ${b.w} × ${b.h} mm</dd></div>` +
+    `<div><dt>${T("drop")}</dt><dd>${scene.drop} mm</dd></div>` +
+    `<div><dt>${T("paper")}</dt><dd>${scene.page.label}</dd></div>` +
+    `<div><dt>${T("share")}</dt><dd>${Math.round(Math.min(state.P.bl, state.P.L * 0.6) / state.P.L * 100)} % · ${T("guide")} ${SHARE[state.type]}</dd></div>`;
+  $("warn").hidden = state.P.ca <= 15;
+  // Mundgröße beim Esslöffel: Laffe höchstens ca. 45 × 65 mm und 8 mm tief
+  const ess = state.type === "ess";
+  $("warnMouth").hidden = !(ess && (state.P.bw > 45 || Math.min(state.P.bl, state.P.L * 0.6) > 65));
+  $("warnDepth").hidden = !(ess && state.P.bd > 8);
+  $("warnMax").hidden = scene.caMax === null; $("warnMax").textContent = scene.caMax === null ? "" : T("caMax")(scene.caMax);
+  try { localStorage.setItem("loeffel-state", JSON.stringify(state)); } catch (e) {}
+}
+
+$("types").addEventListener("click", e => {
+  const btn = e.target.closest("button"); if (!btn) return;
+  state = { type: btn.dataset.k, P: { ...PRESETS[btn.dataset.k] } };
+  renderTypes(); syncFields(); update();
+});
+$("fields").addEventListener("click", e => {
+  const b = e.target.closest("[data-ck]"); if (!b) return;
+  state.P[b.dataset.ck] = b.dataset.v;
+  const D = b.dataset.ck === "bs" && bowlData(b.dataset.v);
+  if (D) state.P.bl = Math.min(130, Math.max(25, Math.round(state.P.bw * D[0])));
+  syncFields(); update();
+});
+$("fields").addEventListener("change", async e => {
+  const k = e.target.dataset && e.target.dataset.up; if (!k || !e.target.files[0]) return;
+  const kind = k === "bs" ? "bowl" : "end";
+  try {
+    const data = await loadShapeFile(e.target.files[0], kind);
+    let v;
+    if (kind === "bowl") { v = "u" + CUSTOM.nb; CUSTOM.bowls[CUSTOM.nb++] = data; state.P.bl = Math.min(130, Math.max(25, Math.round(state.P.bw * data[0]))); }
+    else { v = "w" + CUSTOM.ne; CUSTOM.ends[CUSTOM.ne++] = data; }
+    saveCustom(); state.P[k] = v;
+    renderFields(); syncFields(); update();
+    status(T("uploaded")(kind === "bowl" ? bowlCode(v) : endCode(v)));
+  } catch (err) { status(T("uploadFail")); }
+  e.target.value = "";
+});
+$("fields").addEventListener("click", e => {
+  const b = e.target.closest("[data-del]"); if (!b) return;
+  const k = b.dataset.del, v = state.P[k];
+  if (v[0] === "u") delete CUSTOM.bowls[v.slice(1)]; else if (v[0] === "w") delete CUSTOM.ends[v.slice(1)]; else return;
+  saveCustom(); state.P[k] = PRESETS[state.type][k];
+  renderFields(); syncFields(); update();
+});
+// Zufallsdesign: zufällige Laffenform und Griffende, Maße in sinnvollen Grenzen um die Startwerte der gewählten Löffelart.
+// Papier, Facettenlinien und Löffelart bleiben, eigene Formen werden nicht gewählt.
+const CA_RANGE = { ess: [12, 20], koch: [0, 12], tee: [10, 20], kelle: [45, 75] };
+function randomDesign() {
+  const B = PRESETS[state.type], P = { ...state.P };
+  const rnd = (a, b) => Math.round(a + Math.random() * (b - a)), pick = a => a[Math.floor(Math.random() * a.length)];
+  P.bs = pick(["ei", "rund", "schaufel"].concat(Object.keys(BOWLS).map(k => "d" + k)));
+  P.he = pick(["rund", "gerade", "spitz"].concat(Object.keys(ENDS).map(k => "e" + k)));
+  P.hd = pick(["r", "l"]);
+  P.L = rnd(B.L * 0.92, B.L * 1.08);
+  P.bl = rnd(B.bl * 0.9, B.bl * 1.1);
+  const D = bowlData(P.bs);
+  // Bei Formen aus den Vorlagen folgt die Breite dem Seitenverhältnis, begrenzt auf einen sinnvollen Bereich
+  P.bw = Math.round(Math.min(B.bw * 1.07, Math.max(B.bw * 0.7, D ? P.bl / D[0] : rnd(B.bw * 0.9, B.bw * 1.07))));
+  if (D) P.bl = Math.round(Math.min(B.bl * 1.12, Math.max(B.bl * 0.8, P.bw * D[0])));
+  P.bd = rnd(B.bd * 0.8, B.bd * 1.1);
+  P.p = rnd(38, 52);
+  P.nw = rnd(B.nw * 0.85, B.nw * 1.15); P.ew = rnd(B.ew * 0.85, B.ew * 1.15); P.th = rnd(B.th * 0.85, B.th * 1.15);
+  P.ca = rnd(...CA_RANGE[state.type]);
+  P.kp = state.type === "kelle" ? rnd(0, 10) : rnd(25, 33);
+  P.kr = rnd(15, 35); P.hc = rnd(-6, 8);
+  GROUPS.forEach(g => g.fields.forEach(fd => { if (fd.min !== undefined) P[fd.k] = Math.min(fd.max, Math.max(fd.min, P[fd.k])); }));
+  state.P = P;
+  syncFields(); update();
+}
+$("rndBtn").addEventListener("click", randomDesign);
+document.addEventListener("input", e => {
+  const k = e.target.dataset && e.target.dataset.k; if (!k || e.target.type !== "range") return;
+  state.P[k] = Number(e.target.value);
+  syncFields(); update();
+});
+
+/* ---------- Zoom in der Vorschau ---------- */
+// Nur die Anzeige: Verändert wird der viewBox des eingefügten SVG; toSVG, PDF und SVG-Export bleiben unverändert.
+// Mausrad zoomt zur Mausposition (1–8-fach), Ziehen verschiebt, Doppelklick zeigt wieder das ganze Blatt.
+// cx/cy = Mitte des Ausschnitts als Anteil von Blattbreite/-höhe; der Ausschnitt bleibt bei Änderungen der Regler erhalten.
+const ZOOM_MAX = 8;
+const ZM = { z: 1, cx: 0.5, cy: 0.5, W: 0, H: 0, vb0: "", drag: null, mini: false };
+function zoomView() {
+  const w = ZM.W / ZM.z, h = ZM.H / ZM.z;
+  return [Math.min(ZM.W - w, Math.max(0, ZM.cx * ZM.W - w / 2)), Math.min(ZM.H - h, Math.max(0, ZM.cy * ZM.H - h / 2)), w, h];
+}
+function applyZoom() {
+  const svg = $("sheet").querySelector("svg"); if (!svg || !ZM.W) return;
+  const [x, y, w, h] = zoomView();
+  ZM.cx = (x + w / 2) / ZM.W; ZM.cy = (y + h / 2) / ZM.H; // am Blattrand anhalten
+  svg.setAttribute("viewBox", ZM.z === 1 ? ZM.vb0 : `${f(x)} ${f(y)} ${f(w)} ${f(h)}`);
+  $("sheet").classList.toggle("zoomed", ZM.z > 1);
+  // Zoom-Anzeige: Mini-Übersicht (Kopie der Vorschau, nach jedem Neuzeichnen einmal neu) mit Rahmen um den Ausschnitt
+  $("zbadge").hidden = ZM.z === 1;
+  if (ZM.z === 1) return;
+  if (!ZM.mini) {
+    const m = $("zmini"), k = Math.min(72 / ZM.W, 110 / ZM.H);
+    m.innerHTML = svg.outerHTML.replace(/pgclip/g, "pgclipm");
+    const ms = m.querySelector("svg");
+    ms.setAttribute("viewBox", ZM.vb0); ms.setAttribute("width", Math.round(ZM.W * k)); ms.setAttribute("height", Math.round(ZM.H * k));
+    ms.insertAdjacentHTML("beforeend", '<rect id="zframe" fill="rgba(217,130,43,.18)" stroke="#d9822b" stroke-width="1.5" vector-effect="non-scaling-stroke"/>');
+    ZM.mini = true;
+  }
+  const fr = $("zframe");
+  fr.setAttribute("x", f(x)); fr.setAttribute("y", f(y)); fr.setAttribute("width", f(w)); fr.setAttribute("height", f(h));
+  $("zlvl").textContent = ZM.z.toLocaleString(lang, { maximumFractionDigits: 1 }) + "×";
+}
+// Nach jedem Neuzeichnen: Blattmaße aus dem frischen SVG übernehmen und den Ausschnitt wieder anwenden
+function zoomRefresh() {
+  const svg = $("sheet").querySelector("svg"); if (!svg) return;
+  ZM.vb0 = svg.getAttribute("viewBox");
+  const v = ZM.vb0.split(" ").map(Number); ZM.W = v[2]; ZM.H = v[3]; ZM.mini = false;
+  applyZoom();
+}
+$("sheet").addEventListener("wheel", e => {
+  const svg = $("sheet").querySelector("svg"); if (!svg || !ZM.W) return;
+  const dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 400 : 1);
+  if (ZM.z === 1 && dy >= 0) return; // ganzes Blatt sichtbar: Seite scrollt normal weiter
+  e.preventDefault();
+  const r = svg.getBoundingClientRect(), [x, y, w, h] = zoomView();
+  const fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height, px = x + fx * w, py = y + fy * h;
+  ZM.z = Math.min(ZOOM_MAX, Math.max(1, ZM.z * Math.exp(-dy * 0.002)));
+  if (dy > 0 && ZM.z < 1.02) ZM.z = 1;
+  const nw = ZM.W / ZM.z, nh = ZM.H / ZM.z; // Blattpunkt unter der Maus bleibt stehen
+  ZM.cx = (px - fx * nw + nw / 2) / ZM.W; ZM.cy = (py - fy * nh + nh / 2) / ZM.H;
+  applyZoom();
+}, { passive: false });
+$("sheet").addEventListener("pointerdown", e => {
+  if (ZM.z === 1 || e.pointerType === "touch" || e.button !== 0) return;
+  const svg = $("sheet").querySelector("svg"); if (!svg) return;
+  ZM.drag = { x: e.clientX, y: e.clientY, r: svg.getBoundingClientRect() };
+  $("sheet").setPointerCapture(e.pointerId); $("sheet").classList.add("panning"); e.preventDefault();
+});
+$("sheet").addEventListener("pointermove", e => {
+  const d = ZM.drag; if (!d) return;
+  const [, , w, h] = zoomView();
+  ZM.cx -= (e.clientX - d.x) / d.r.width * w / ZM.W; ZM.cy -= (e.clientY - d.y) / d.r.height * h / ZM.H;
+  d.x = e.clientX; d.y = e.clientY; applyZoom();
+});
+const zoomDragEnd = () => { ZM.drag = null; $("sheet").classList.remove("panning"); };
+$("sheet").addEventListener("pointerup", zoomDragEnd);
+$("sheet").addEventListener("pointercancel", zoomDragEnd);
+const zoomReset = () => { ZM.z = 1; ZM.cx = ZM.cy = 0.5; applyZoom(); };
+$("sheet").addEventListener("dblclick", zoomReset);
+$("zreset").addEventListener("click", zoomReset);
+
+/* ---------- 3D-Ansicht ---------- */
+const V3 = {};
+function init3D() {
+  if (!window.THREE) { $("v3d").hidden = true; return; }
+  const canvas = $("c3d");
+  try { V3.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); }
+  catch (e) { $("v3d").hidden = true; return; }
+  V3.scene = new THREE.Scene();
+  V3.camera = new THREE.PerspectiveCamera(30, 1, 1, 5000);
+  V3.scene.add(new THREE.HemisphereLight(0xfff8ee, 0x3a3326, 0.85));
+  const sun = new THREE.DirectionalLight(0xffffff, 0.75); sun.position.set(1, 2, 1.2); V3.scene.add(sun);
+  V3.mesh = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshStandardMaterial({ color: 0xc89a68, roughness: 0.8, side: THREE.DoubleSide }));
+  V3.group = new THREE.Group(); V3.group.add(V3.mesh); V3.scene.add(V3.group);
+  V3.yaw = -0.6; V3.pitch = 0.55; V3.dist = 400; V3.on = true; V3.drag = null;
+  V3.still = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  canvas.addEventListener("pointerdown", e => { V3.drag = { x: e.clientX, y: e.clientY }; canvas.setPointerCapture(e.pointerId); });
+  canvas.addEventListener("pointermove", e => {
+    if (!V3.drag) return;
+    V3.yaw += (e.clientX - V3.drag.x) * 0.01;
+    V3.pitch = Math.max(-1.3, Math.min(1.3, V3.pitch + (e.clientY - V3.drag.y) * 0.01));
+    V3.drag = { x: e.clientX, y: e.clientY }; V3.idle = 0;
+  });
+  const end = () => { V3.drag = null; };
+  canvas.addEventListener("pointerup", end); canvas.addEventListener("pointercancel", end);
+  $("v3dToggle").addEventListener("click", () => {
+    V3.on = !V3.on; canvas.hidden = !V3.on;
+    $("v3dToggle").textContent = V3.on ? T("hide") : T("show");
+    $("v3dToggle").setAttribute("aria-expanded", V3.on);
+    try { localStorage.setItem("loeffel-3d", V3.on ? "1" : "0"); } catch (e) {}
+  });
+  try { if (localStorage.getItem("loeffel-3d") === "0") $("v3dToggle").click(); } catch (e) {}
+  V3.idle = 0;
+  const loop = () => {
+    requestAnimationFrame(loop);
+    if (!V3.on) return;
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    if (!w || !h) return;
+    if (canvas.width !== Math.round(w * Math.min(2, devicePixelRatio)) ) { V3.renderer.setPixelRatio(Math.min(2, devicePixelRatio)); V3.renderer.setSize(w, h, false); V3.camera.aspect = w / h; V3.camera.updateProjectionMatrix(); }
+    if (!V3.drag && !V3.still && ++V3.idle > 90) V3.yaw += 0.004;
+    const d = V3.dist;
+    V3.camera.position.set(Math.sin(V3.yaw) * Math.cos(V3.pitch) * d, Math.sin(V3.pitch) * d, Math.cos(V3.yaw) * Math.cos(V3.pitch) * d);
+    V3.camera.lookAt(0, 0, 0);
+    V3.renderer.render(V3.scene, V3.camera);
+  };
+  loop();
+}
+
+// Baut aus Draufsicht und Seitenprofil einen geschlossenen Körper: je Längsschnitt eine obere und eine untere Querkurve
+function update3D(sc) {
+  if (!V3.mesh) return;
+  const M = 18, pos = [], idx = [], g = sc.geo, L = sc.L;
+  const ring = [];
+  g.forEach(([px, pz, ps, hl, hr, top, bot, hol, hf, fc, fe]) => {
+    const nx = -Math.sin(ps), nz = Math.cos(ps);
+    const e = top + Math.min(bot - top, 2 * hf) / 2;
+    // Facetten: im Facettenbereich (fe 0…1) geht der gerundete Querschnitt in ein Rechteck über, dessen Kanten
+    // um die Fasenbreite fc unter 45° abgeschnitten sind; außerhalb (fe = 0) bleibt der Querschnitt unverändert
+    const low = (u, w, uu) => {
+      let z = e + (bot - e) * Math.sqrt(1 - uu);
+      if (fe > 0) z += (bot - z) * fe;
+      if (fc > 0) z = Math.min(z, bot - (Math.abs(u) * w - (w - fc)));
+      return z;
+    };
+    const r = [];
+    for (let j = 0; j <= M; j++) {
+      const u = -1 + 2 * j / M, w = u < 0 ? hl : hr, uu = u * u;
+      const ui = w > 4 ? (w - 2.5) / w : 0;
+      let z = e - (e - top) * Math.pow(1 - uu, 0.35);
+      if (fe > 0) z += (top - z) * fe;
+      if (hol > 0 && Math.abs(u) < ui) z += hol * (1 - uu / (ui * ui));
+      if (fc > 0) z = Math.max(z, top + Math.abs(u) * w - (w - fc));
+      const zl = low(u, w, uu);
+      const n = Math.min(z, zl - 0.8);
+      r.push([px + n * nx - L / 2, -(pz + n * nz), u * w]);
+    }
+    for (let j = M; j >= 0; j--) {
+      const u = -1 + 2 * j / M, w = u < 0 ? hl : hr, uu = u * u;
+      const n = low(u, w, uu);
+      r.push([px + n * nx - L / 2, -(pz + n * nz), u * w]);
+    }
+    ring.push(r);
+  });
+  const R = 2 * (M + 1);
+  ring.forEach(r => r.forEach(p => pos.push(p[0], p[1], p[2])));
+  for (let i = 0; i < ring.length - 1; i++)
+    for (let j = 0; j < R; j++) {
+      const a = i * R + j, b = i * R + (j + 1) % R, c = a + R, d = b + R;
+      idx.push(a, c, b, b, c, d);
+    }
+  [0, ring.length - 1].forEach(i => {
+    const r = ring[i], cxy = r.reduce((s, p) => [s[0] + p[0] / R, s[1] + p[1] / R, s[2] + p[2] / R], [0, 0, 0]);
+    const ci = pos.length / 3; pos.push(...cxy);
+    for (let j = 0; j < R; j++) idx.push(ci, i * R + j, i * R + (j + 1) % R);
+  });
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  geo.setIndex(idx); geo.computeVertexNormals();
+  V3.mesh.geometry.dispose(); V3.mesh.geometry = geo;
+  V3.dist = L * 2.2;
+}
+
+init3D();
+
+/* ---------- Speichern ---------- */
+// In claude.ai läuft das Speichern über die downloads-Fähigkeit, als eigenständige Datei über einen normalen Download.
+const inClaude = !!(window.claude && window.claude.use);
+const fileBase = () => `${T("files").base}-${T("files")[state.type]}-${state.P.L}mm`;
+const status = msg => { $("status").textContent = msg; };
+const downloadsP = inClaude ? window.claude.use("downloads").catch(() => null) : Promise.resolve(null);
+function plainDownload(filename, data, type) {
+  const url = URL.createObjectURL(new Blob([data], { type }));
+  const a = document.createElement("a"); a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+
+async function save(kind) {
+  let data, filename = fileBase() + "." + kind, extra = "";
+  if (kind === "svg") data = toSVG(scene);
+  else { const r = toPDF(scene); data = r.buf; extra = ` (${r.page})`; }
+  if (!inClaude) { plainDownload(filename, data, kind === "svg" ? "image/svg+xml" : "application/pdf"); status(T("saved")(filename, extra)); return; }
+  const dl = await downloadsP;
+  if (!dl) return;
+  try {
+    const res = await dl.save({ filename, data });
+    status(res.status === "saved" ? T("saved")(filename, extra) : T("handed"));
+  } catch (err) {
+    const c = err && err.code;
+    status(c === "declined" ? T("declined") : c === "rate_limited" ? T("busy") : T("failed"));
+  }
+}
+$("pdfBtn").addEventListener("click", () => save("pdf"));
+$("svgBtn").addEventListener("click", () => save("svg"));
+
+downloadsP.then(dl => {
+  if (dl || !inClaude) { $("pdfBtn").disabled = false; $("svgBtn").disabled = false; return; }
+  $("pdfBtn").hidden = true; $("svgBtn").hidden = true; $("copyBtn").hidden = false;
+  status(T("noSave"));
+});
+$("copyBtn").addEventListener("click", () => {
+  const code = toSVG(scene);
+  navigator.clipboard.writeText(code).then(() => status(T("copied")), () => status(T("copyFail")));
+});
+
+/* ---------- Sprache umschalten ---------- */
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.title = T("title");
+  document.querySelectorAll("[data-i]").forEach(el => { el.textContent = T(el.dataset.i); });
+  document.querySelectorAll("[data-ia]").forEach(el => el.setAttribute("aria-label", T(el.dataset.ia)));
+  $("langs").setAttribute("aria-label", T("lang"));
+  $("sheet").title = T("zoomHint");
+  document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === lang));
+  if (V3.mesh) $("v3dToggle").textContent = V3.on ? T("hide") : T("show");
+  status("");
+  renderTypes(); renderFields(); syncFields(); update();
+}
+$("langs").addEventListener("click", e => {
+  const b = e.target.closest("[data-lang]"); if (!b || b.dataset.lang === lang) return;
+  lang = b.dataset.lang;
+  try { localStorage.setItem("loeffel-lang", lang); } catch (e) {}
+  applyLang();
+});
+applyLang();
+</script>
+
