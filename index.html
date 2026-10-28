@@ -66,17 +66,25 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 
 .types button:focus-visible, .btn:focus-visible, input[type=range]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .grp { border-top: 1px solid var(--line); }
-.grp summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font: 600 11px var(--font-body); text-transform: uppercase; letter-spacing: .09em; color: var(--muted); }
-.grp summary::-webkit-details-marker { display: none; }
-.grp summary::after { content: ""; width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin-right: 4px; transition: transform .15s; }
-.grp[open] summary::after { transform: rotate(-135deg); }
-.grp summary:hover { color: var(--fg); }
-.grp summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.grp > summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font: 600 11px var(--font-body); text-transform: uppercase; letter-spacing: .09em; color: var(--muted); }
+.grp > summary::-webkit-details-marker { display: none; }
+.grp > summary::after { content: ""; width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin-right: 4px; transition: transform .15s; }
+.grp[open] > summary::after { transform: rotate(-135deg); }
+.grp > summary:hover { color: var(--fg); }
+.grp > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .grp-body { display: grid; gap: 12px; padding-bottom: 14px; }
 /* Zwischenüberschriften im Bereich „Erweitert“ */
 .subh { font: 600 12px var(--font-body); color: var(--fg); padding-top: 10px; border-top: 1px dashed var(--line); }
 .grp-body > .subh:first-child { border-top: 0; padding-top: 0; }
-@media (prefers-reduced-motion: reduce) { .grp summary::after { transition: none; } }
+/* Klappbarer Block in einer Gruppe (Facetten-Einstellungen im Stiel) */
+.fold { border-top: 1px dashed var(--line); }
+.fold > summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding-top: 10px; font: 600 12px var(--font-body); color: var(--fg); }
+.fold > summary::-webkit-details-marker { display: none; }
+.fold > summary::after { content: ""; width: 6px; height: 6px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin-right: 4px; transition: transform .15s; }
+.fold[open] > summary::after { transform: rotate(-135deg); }
+.fold > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.fold-body { display: grid; gap: 12px; padding-top: 12px; }
+@media (prefers-reduced-motion: reduce) { .grp > summary::after, .fold > summary::after { transition: none; } }
 .field { display: grid; gap: 2px; }
 .field .row { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
 .field label { font-size: 14px; }
@@ -191,7 +199,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
   input[type=range] { height: 32px; }
   .gallery { grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); }
   .gallery button { min-height: 52px; }
-  .grp summary { padding: 14px 0; }
+  .grp > summary { padding: 14px 0; }
   .upbtn, .langs button, .v3d-head button { min-height: 36px; }
 }
 </style>
@@ -281,7 +289,7 @@ const I18N = {
       wt: ["Wandstärke", "Abstand der Innenlinie vom Laffenrand"],
       fe: ["Facettenende", "Verschiebt das Ende; negativ = kürzer"],
       fv: ["Auslauf", "Kleiner: Die Fase bleibt länger breit. Größer: Sie läuft früher spitz aus."],
-      fk: ["V-Kiel unten", "Öffnungswinkel der Unterseite im Facettenbereich. 180° = flach wie bisher, kleiner = spitzerer Kiel."],
+      kh: ["Kiel unten", "Die Unterseite läuft im Facettenbereich in geraden Flächen zu einer 2 mm breiten Kante zusammen. 0 % = flach, 100 % = schräg von der Oberkante bis unten."],
       pp: ["Papier bei langen Schablonen"],
       hd: ["Händigkeit", "Spiegelt asymmetrische Laffenformen. Die Vorlagen sind für Rechtshänder gezeichnet."]
     },
@@ -330,7 +338,7 @@ const I18N = {
       wt: ["Wanddikte", "Afstand van de binnenlijn tot de rand van de kom"],
       fe: ["Einde van de facet", "Verschuift het einde; negatief = korter"],
       fv: ["Uitloop", "Kleiner: de afschuining blijft langer breed. Groter: ze loopt eerder spits uit."],
-      fk: ["V-kiel onderaan", "Openingshoek van de onderkant in het facetbereik. 180° = vlak zoals tot nu toe, kleiner = scherpere kiel."],
+      kh: ["Kiel onderaan", "De onderkant loopt in het facetbereik met vlakke zijden toe naar een rand van 2 mm. 0 % = vlak, 100 % = schuin vanaf de bovenrand tot onderaan."],
       pp: ["Papier bij lange sjablonen"],
       hd: ["Voorkeurshand", "Spiegelt asymmetrische komvormen. De voorbeelden zijn getekend voor rechtshandigen."]
     },
@@ -379,7 +387,7 @@ const I18N = {
       wt: ["Wall thickness", "Distance of the inner line from the bowl rim"],
       fe: ["Facet end", "Shifts the end; negative = shorter"],
       fv: ["Run-out", "Smaller: the chamfer stays wide for longer. Larger: it tapers off sooner."],
-      fk: ["V keel underneath", "Opening angle of the underside in the facet area. 180° = flat as before, smaller = sharper keel."],
+      kh: ["Keel underneath", "In the facet area the underside tapers with flat faces to a 2 mm wide edge. 0 % = flat, 100 % = sloped from the top edge down to the bottom."],
       pp: ["Paper for long templates"],
       hd: ["Handedness", "Mirrors asymmetric bowl shapes. The originals are drawn for right-handers."]
     },
@@ -428,7 +436,7 @@ const I18N = {
       wt: ["Épaisseur de paroi", "Distance entre la ligne intérieure et le bord du cuilleron"],
       fe: ["Fin des facettes", "Décale la fin ; négatif = plus court"],
       fv: ["Sortie", "Plus petit : le chanfrein reste large plus longtemps. Plus grand : il s'affine plus tôt."],
-      fk: ["Arête en V dessous", "Angle d'ouverture du dessous dans la zone des facettes. 180° = plat comme avant, plus petit = arête plus vive."],
+      kh: ["Quille dessous", "Dans la zone des facettes, le dessous se resserre en faces planes jusqu'à une arête de 2 mm. 0 % = plat, 100 % = en pente depuis le bord supérieur jusqu'en bas."],
       pp: ["Papier pour les longs gabarits"],
       hd: ["Latéralité", "Inverse les formes de cuilleron asymétriques. Les modèles sont dessinés pour les droitiers."]
     },
@@ -477,7 +485,7 @@ const I18N = {
       wt: ["Godstjocklek", "Avstånd från innerlinjen till skålens kant"],
       fe: ["Fasettens slut", "Flyttar slutet; negativt = kortare"],
       fv: ["Utlopp", "Mindre: fasen förblir bred längre. Större: den smalnar av tidigare."],
-      fk: ["V-köl undertill", "Öppningsvinkel på undersidan i fasettområdet. 180° = plan som tidigare, mindre = spetsigare köl."],
+      kh: ["Köl undertill", "Undersidan smalnar i fasettområdet av med plana ytor till en 2 mm bred kant. 0 % = plan, 100 % = sluttande från överkanten ända ner."],
       pp: ["Papper för långa mallar"],
       hd: ["Hänthet", "Spegelvänder asymmetriska skålformer. Förlagorna är ritade för högerhänta."]
     },
@@ -526,7 +534,7 @@ const I18N = {
       wt: ["Grosor de pared", "Distancia de la línea interior al borde del cazo"],
       fe: ["Final de las facetas", "Desplaza el final; negativo = más corto"],
       fv: ["Salida", "Menor: el chaflán se mantiene ancho más tiempo. Mayor: se afina antes."],
-      fk: ["Quilla en V abajo", "Ángulo de apertura de la parte inferior en la zona de facetas. 180° = plano como hasta ahora, menor = quilla más aguda."],
+      kh: ["Quilla abajo", "En la zona de facetas, la parte inferior se estrecha con caras planas hasta una arista de 2 mm. 0 % = plano, 100 % = inclinado desde el borde superior hasta abajo."],
       pp: ["Papel para plantillas largas"],
       hd: ["Lateralidad", "Invierte las formas de cazo asimétricas. Los modelos están dibujados para diestros."]
     },
@@ -575,7 +583,7 @@ const I18N = {
       wt: ["Spessore della parete", "Distanza della linea interna dal bordo della coppa"],
       fe: ["Fine delle sfaccettature", "Sposta la fine; negativo = più corta"],
       fv: ["Uscita", "Più piccolo: lo smusso resta largo più a lungo. Più grande: si assottiglia prima."],
-      fk: ["Chiglia a V sotto", "Angolo di apertura del lato inferiore nella zona delle sfaccettature. 180° = piatto come finora, più piccolo = chiglia più acuta."],
+      kh: ["Chiglia sotto", "Nella zona delle sfaccettature il lato inferiore si restringe con facce piane fino a uno spigolo di 2 mm. 0 % = piatto, 100 % = inclinato dal bordo superiore fino in fondo."],
       pp: ["Carta per dime lunghe"],
       hd: ["Lateralità", "Specchia le forme asimmetriche della coppa. I modelli sono disegnati per destrorsi."]
     },
@@ -602,12 +610,11 @@ try {
   lang = I18N[sv] ? sv : I18N[nav] ? nav : "de";
 } catch (e) {}
 const T = k => I18N[lang][k];
-
 const PRESETS = {
-  ess:   { L: 170, bl: 58, bw: 42, bd: 7,  p: 44, nw: 12, ew: 24, th: 10, ca: 18, kp: 30, kr: 25, hc: 4,  bs: "ei",       he: "rund", fc: "an", fs: "leicht", fr: "hals", pp: "a3", hd: "r", wt: 2.5, te: 50, nv: 25, wp: 78, fe: 0, fv: 1.2, fk: 180 },
-  koch:  { L: 280, bl: 70, bw: 50, bd: 7,  p: 50, nw: 14, ew: 26, th: 14, ca: 5,  kp: 30, kr: 25, hc: 3,  bs: "schaufel", he: "spitz", fc: "an", fs: "leicht", fr: "hals", pp: "a3", hd: "r", wt: 2.5, te: 50, nv: 25, wp: 78, fe: 0, fv: 1.2, fk: 180 },
-  tee:   { L: 135, bl: 40, bw: 28, bd: 6,  p: 44, nw: 7,  ew: 17, th: 7,  ca: 15, kp: 30, kr: 15, hc: -3, bs: "ei",       he: "rund", fc: "an", fs: "leicht", fr: "hals", pp: "a3", hd: "r", wt: 2.5, te: 50, nv: 25, wp: 78, fe: 0, fv: 1.2, fk: 180 },
-  kelle: { L: 330, bl: 95, bw: 85, bd: 40, p: 50, nw: 18, ew: 28, th: 16, ca: 60, kp: 5,  kr: 35, hc: 6,  bs: "rund",     he: "gerade", fc: "an", fs: "leicht", fr: "hals", pp: "a3", hd: "r", wt: 2.5, te: 50, nv: 25, wp: 78, fe: 0, fv: 1.2, fk: 180 }
+  ess:   { L: 170, bl: 58, bw: 42, bd: 7,  p: 44, nw: 12, ew: 24, th: 10, ca: 18, kp: 30, kr: 25, hc: 4,  bs: "ei",       he: "rund", fc: "an", fs: "leicht", fr: "hals", pp: "a3", hd: "r", wt: 2.5, te: 50, nv: 25, wp: 78, fe: 0, fv: 1.2, kh: 0 },
+  koch:  { L: 280, bl: 70, bw: 50, bd: 7,  p: 50, nw: 14, ew: 26, th: 14, ca: 5,  kp: 30, kr: 25, hc: 3,  bs: "schaufel", he: "spitz", fc: "an", fs: "leicht", fr: "hals", pp: "a3", hd: "r", wt: 2.5, te: 50, nv: 25, wp: 78, fe: 0, fv: 1.2, kh: 0 },
+  tee:   { L: 135, bl: 40, bw: 28, bd: 6,  p: 44, nw: 7,  ew: 17, th: 7,  ca: 15, kp: 30, kr: 15, hc: -3, bs: "ei",       he: "rund", fc: "an", fs: "leicht", fr: "hals", pp: "a3", hd: "r", wt: 2.5, te: 50, nv: 25, wp: 78, fe: 0, fv: 1.2, kh: 0 },
+  kelle: { L: 330, bl: 95, bw: 85, bd: 40, p: 50, nw: 18, ew: 28, th: 16, ca: 60, kp: 5,  kr: 35, hc: 6,  bs: "rund",     he: "gerade", fc: "an", fs: "leicht", fr: "hals", pp: "a3", hd: "r", wt: 2.5, te: 50, nv: 25, wp: 78, fe: 0, fv: 1.2, kh: 0 }
 };
 // Richtwerte für den Laffenanteil (Laffenlänge / Gesamtlänge) je Löffelart
 const SHARE = { ess: "≈ 33 %", koch: "≈ 25 %", tee: "≈ 30 %", kelle: "≤ 25 %" };
@@ -626,12 +633,19 @@ const GROUPS = [
     { k: "nw", min: 6, max: 30 },
     { k: "ew", min: 10, max: 45 },
     { k: "he", gallery: true },
-    { k: "fc", choice: [["an", "fcOn"], ["aus", "fcOff"]] } ] },
+    { k: "fc", choice: [["an", "fcOn"], ["aus", "fcOff"]] },
+    // fold = klappbarer Block bis zum Ende der Gruppe; fac = nur bei Facetten „An“ sichtbar
+    { fold: "facets", fac: true },
+    { k: "fs", choice: [["leicht", "fsL"], ["acht", "fsA"]], fac: true },
+    { k: "fr", choice: [["hals", "frH"], ["stiel", "frS"]], fac: true },
+    { k: "fe", min: -30, max: 30, fac: true },
+    { k: "fv", min: 0.5, max: 3, step: 0.1, unit: "", fac: true },
+    { k: "kh", min: 0, max: 100, step: 5, unit: "%", fac: true } ] },
   { id: "seite", fields: [
     { k: "th", min: 5, max: 25 },
     { k: "ca", min: 0, max: 90, unit: "°" },
     { k: "kp", min: 0, max: 50, unit: "%" } ] },
-  // Erweitert: selten geänderte Werte in vier Abschnitten (sub = Zwischenüberschrift, fac = nur bei Facetten „An“ sichtbar).
+  // Erweitert: selten geänderte Werte in drei Abschnitten (sub = Zwischenüberschrift).
   // Die Startwerte ergeben genau die Form von Version 20.
   { id: "erweitert", fields: [
     { sub: "stiel" },
@@ -642,23 +656,12 @@ const GROUPS = [
     { k: "kr", min: 0, max: 40 },
     { k: "hc", min: -20, max: 20 },
     { sub: "hollow" },
-    { k: "wt", min: 1.5, max: 5, step: 0.5 },
-    { sub: "facets", fac: true },
-    { k: "fs", choice: [["leicht", "fsL"], ["acht", "fsA"]], fac: true },
-    { k: "fr", choice: [["hals", "frH"], ["stiel", "frS"]], fac: true },
-    { k: "fe", min: -30, max: 30, fac: true },
-    { k: "fv", min: 0.5, max: 3, step: 0.1, unit: "", fac: true },
-    { k: "fk", min: 60, max: 180, step: 5, unit: "°", fac: true } ] }
+    { k: "wt", min: 1.5, max: 5, step: 0.5 } ] }
 ];
 
-let state = { type: "ess", P: { ...PRESETS.ess } };
-try {
-  const s = JSON.parse(localStorage.getItem("loeffel-state") || "null");
-  if (s && PRESETS[s.type] && s.P) state = { type: s.type, P: { ...PRESETS[s.type], ...s.P } };
-  state.P.L = Math.min(state.P.L, 350);
-} catch (e) {}
-
-/* ---------- Geometrie (alle Werte in mm) ---------- */
+// Crank-Bereich (°) für das Zufallsdesign je Löffelart
+const CA_RANGE = { ess: [12, 20], koch: [0, 12], tee: [10, 20], kelle: [45, 75] };
+/* ---------- Formen ---------- */
 /* Laffenformen 1–34 aus „Bowldesign.pdf“, 35–42 aus dem Formenblatt: halbe Breite (links/rechts bzw. beidseitig) in 101 Schritten von der Spitze zum Hals, Gesamtbreite = 1000 */
 const BOWLS = {
 1:[0.71,[47,118,158,189,215,237,257,275,291,306,320,333,345,357,368,378,388,397,405,413,420,427,434,440,446,451,456,461,466,470,473,477,480,483,486,488,490,492,494,495,497,498,499,499,500,500,500,500,500,499,498,498,497,495,494,492,490,488,485,482,479,476,472,468,464,459,454,449,444,438,432,425,418,411,404,395,387,378,369,359,349,338,327,315,303,291,277,264,249,234,218,202,185,167,147,128,107,84,60,35,6]],
@@ -724,8 +727,6 @@ const ENDS = {
 15:[6.235,[235,920,1343,1568,1685,1711,1686,1656,1629,1583,1542,1510,1463,1426,1404,1383,1363,1339,1316,1300,1288,1263,1224,1193,1167,1145,1137,1137,1124,1101,1085,1071,1064,1062,1059,1059,1059,1059,1052,1035,1032,1049,1049,1030,1020,1020,1020,1020,1020,1020,1020,1020,1014,1008,1014,1024,1029,1024,1020,1000,941]],
 16:[2.508,[1000,1094,1168,1238,1308,1361,1400,1441,1478,1482,1458,1426,1398,1375,1352,1328,1308,1290,1273,1259,1244,1225,1206,1191,1180,1172,1163,1155,1144,1132,1128,1127,1123,1115,1109,1098,1085,1080,1076,1065,1057,1055,1051,1044,1040,1038,1031,1020,1016,1019,1022,1015,1004,1003,1006,1003,1004,1008,1006,997,968]]
 };
-const ss = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
-const lerpArr = (a, t) => { const f = Math.min(1, Math.max(0, t)) * (a.length - 1), i = Math.min(a.length - 2, Math.floor(f)); return (a[i] + (a[i + 1] - a[i]) * (f - i)) / 1000; };
 /* ---------- Eigene Formen (im Browser gespeichert) ---------- */
 // u<n> = eigene Laffe [ar, links, rechts], w<n> = eigenes Griffende [ar, profil]; Nummern laufen fort und werden nie wiederverwendet
 let CUSTOM = { nb: 1, ne: 1, bowls: {}, ends: {} };
@@ -733,8 +734,6 @@ try { const c = JSON.parse(localStorage.getItem("loeffel-custom") || "null"); if
 const saveCustom = () => { try { localStorage.setItem("loeffel-custom", JSON.stringify(CUSTOM)); } catch (e) {} };
 const bowlData = v => v && v[0] === "d" ? BOWLS[v.slice(1)] : v && v[0] === "u" ? CUSTOM.bowls[v.slice(1)] : null;
 const endData = v => v && v[0] === "e" ? ENDS[v.slice(1)] : v && v[0] === "w" ? CUSTOM.ends[v.slice(1)] : null;
-if (state.P.bs[0] === "u" && !bowlData(state.P.bs)) state.P.bs = PRESETS[state.type].bs;
-if (state.P.he[0] === "w" && !endData(state.P.he)) state.P.he = PRESETS[state.type].he;
 // Fortlaufende Kennungen: Laffen L01…, Griffenden G01…
 const NB = Object.keys(BOWLS).length, NE = Object.keys(ENDS).length;
 function shapeCode(v) {
@@ -748,64 +747,9 @@ function shapeCode(v) {
 }
 const bowlCode = v => shapeCode(v) || "L" + String(["ei", "rund", "schaufel"].indexOf(v) + 1).padStart(2, "0");
 const endCode = v => shapeCode(v) || "G" + String(["rund", "gerade", "spitz"].indexOf(v) + 1).padStart(2, "0");
-
-// Liest aus einem Bild (SVG, PNG, JPG) die Umrisslinie: Spitze bzw. Griffende oben, Ansatz unten.
-function profileFromImage(img, kind) {
-  const sc = 600 / Math.max(img.naturalWidth || img.width || 600, img.naturalHeight || img.height || 600);
-  const W = Math.max(20, Math.round((img.naturalWidth || 600) * sc)), H = Math.max(20, Math.round((img.naturalHeight || 600) * sc));
-  const cv = document.createElement("canvas"); cv.width = W + 8; cv.height = H + 8;
-  const ctx = cv.getContext("2d"); ctx.drawImage(img, 4, 4, W, H);
-  const px = ctx.getImageData(0, 0, cv.width, cv.height).data, w = cv.width, h = cv.height;
-  const transparentBg = px[3] < 40;
-  let ink = new Uint8Array(w * h);
-  for (let i = 0; i < w * h; i++) {
-    const a = px[i * 4 + 3], lum = 0.3 * px[i * 4] + 0.59 * px[i * 4 + 1] + 0.11 * px[i * 4 + 2];
-    ink[i] = transparentBg ? (a > 100 ? 1 : 0) : (a > 40 && lum < 160 ? 1 : 0);
-  }
-  // kleine Lücken in der Linie schließen
-  for (let pass = 0; pass < 2; pass++) {
-    const n = ink.slice();
-    for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) if (!ink[y * w + x] && (ink[y * w + x - 1] || ink[y * w + x + 1] || ink[(y - 1) * w + x] || ink[(y + 1) * w + x])) n[y * w + x] = 1;
-    ink = n;
-  }
-  let y0 = -1, y1 = -1;
-  for (let y = 0; y < h; y++) { let any = false; for (let x = 0; x < w; x++) if (ink[y * w + x]) { any = true; break; } if (any) { if (y0 < 0) y0 = y; y1 = y; } }
-  if (y0 < 0 || y1 - y0 < 20) throw new Error("empty");
-  if (kind === "end") {
-    // offene Unterkante schließen: unterste Zeile mit zwei getrennten Linien
-    for (let y = y1; y > y0; y--) {
-      let runs = 0, prev = 0, lx = -1, rx = -1;
-      for (let x = 0; x < w; x++) { const v = ink[y * w + x]; if (v && !prev) runs++; if (v) { if (lx < 0) lx = x; rx = x; } prev = v; }
-      if (runs >= 2) { for (let x = lx; x <= rx; x++) ink[y * w + x] = 1; for (let yy = y + 1; yy <= y1; yy++) for (let x = 0; x < w; x++) ink[yy * w + x] = 0; y1 = y; break; }
-    }
-  }
-  // Außenbereich von den Rändern aus füllen; alles andere gehört zur Form
-  const out = new Uint8Array(w * h), stack = [];
-  for (let x = 0; x < w; x++) { stack.push(x, (h - 1) * w + x); }
-  for (let y = 0; y < h; y++) { stack.push(y * w, y * w + w - 1); }
-  while (stack.length) { const i = stack.pop(); if (out[i] || ink[i]) continue; out[i] = 1; const x = i % w, y = (i / w) | 0; if (x > 0) stack.push(i - 1); if (x < w - 1) stack.push(i + 1); if (y > 0) stack.push(i - w); if (y < h - 1) stack.push(i + w); }
-  const rows = [];
-  for (let y = y0; y <= y1; y++) { let l = -1, r = -1; for (let x = 0; x < w; x++) if (!out[y * w + x]) { if (l < 0) l = x; r = x; } rows.push([l, r]); }
-  const nb = Math.max(2, Math.round(rows.length * 0.04)), tail = rows.slice(-nb);
-  const axis = tail.reduce((s, [l, r]) => s + (l + r) / 2, 0) / tail.length;
-  const sample = (arr, n) => Array.from({ length: n }, (_, i) => { const f = i / (n - 1) * (arr.length - 1), k = Math.min(arr.length - 2, Math.floor(f)); return arr[k] + (arr[k + 1] - arr[k]) * (f - k); });
-  if (kind === "bowl") {
-    const maxW = Math.max(...rows.map(([l, r]) => r - l + 1));
-    const L = sample(rows.map(([l]) => Math.max(0, axis - l + 0.5)), 101).map(v => Math.round(v / maxW * 1000));
-    const R = sample(rows.map(([, r]) => Math.max(0, r - axis + 0.5)), 101).map(v => Math.round(v / maxW * 1000));
-    return [Math.round(rows.length / maxW * 1000) / 1000, L, R];
-  }
-  const hw = rows.map(([l, r]) => (r - l + 1) / 2), ref = tail.reduce((s, [l, r]) => s + (r - l + 1) / 2, 0) / tail.length;
-  return [Math.round(rows.length / (2 * ref) * 1000) / 1000, sample(hw, 61).map(v => Math.round(v / ref * 1000))];
-}
-function loadShapeFile(file, kind) {
-  return new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(file), img = new Image();
-    img.onload = () => { try { resolve(profileFromImage(img, kind)); } catch (e) { reject(e); } finally { URL.revokeObjectURL(url); } };
-    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("load")); };
-    img.src = url;
-  });
-}
+/* ---------- Geometrie (alle Werte in mm) ---------- */
+const ss = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+const lerpArr = (a, t) => { const f = Math.min(1, Math.max(0, t)) * (a.length - 1), i = Math.min(a.length - 2, Math.floor(f)); return (a[i] + (a[i + 1] - a[i]) * (f - i)) / 1000; };
 
 // Liefert für t = 0 (Spitze) … 1 (Hals) die halbe Breite links und rechts (Gesamtbreite max. 1) und ein Tiefenprofil
 // Asymmetrisch = linke und rechte Hälfte weichen um mehr als 3 % der Breite voneinander ab
@@ -1045,7 +989,7 @@ function buildScene(P, name) {
       poly([[cx + hwR(x), y0 + x], [cx + hwR(x2) - c2, y0 + x2]], "hatch");
     }
     text(cx + Math.max(...fx.map(hwR)) + 3, y0 + (facXa + facXb) / 2 + 1, T("facets"), 2.6, "start", true);
-    if (P.fk < 180) text(cx + Math.max(...fx.map(hwR)) + 3, y0 + (facXa + facXb) / 2 + 5, `${T("fields").fk[0]} ${P.fk}°`, 2.6);
+    if (P.kh > 0) text(cx + Math.max(...fx.map(hwR)) + 3, y0 + (facXa + facXb) / 2 + 5, `${T("fields").kh[0]} ${P.kh} %`, 2.6);
   }
 
   // 2 × A4: Anlegelinien an beiden Seitenkanten der Überlappung, Passkreuze in ihrer Mitte, Seitenzahlen
@@ -1067,9 +1011,8 @@ function buildScene(P, name) {
     const c = cAt(x);
     return [c[0], c[1], psi(x), hLs[i], hRs[i], -half(x), belly(x), hol, half(x), facC(x), facE(x)];
   });
-  return { W, H, items, blank, page: pg, geo, L, drop, caMax, wt, fk: P.fc === "an" ? P.fk : 180 };
+  return { W, H, items, blank, page: pg, geo, L, drop, caMax, wt, kh: P.fc === "an" ? P.kh : 0 };
 }
-
 /* ---------- Ausgabe ---------- */
 const STYLE = {
   cut:    { w: 0.45, dash: null },
@@ -1142,7 +1085,149 @@ function toPDF(sc) {
   return { buf: doc.output("arraybuffer"), page: sc.page.label };
 }
 
+/* ---------- Speichern ---------- */
+// In claude.ai läuft das Speichern über die downloads-Fähigkeit, als eigenständige Datei über einen normalen Download.
+const inClaude = !!(window.claude && window.claude.use);
+const fileBase = () => `${T("files").base}-${T("files")[state.type]}-${state.P.L}mm`;
+const status = msg => { $("status").textContent = msg; };
+const downloadsP = inClaude ? window.claude.use("downloads").catch(() => null) : Promise.resolve(null);
+function plainDownload(filename, data, type) {
+  const url = URL.createObjectURL(new Blob([data], { type }));
+  const a = document.createElement("a"); a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+
+async function save(kind) {
+  let data, filename = fileBase() + "." + kind, extra = "";
+  if (kind === "pdf" && !(window.jspdf && window.jspdf.jsPDF)) { status(T("pdfLib")); return; }
+  if (kind === "svg") data = toSVG(scene);
+  else { const r = toPDF(scene); data = r.buf; extra = ` (${r.page})`; }
+  if (!inClaude) { plainDownload(filename, data, kind === "svg" ? "image/svg+xml" : "application/pdf"); status(T("saved")(filename, extra)); return; }
+  const dl = await downloadsP;
+  if (!dl) return;
+  try {
+    const res = await dl.save({ filename, data });
+    status(res.status === "saved" ? T("saved")(filename, extra) : T("handed"));
+  } catch (err) {
+    const c = err && err.code;
+    status(c === "declined" ? T("declined") : c === "rate_limited" ? T("busy") : T("failed"));
+  }
+}
+/* ---------- 3D-Ansicht ---------- */
+const V3 = {};
+function init3D() {
+  if (!window.THREE) { $("v3d").hidden = true; return; }
+  const canvas = $("c3d");
+  try { V3.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); }
+  catch (e) { $("v3d").hidden = true; return; }
+  V3.scene = new THREE.Scene();
+  V3.camera = new THREE.PerspectiveCamera(30, 1, 1, 5000);
+  V3.scene.add(new THREE.HemisphereLight(0xfff8ee, 0x3a3326, 0.85));
+  const sun = new THREE.DirectionalLight(0xffffff, 0.75); sun.position.set(1, 2, 1.2); V3.scene.add(sun);
+  V3.mesh = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshStandardMaterial({ color: 0xc89a68, roughness: 0.8, side: THREE.DoubleSide }));
+  V3.group = new THREE.Group(); V3.group.add(V3.mesh); V3.scene.add(V3.group);
+  V3.yaw = -0.6; V3.pitch = 0.55; V3.dist = 400; V3.on = true; V3.drag = null;
+  V3.still = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  canvas.addEventListener("pointerdown", e => { V3.drag = { x: e.clientX, y: e.clientY }; canvas.setPointerCapture(e.pointerId); });
+  canvas.addEventListener("pointermove", e => {
+    if (!V3.drag) return;
+    V3.yaw += (e.clientX - V3.drag.x) * 0.01;
+    V3.pitch = Math.max(-1.3, Math.min(1.3, V3.pitch + (e.clientY - V3.drag.y) * 0.01));
+    V3.drag = { x: e.clientX, y: e.clientY }; V3.idle = 0;
+  });
+  const end = () => { V3.drag = null; };
+  canvas.addEventListener("pointerup", end); canvas.addEventListener("pointercancel", end);
+  $("v3dToggle").addEventListener("click", () => {
+    V3.on = !V3.on; canvas.hidden = !V3.on;
+    $("v3dToggle").textContent = V3.on ? T("hide") : T("show");
+    $("v3dToggle").setAttribute("aria-expanded", V3.on);
+    try { localStorage.setItem("loeffel-3d", V3.on ? "1" : "0"); } catch (e) {}
+  });
+  try { if (localStorage.getItem("loeffel-3d") === "0") $("v3dToggle").click(); } catch (e) {}
+  V3.idle = 0;
+  const loop = () => {
+    requestAnimationFrame(loop);
+    if (!V3.on) return;
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    if (!w || !h) return;
+    if (canvas.width !== Math.round(w * Math.min(2, devicePixelRatio)) ) { V3.renderer.setPixelRatio(Math.min(2, devicePixelRatio)); V3.renderer.setSize(w, h, false); V3.camera.aspect = w / h; V3.camera.updateProjectionMatrix(); }
+    if (!V3.drag && !V3.still && ++V3.idle > 90) V3.yaw += 0.004;
+    const d = V3.dist;
+    V3.camera.position.set(Math.sin(V3.yaw) * Math.cos(V3.pitch) * d, Math.sin(V3.pitch) * d, Math.cos(V3.yaw) * Math.cos(V3.pitch) * d);
+    V3.camera.lookAt(0, 0, 0);
+    V3.renderer.render(V3.scene, V3.camera);
+  };
+  loop();
+}
+
+// Baut aus Draufsicht und Seitenprofil einen geschlossenen Körper: je Längsschnitt eine obere und eine untere Querkurve
+function update3D(sc) {
+  if (!V3.mesh) return;
+  const M = 18, pos = [], idx = [], g = sc.geo, L = sc.L;
+  // Kiel unten: Die Unterseite läuft in geraden Flächen von den Seiten zu einer 2 mm breiten Kante zusammen (halbe Breite KB);
+  // kh = Anteil der Seitenhöhe, auf dem die Schräge liegt (1 = von der Oberkante an: unter der Fase fc und 0,8 mm Mindestabstand)
+  const kh = sc.kh / 100, KB = 1;
+  const ring = [];
+  g.forEach(([px, pz, ps, hl, hr, top, bot, hol, hf, fc, fe]) => {
+    const nx = -Math.sin(ps), nz = Math.cos(ps);
+    const e = top + Math.min(bot - top, 2 * hf) / 2;
+    // Facetten: im Facettenbereich (fe 0…1) geht der gerundete Querschnitt in ein Rechteck über, dessen Kanten
+    // um die Fasenbreite fc unter 45° abgeschnitten sind; außerhalb (fe = 0) bleibt der Querschnitt unverändert
+    const low = (u, w, uu) => {
+      let z = e + (bot - e) * Math.sqrt(1 - uu);
+      if (fe > 0) z += (bot - z) * fe;
+      if (fc > 0) z = Math.min(z, bot - (Math.abs(u) * w - (w - fc)));
+      const y = Math.abs(u) * w;
+      if (kh > 0 && fe > 0 && y > KB) z = Math.min(z, bot - fe * kh * Math.max(0, bot - top - fc - 0.8) * (y - KB) / (w - KB));
+      return z;
+    };
+    const r = [];
+    for (let j = 0; j <= M; j++) {
+      const u = -1 + 2 * j / M, w = u < 0 ? hl : hr, uu = u * u;
+      const ui = w > sc.wt + 1.5 ? (w - sc.wt) / w : 0;
+      let z = e - (e - top) * Math.pow(1 - uu, 0.35);
+      if (fe > 0) z += (top - z) * fe;
+      if (hol > 0 && Math.abs(u) < ui) z += hol * (1 - uu / (ui * ui));
+      if (fc > 0) z = Math.max(z, top + Math.abs(u) * w - (w - fc));
+      const zl = low(u, w, uu);
+      const n = Math.min(z, zl - 0.8);
+      r.push([px + n * nx - L / 2, -(pz + n * nz), u * w]);
+    }
+    for (let j = M; j >= 0; j--) {
+      const u = -1 + 2 * j / M, w = u < 0 ? hl : hr, uu = u * u;
+      const n = low(u, w, uu);
+      r.push([px + n * nx - L / 2, -(pz + n * nz), u * w]);
+    }
+    ring.push(r);
+  });
+  const R = 2 * (M + 1);
+  ring.forEach(r => r.forEach(p => pos.push(p[0], p[1], p[2])));
+  for (let i = 0; i < ring.length - 1; i++)
+    for (let j = 0; j < R; j++) {
+      const a = i * R + j, b = i * R + (j + 1) % R, c = a + R, d = b + R;
+      idx.push(a, c, b, b, c, d);
+    }
+  [0, ring.length - 1].forEach(i => {
+    const r = ring[i], cxy = r.reduce((s, p) => [s[0] + p[0] / R, s[1] + p[1] / R, s[2] + p[2] / R], [0, 0, 0]);
+    const ci = pos.length / 3; pos.push(...cxy);
+    for (let j = 0; j < R; j++) idx.push(ci, i * R + j, i * R + (j + 1) % R);
+  });
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  geo.setIndex(idx); geo.computeVertexNormals();
+  V3.mesh.geometry.dispose(); V3.mesh.geometry = geo;
+  V3.dist = L * 2.2;
+}
 /* ---------- Oberfläche ---------- */
+let state = { type: "ess", P: { ...PRESETS.ess } };
+try {
+  const s = JSON.parse(localStorage.getItem("loeffel-state") || "null");
+  if (s && PRESETS[s.type] && s.P) state = { type: s.type, P: { ...PRESETS[s.type], ...s.P } };
+  state.P.L = Math.min(state.P.L, 350);
+} catch (e) {}
+if (state.P.bs[0] === "u" && !bowlData(state.P.bs)) state.P.bs = PRESETS[state.type].bs;
+if (state.P.he[0] === "w" && !endData(state.P.he)) state.P.he = PRESETS[state.type].he;
 const $ = id => document.getElementById(id);
 let scene;
 
@@ -1176,7 +1261,12 @@ function renderFields() {
   let advOpen = false;
   try { advOpen = localStorage.getItem("loeffel-adv") === "1"; } catch (e) {}
   closed = closed.filter(id => id !== "erweitert"); if (!advOpen) closed.push("erweitert");
-  $("fields").innerHTML = GROUPS.map(g => `<details class="grp" data-g="${g.id}"${closed.includes(g.id) ? "" : " open"}><summary>${T("groups")[g.id]}</summary><div class="grp-body">` + g.fields.map(fd => fd.sub ? `<div class="subh"${fd.fac ? " data-fac" : ""}>${T("groups")[fd.sub] || T(fd.sub)}</div>` : fd.gallery ?
+  // Klappbarer Block (fold, Facetten im Stiel): anfangs zu, Zustand wird gemerkt; reicht bis zum Ende der Gruppe
+  let foldOpen = false;
+  try { foldOpen = localStorage.getItem("loeffel-fold") === "1"; } catch (e) {}
+  $("fields").innerHTML = GROUPS.map(g => `<details class="grp" data-g="${g.id}"${closed.includes(g.id) ? "" : " open"}><summary>${T("groups")[g.id]}</summary><div class="grp-body">` + g.fields.map(fd => fd.fold ?
+    `<details class="fold"${fd.fac ? " data-fac" : ""}${foldOpen ? " open" : ""}><summary>${T(fd.fold)}</summary><div class="fold-body">` :
+    fd.sub ? `<div class="subh"${fd.fac ? " data-fac" : ""}>${T("groups")[fd.sub] || T(fd.sub)}</div>` : fd.gallery ?
     `<div class="field"><span class="flabel" id="l-${fd.k}">${T("fields")[fd.k][0]}</span><div class="gallery" role="group" aria-labelledby="l-${fd.k}">` +
       (fd.k === "bs" ? SHAPES() : ENDSHAPES()).map(v => {
         const code = fd.k === "bs" ? bowlCode(v) : endCode(v), own = v[0] === "u" || v[0] === "w";
@@ -1189,10 +1279,13 @@ function renderFields() {
       fd.choice.map(([v, t]) => `<button type="button" data-ck="${fd.k}" data-v="${v}">${T(t) || t}</button>`).join("") + `</div>${T("fields")[fd.k][1] ? `<span class="hint">${T("fields")[fd.k][1]}</span>` : ""}</div>` :
     `<div class="field" id="fld-${fd.k}"${fd.fac ? " data-fac" : ""}><div class="row"><label for="f-${fd.k}">${T("fields")[fd.k][0]}</label><output id="o-${fd.k}" for="f-${fd.k}"></output></div>
      <input type="range" id="f-${fd.k}" data-k="${fd.k}" min="${fd.min}" max="${fd.max}" step="${fd.step || 1}">
-     ${T("fields")[fd.k][1] ? `<span class="hint">${T("fields")[fd.k][1]}</span>` : ""}</div>`).join("") + `</div></details>`).join("");
-  $("fields").querySelectorAll("details").forEach(d => d.addEventListener("toggle", () => {
-    const shut = [...$("fields").querySelectorAll("details:not([open])")].map(x => x.dataset.g);
+     ${T("fields")[fd.k][1] ? `<span class="hint">${T("fields")[fd.k][1]}</span>` : ""}</div>`).join("") + (g.fields.some(fd => fd.fold) ? "</div></details>" : "") + `</div></details>`).join("");
+  $("fields").querySelectorAll("details.grp").forEach(d => d.addEventListener("toggle", () => {
+    const shut = [...$("fields").querySelectorAll("details.grp:not([open])")].map(x => x.dataset.g);
     try { localStorage.setItem("loeffel-closed", JSON.stringify(shut)); localStorage.setItem("loeffel-adv", shut.includes("erweitert") ? "0" : "1"); } catch (e) {}
+  }));
+  $("fields").querySelectorAll("details.fold").forEach(d => d.addEventListener("toggle", () => {
+    try { localStorage.setItem("loeffel-fold", d.open ? "1" : "0"); } catch (e) {}
   }));
 }
 function syncFields() {
@@ -1201,7 +1294,7 @@ function syncFields() {
   document.querySelectorAll("[data-fac]").forEach(el => { el.hidden = state.P.fc !== "an"; });
   document.querySelectorAll("[data-del]").forEach(b => { const v = state.P[b.dataset.del]; b.hidden = !(v[0] === "u" || v[0] === "w"); });
   GROUPS.forEach(g => g.fields.forEach(fd => {
-    if (fd.sub) return;
+    if (fd.sub || fd.fold) return;
     if (fd.choice || fd.gallery) { document.querySelectorAll(`[data-ck="${fd.k}"]`).forEach(b => b.setAttribute("aria-pressed", b.dataset.v === state.P[fd.k])); return; }
     $("f-" + fd.k).value = state.P[fd.k];
     $("o-" + fd.k).textContent = state.P[fd.k].toLocaleString(lang) + (fd.unit === "" ? "" : " " + (fd.unit || "mm"));
@@ -1262,9 +1355,68 @@ $("fields").addEventListener("click", e => {
   saveCustom(); state.P[k] = PRESETS[state.type][k];
   renderFields(); syncFields(); update();
 });
+
+/* ---------- Eigene Formen aus Bildern ---------- */
+// Liest aus einem Bild (SVG, PNG, JPG) die Umrisslinie: Spitze bzw. Griffende oben, Ansatz unten.
+function profileFromImage(img, kind) {
+  const sc = 600 / Math.max(img.naturalWidth || img.width || 600, img.naturalHeight || img.height || 600);
+  const W = Math.max(20, Math.round((img.naturalWidth || 600) * sc)), H = Math.max(20, Math.round((img.naturalHeight || 600) * sc));
+  const cv = document.createElement("canvas"); cv.width = W + 8; cv.height = H + 8;
+  const ctx = cv.getContext("2d"); ctx.drawImage(img, 4, 4, W, H);
+  const px = ctx.getImageData(0, 0, cv.width, cv.height).data, w = cv.width, h = cv.height;
+  const transparentBg = px[3] < 40;
+  let ink = new Uint8Array(w * h);
+  for (let i = 0; i < w * h; i++) {
+    const a = px[i * 4 + 3], lum = 0.3 * px[i * 4] + 0.59 * px[i * 4 + 1] + 0.11 * px[i * 4 + 2];
+    ink[i] = transparentBg ? (a > 100 ? 1 : 0) : (a > 40 && lum < 160 ? 1 : 0);
+  }
+  // kleine Lücken in der Linie schließen
+  for (let pass = 0; pass < 2; pass++) {
+    const n = ink.slice();
+    for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) if (!ink[y * w + x] && (ink[y * w + x - 1] || ink[y * w + x + 1] || ink[(y - 1) * w + x] || ink[(y + 1) * w + x])) n[y * w + x] = 1;
+    ink = n;
+  }
+  let y0 = -1, y1 = -1;
+  for (let y = 0; y < h; y++) { let any = false; for (let x = 0; x < w; x++) if (ink[y * w + x]) { any = true; break; } if (any) { if (y0 < 0) y0 = y; y1 = y; } }
+  if (y0 < 0 || y1 - y0 < 20) throw new Error("empty");
+  if (kind === "end") {
+    // offene Unterkante schließen: unterste Zeile mit zwei getrennten Linien
+    for (let y = y1; y > y0; y--) {
+      let runs = 0, prev = 0, lx = -1, rx = -1;
+      for (let x = 0; x < w; x++) { const v = ink[y * w + x]; if (v && !prev) runs++; if (v) { if (lx < 0) lx = x; rx = x; } prev = v; }
+      if (runs >= 2) { for (let x = lx; x <= rx; x++) ink[y * w + x] = 1; for (let yy = y + 1; yy <= y1; yy++) for (let x = 0; x < w; x++) ink[yy * w + x] = 0; y1 = y; break; }
+    }
+  }
+  // Außenbereich von den Rändern aus füllen; alles andere gehört zur Form
+  const out = new Uint8Array(w * h), stack = [];
+  for (let x = 0; x < w; x++) { stack.push(x, (h - 1) * w + x); }
+  for (let y = 0; y < h; y++) { stack.push(y * w, y * w + w - 1); }
+  while (stack.length) { const i = stack.pop(); if (out[i] || ink[i]) continue; out[i] = 1; const x = i % w, y = (i / w) | 0; if (x > 0) stack.push(i - 1); if (x < w - 1) stack.push(i + 1); if (y > 0) stack.push(i - w); if (y < h - 1) stack.push(i + w); }
+  const rows = [];
+  for (let y = y0; y <= y1; y++) { let l = -1, r = -1; for (let x = 0; x < w; x++) if (!out[y * w + x]) { if (l < 0) l = x; r = x; } rows.push([l, r]); }
+  const nb = Math.max(2, Math.round(rows.length * 0.04)), tail = rows.slice(-nb);
+  const axis = tail.reduce((s, [l, r]) => s + (l + r) / 2, 0) / tail.length;
+  const sample = (arr, n) => Array.from({ length: n }, (_, i) => { const f = i / (n - 1) * (arr.length - 1), k = Math.min(arr.length - 2, Math.floor(f)); return arr[k] + (arr[k + 1] - arr[k]) * (f - k); });
+  if (kind === "bowl") {
+    const maxW = Math.max(...rows.map(([l, r]) => r - l + 1));
+    const L = sample(rows.map(([l]) => Math.max(0, axis - l + 0.5)), 101).map(v => Math.round(v / maxW * 1000));
+    const R = sample(rows.map(([, r]) => Math.max(0, r - axis + 0.5)), 101).map(v => Math.round(v / maxW * 1000));
+    return [Math.round(rows.length / maxW * 1000) / 1000, L, R];
+  }
+  const hw = rows.map(([l, r]) => (r - l + 1) / 2), ref = tail.reduce((s, [l, r]) => s + (r - l + 1) / 2, 0) / tail.length;
+  return [Math.round(rows.length / (2 * ref) * 1000) / 1000, sample(hw, 61).map(v => Math.round(v / ref * 1000))];
+}
+function loadShapeFile(file, kind) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => { try { resolve(profileFromImage(img, kind)); } catch (e) { reject(e); } finally { URL.revokeObjectURL(url); } };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("load")); };
+    img.src = url;
+  });
+}
+
 // Zufallsdesign: zufällige Laffenform und Griffende, Maße in sinnvollen Grenzen um die Startwerte der gewählten Löffelart.
 // Papier, Facettenlinien und Löffelart bleiben, eigene Formen werden nicht gewählt.
-const CA_RANGE = { ess: [12, 20], koch: [0, 12], tee: [10, 20], kelle: [45, 75] };
 function randomDesign() {
   const B = PRESETS[state.type], P = { ...state.P };
   const rnd = (a, b) => Math.round(a + Math.random() * (b - a)), pick = a => a[Math.floor(Math.random() * a.length)];
@@ -1364,141 +1516,8 @@ const zoomReset = () => { ZM.z = 1; ZM.cx = ZM.cy = 0.5; applyZoom(); };
 $("sheet").addEventListener("dblclick", zoomReset);
 $("zreset").addEventListener("click", zoomReset);
 
-/* ---------- 3D-Ansicht ---------- */
-const V3 = {};
-function init3D() {
-  if (!window.THREE) { $("v3d").hidden = true; return; }
-  const canvas = $("c3d");
-  try { V3.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); }
-  catch (e) { $("v3d").hidden = true; return; }
-  V3.scene = new THREE.Scene();
-  V3.camera = new THREE.PerspectiveCamera(30, 1, 1, 5000);
-  V3.scene.add(new THREE.HemisphereLight(0xfff8ee, 0x3a3326, 0.85));
-  const sun = new THREE.DirectionalLight(0xffffff, 0.75); sun.position.set(1, 2, 1.2); V3.scene.add(sun);
-  V3.mesh = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshStandardMaterial({ color: 0xc89a68, roughness: 0.8, side: THREE.DoubleSide }));
-  V3.group = new THREE.Group(); V3.group.add(V3.mesh); V3.scene.add(V3.group);
-  V3.yaw = -0.6; V3.pitch = 0.55; V3.dist = 400; V3.on = true; V3.drag = null;
-  V3.still = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-  canvas.addEventListener("pointerdown", e => { V3.drag = { x: e.clientX, y: e.clientY }; canvas.setPointerCapture(e.pointerId); });
-  canvas.addEventListener("pointermove", e => {
-    if (!V3.drag) return;
-    V3.yaw += (e.clientX - V3.drag.x) * 0.01;
-    V3.pitch = Math.max(-1.3, Math.min(1.3, V3.pitch + (e.clientY - V3.drag.y) * 0.01));
-    V3.drag = { x: e.clientX, y: e.clientY }; V3.idle = 0;
-  });
-  const end = () => { V3.drag = null; };
-  canvas.addEventListener("pointerup", end); canvas.addEventListener("pointercancel", end);
-  $("v3dToggle").addEventListener("click", () => {
-    V3.on = !V3.on; canvas.hidden = !V3.on;
-    $("v3dToggle").textContent = V3.on ? T("hide") : T("show");
-    $("v3dToggle").setAttribute("aria-expanded", V3.on);
-    try { localStorage.setItem("loeffel-3d", V3.on ? "1" : "0"); } catch (e) {}
-  });
-  try { if (localStorage.getItem("loeffel-3d") === "0") $("v3dToggle").click(); } catch (e) {}
-  V3.idle = 0;
-  const loop = () => {
-    requestAnimationFrame(loop);
-    if (!V3.on) return;
-    const w = canvas.clientWidth, h = canvas.clientHeight;
-    if (!w || !h) return;
-    if (canvas.width !== Math.round(w * Math.min(2, devicePixelRatio)) ) { V3.renderer.setPixelRatio(Math.min(2, devicePixelRatio)); V3.renderer.setSize(w, h, false); V3.camera.aspect = w / h; V3.camera.updateProjectionMatrix(); }
-    if (!V3.drag && !V3.still && ++V3.idle > 90) V3.yaw += 0.004;
-    const d = V3.dist;
-    V3.camera.position.set(Math.sin(V3.yaw) * Math.cos(V3.pitch) * d, Math.sin(V3.pitch) * d, Math.cos(V3.yaw) * Math.cos(V3.pitch) * d);
-    V3.camera.lookAt(0, 0, 0);
-    V3.renderer.render(V3.scene, V3.camera);
-  };
-  loop();
-}
-
-// Baut aus Draufsicht und Seitenprofil einen geschlossenen Körper: je Längsschnitt eine obere und eine untere Querkurve
-function update3D(sc) {
-  if (!V3.mesh) return;
-  const M = 18, pos = [], idx = [], g = sc.geo, L = sc.L;
-  // V-Kiel: Steigung der Unterseite = cot(halber Öffnungswinkel), 0 bei 180°
-  const kv = sc.fk < 180 ? 1 / Math.tan(sc.fk * Math.PI / 360) : 0;
-  const ring = [];
-  g.forEach(([px, pz, ps, hl, hr, top, bot, hol, hf, fc, fe]) => {
-    const nx = -Math.sin(ps), nz = Math.cos(ps);
-    const e = top + Math.min(bot - top, 2 * hf) / 2;
-    // Facetten: im Facettenbereich (fe 0…1) geht der gerundete Querschnitt in ein Rechteck über, dessen Kanten
-    // um die Fasenbreite fc unter 45° abgeschnitten sind; außerhalb (fe = 0) bleibt der Querschnitt unverändert
-    const low = (u, w, uu) => {
-      let z = e + (bot - e) * Math.sqrt(1 - uu);
-      if (fe > 0) z += (bot - z) * fe;
-      if (fc > 0) z = Math.min(z, bot - (Math.abs(u) * w - (w - fc)));
-      if (kv > 0 && fe > 0) z = Math.min(z, Math.max(top + 1.5, bot - fe * kv * Math.abs(u) * w));
-      return z;
-    };
-    const r = [];
-    for (let j = 0; j <= M; j++) {
-      const u = -1 + 2 * j / M, w = u < 0 ? hl : hr, uu = u * u;
-      const ui = w > sc.wt + 1.5 ? (w - sc.wt) / w : 0;
-      let z = e - (e - top) * Math.pow(1 - uu, 0.35);
-      if (fe > 0) z += (top - z) * fe;
-      if (hol > 0 && Math.abs(u) < ui) z += hol * (1 - uu / (ui * ui));
-      if (fc > 0) z = Math.max(z, top + Math.abs(u) * w - (w - fc));
-      const zl = low(u, w, uu);
-      const n = Math.min(z, zl - 0.8);
-      r.push([px + n * nx - L / 2, -(pz + n * nz), u * w]);
-    }
-    for (let j = M; j >= 0; j--) {
-      const u = -1 + 2 * j / M, w = u < 0 ? hl : hr, uu = u * u;
-      const n = low(u, w, uu);
-      r.push([px + n * nx - L / 2, -(pz + n * nz), u * w]);
-    }
-    ring.push(r);
-  });
-  const R = 2 * (M + 1);
-  ring.forEach(r => r.forEach(p => pos.push(p[0], p[1], p[2])));
-  for (let i = 0; i < ring.length - 1; i++)
-    for (let j = 0; j < R; j++) {
-      const a = i * R + j, b = i * R + (j + 1) % R, c = a + R, d = b + R;
-      idx.push(a, c, b, b, c, d);
-    }
-  [0, ring.length - 1].forEach(i => {
-    const r = ring[i], cxy = r.reduce((s, p) => [s[0] + p[0] / R, s[1] + p[1] / R, s[2] + p[2] / R], [0, 0, 0]);
-    const ci = pos.length / 3; pos.push(...cxy);
-    for (let j = 0; j < R; j++) idx.push(ci, i * R + j, i * R + (j + 1) % R);
-  });
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
-  geo.setIndex(idx); geo.computeVertexNormals();
-  V3.mesh.geometry.dispose(); V3.mesh.geometry = geo;
-  V3.dist = L * 2.2;
-}
-
 init3D();
 
-/* ---------- Speichern ---------- */
-// In claude.ai läuft das Speichern über die downloads-Fähigkeit, als eigenständige Datei über einen normalen Download.
-const inClaude = !!(window.claude && window.claude.use);
-const fileBase = () => `${T("files").base}-${T("files")[state.type]}-${state.P.L}mm`;
-const status = msg => { $("status").textContent = msg; };
-const downloadsP = inClaude ? window.claude.use("downloads").catch(() => null) : Promise.resolve(null);
-function plainDownload(filename, data, type) {
-  const url = URL.createObjectURL(new Blob([data], { type }));
-  const a = document.createElement("a"); a.href = url; a.download = filename;
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 2000);
-}
-
-async function save(kind) {
-  let data, filename = fileBase() + "." + kind, extra = "";
-  if (kind === "pdf" && !(window.jspdf && window.jspdf.jsPDF)) { status(T("pdfLib")); return; }
-  if (kind === "svg") data = toSVG(scene);
-  else { const r = toPDF(scene); data = r.buf; extra = ` (${r.page})`; }
-  if (!inClaude) { plainDownload(filename, data, kind === "svg" ? "image/svg+xml" : "application/pdf"); status(T("saved")(filename, extra)); return; }
-  const dl = await downloadsP;
-  if (!dl) return;
-  try {
-    const res = await dl.save({ filename, data });
-    status(res.status === "saved" ? T("saved")(filename, extra) : T("handed"));
-  } catch (err) {
-    const c = err && err.code;
-    status(c === "declined" ? T("declined") : c === "rate_limited" ? T("busy") : T("failed"));
-  }
-}
 $("pdfBtn").addEventListener("click", () => save("pdf"));
 $("svgBtn").addEventListener("click", () => save("svg"));
 
@@ -1533,6 +1552,5 @@ $("langs").addEventListener("click", e => {
 });
 applyLang();
 </script>
-
 </body>
 </html>
