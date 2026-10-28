@@ -7,4 +7,4 @@ Direkt im Browser: https://hoewimi.github.io/Spoon-Template-Generator/
 
 Oder `index.html` herunterladen und im Browser öffnen – keine Installation nötig. Für den PDF-Export und die 3D-Ansicht braucht die Seite eine Internetverbindung.
 
-Aktuelle Version: 25
+Aktuelle Version: 26

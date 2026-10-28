@@ -7,34 +7,23 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>try { var t = localStorage.getItem("loeffel-theme"); if (t === "dark") document.documentElement.setAttribute("data-theme", "dark"); var d = localStorage.getItem("loeffel-design"); if (/^[abcd]$/.test(d)) document.documentElement.setAttribute("data-design", d); } catch (e) {}</script>
 <style>
 /* Layout: Werkbank – Regler links, Schablone auf einer Schneidematte rechts; einspaltig auf dem Handy */
+/* Vier Designs (a Salbei, b Ahorn, c Papier & Terrakotta, d Morgenhimmel), je hell und dunkel; ohne data-design gilt a */
 :root {
-  --bg: #eef1ee;
-  --panel: #ffffff;
-  --fg: #1c2622;
-  --muted: #5b6a63;
-  --line: #d2dad5;
-  --accent: #2e6a56;
-  --accent-fg: #ffffff;
-  --mat: #24463b;
-  --mat-line: rgba(255,255,255,.08);
   --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #111715; --panel: #19211e; --fg: #e2eae6; --muted: #93a39b; --line: #2b3732;
-    --accent: #72b99e; --accent-fg: #0c1411; --mat: #17302a; --mat-line: rgba(255,255,255,.06);
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #111715; --panel: #19211e; --fg: #e2eae6; --muted: #93a39b; --line: #2b3732;
-  --accent: #72b99e; --accent-fg: #0c1411; --mat: #17302a; --mat-line: rgba(255,255,255,.06);
-  color-scheme: dark;
-}
+:root, :root[data-design="a"] { --bg: #f3f6f2; --panel: #ffffff; --fg: #1f2b26; --muted: #53645d; --line: #d6e0d9; --accent: #2e6a56; --accent-fg: #ffffff; --mat: #a5bfaf; --mat-line: rgba(34,80,62,.13); --ov-bg: rgba(255,255,255,.78); --ov-fg: #1f2b26; --ov-line: rgba(34,80,62,.2); }
+:root[data-theme="dark"], :root[data-design="a"][data-theme="dark"] { --bg: #141a18; --panel: #1c2421; --fg: #e4ece8; --muted: #9aaba3; --line: #2e3a35; --accent: #7cc0a5; --accent-fg: #0e1613; --mat: #30493f; --mat-line: rgba(255,255,255,.07); --ov-bg: rgba(12,20,17,.62); --ov-fg: #e8efe9; --ov-line: rgba(255,255,255,.16); color-scheme: dark; }
+:root[data-design="b"] { --bg: #f7f1e8; --panel: #fffcf7; --fg: #2b2118; --muted: #6b5845; --line: #e6dac9; --accent: #d69a35; --accent-fg: #2a1a08; --mat: #c8a47a; --mat-line: rgba(95,60,25,.15); --ov-bg: rgba(255,250,242,.8); --ov-fg: #2b2118; --ov-line: rgba(95,60,25,.22); }
+:root[data-design="b"][data-theme="dark"] { --bg: #1a1510; --panel: #241d16; --fg: #f0e6d8; --muted: #b3a08a; --line: #3b3025; --accent: #e2aa4c; --accent-fg: #1f1406; --mat: #4b3926; --mat-line: rgba(255,235,200,.07); --ov-bg: rgba(26,19,12,.62); --ov-fg: #f0e6d8; --ov-line: rgba(255,235,200,.16); color-scheme: dark; }
+:root[data-design="c"] { --bg: #faf6ef; --panel: #fffdf9; --fg: #2a2420; --muted: #6a5e55; --line: #e7ded2; --accent: #ad472c; --accent-fg: #ffffff; --mat: #c6b59d; --mat-line: rgba(120,80,50,.13); --ov-bg: rgba(255,253,249,.8); --ov-fg: #2a2420; --ov-line: rgba(120,80,50,.22); }
+:root[data-design="c"][data-theme="dark"] { --bg: #1b1816; --panel: #252120; --fg: #efe8e0; --muted: #ab9f94; --line: #3a3430; --accent: #e07a5c; --accent-fg: #1d0f0a; --mat: #3f3530; --mat-line: rgba(255,240,225,.07); --ov-bg: rgba(24,20,18,.62); --ov-fg: #efe8e0; --ov-line: rgba(255,240,225,.16); color-scheme: dark; }
+:root[data-design="d"] { --bg: #f2f5f8; --panel: #ffffff; --fg: #1c2630; --muted: #536170; --line: #d7dfe7; --accent: #1f6c76; --accent-fg: #ffffff; --mat: #a7bacb; --mat-line: rgba(30,60,90,.12); --ov-bg: rgba(255,255,255,.78); --ov-fg: #1c2630; --ov-line: rgba(30,60,90,.2); }
+:root[data-design="d"][data-theme="dark"] { --bg: #12171c; --panel: #1a2128; --fg: #e3eaf0; --muted: #98a6b3; --line: #2c3640; --accent: #62b6bf; --accent-fg: #0a1518; --mat: #2b3b49; --mat-line: rgba(255,255,255,.07); --ov-bg: rgba(12,18,24,.62); --ov-fg: #e3eaf0; --ov-line: rgba(255,255,255,.16); color-scheme: dark; }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 body {
@@ -45,11 +34,15 @@ body {
 }
 .wrap { max-width: 1280px; margin: 0 auto; display: grid; gap: 20px; }
 header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; }
-.langs { display: flex; gap: 2px; }
+.hbar { display: flex; align-items: center; gap: 6px; }
 header { padding-right: clamp(130px, 21vw, 252px); }
-.langs button { font: 600 12px var(--font-mono); letter-spacing: .04em; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 6px; padding: 5px 9px; cursor: pointer; }
-.langs button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
-.langs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.langsel, .themebtn, .designsel { font: 600 12px var(--font-mono); letter-spacing: .04em; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 6px; padding: 5px 9px; cursor: pointer; }
+.langsel, .themebtn, .designsel { height: 26px; }
+.themebtn { font-size: 18px; line-height: 1; padding: 0; width: 30px; }
+.themebtn[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.langsel:focus-visible, .themebtn:focus-visible, .designsel:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.brand { display: flex; align-items: baseline; gap: 8px; }
+.ver { font: 500 12px var(--font-mono); color: var(--muted); }
 h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 4vw, 36px); letter-spacing: -.01em; margin: 0; text-wrap: balance; }
 .lede { color: var(--muted); margin: 0; max-width: 60ch; }
 .app { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 20px; align-items: start; }
@@ -114,10 +107,10 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
   background-size: 28px 28px; border-radius: 10px; padding: clamp(14px, 3vw, 32px);
 }
 .mat { display: grid; justify-items: center; position: relative; }
-.v3d { position: fixed; z-index: 20; top: calc(env(safe-area-inset-top, 0px) + 12px); right: max(12px, env(safe-area-inset-right, 0px)); width: clamp(120px, 20vw, 240px); background: rgba(10, 22, 18, .55); border: 1px solid rgba(255,255,255,.14); border-radius: 8px; overflow: hidden; backdrop-filter: blur(3px); }
-.v3d-head { display: flex; justify-content: space-between; align-items: center; padding: 4px 6px 4px 9px; color: #e8efe9; font: 600 11px var(--font-body); letter-spacing: .09em; }
-.v3d-head button { font: 500 11px var(--font-body); color: #e8efe9; background: transparent; border: 1px solid rgba(255,255,255,.25); border-radius: 5px; padding: 2px 7px; cursor: pointer; }
-.v3d-head button:focus-visible { outline: 2px solid #9fd6bf; outline-offset: 1px; }
+.v3d { position: fixed; z-index: 20; top: calc(env(safe-area-inset-top, 0px) + 12px); right: max(12px, env(safe-area-inset-right, 0px)); width: clamp(120px, 20vw, 240px); background: var(--ov-bg); border: 1px solid var(--ov-line); color: var(--ov-fg); border-radius: 8px; overflow: hidden; backdrop-filter: blur(3px); box-shadow: 0 4px 14px rgba(0,0,0,.12); }
+.v3d-head { display: flex; justify-content: space-between; align-items: center; padding: 4px 6px 4px 9px; color: var(--ov-fg); font: 600 11px var(--font-body); letter-spacing: .09em; }
+.v3d-head button { font: 500 11px var(--font-body); color: var(--ov-fg); background: transparent; border: 1px solid var(--ov-line); border-radius: 5px; padding: 2px 7px; cursor: pointer; }
+.v3d-head button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 #c3d { display: block; width: 100%; aspect-ratio: 1; cursor: grab; touch-action: none; }
 #c3d:active { cursor: grabbing; }
 .sheet { width: min(100%, 560px); background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25), 0 8px 24px rgba(0,0,0,.25); }
@@ -126,11 +119,11 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
 .sheet.zoomed { cursor: grab; }
 .sheet.zoomed.panning { cursor: grabbing; }
 /* Zoom-Anzeige: Mini-Übersicht mit Rahmen, Zoomstufe und Knopf „Ganzes Blatt“, nur sichtbar wenn gezoomt */
-.zbadge { position: absolute; z-index: 5; top: 12px; left: 12px; display: grid; justify-items: center; gap: 6px; padding: 8px; background: rgba(10, 22, 18, .6); border: 1px solid rgba(255,255,255,.14); border-radius: 8px; color: #e8efe9; backdrop-filter: blur(3px); }
+.zbadge { position: absolute; z-index: 5; top: 12px; left: 12px; display: grid; justify-items: center; gap: 6px; padding: 8px; background: var(--ov-bg); border: 1px solid var(--ov-line); border-radius: 8px; color: var(--ov-fg); backdrop-filter: blur(3px); box-shadow: 0 4px 14px rgba(0,0,0,.12); }
 .zmini svg { display: block; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.4); }
 .zlvl { font: 600 13px var(--font-mono); font-variant-numeric: tabular-nums; line-height: 1; }
-.zbadge button { font: 500 11px var(--font-body); color: #e8efe9; background: transparent; border: 1px solid rgba(255,255,255,.25); border-radius: 5px; padding: 3px 8px; cursor: pointer; white-space: nowrap; }
-.zbadge button:focus-visible { outline: 2px solid #9fd6bf; outline-offset: 1px; }
+.zbadge button { font: 500 11px var(--font-body); color: var(--ov-fg); background: transparent; border: 1px solid var(--ov-line); border-radius: 5px; padding: 3px 8px; cursor: pointer; white-space: nowrap; }
+.zbadge button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
 .facts { display: flex; flex-wrap: wrap; gap: 8px 28px; font-size: 14px; }
 .facts div { display: grid; }
@@ -173,16 +166,19 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
   body { padding-block: 12px calc(84px + env(safe-area-inset-bottom, 0px)); }
   body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 40; background: var(--bg); }
   header { padding-right: 0; gap: 6px 12px; align-items: center; }
-  header h1 { order: 1; }
-  .langs { order: 2; margin-left: auto; }
+  .wrap { grid-template-columns: minmax(0, 1fr); }
+  .brand { order: 1; }
+  .hbar { order: 2; margin-left: auto; }
+  .hbar { flex-wrap: wrap; justify-content: flex-end; max-width: 100%; gap: 4px; }
+  .langsel, .designsel { padding: 5px 4px; }
   .lede { order: 3; flex-basis: 100%; }
   h1 { font-size: 22px; }
   .lede { font-size: 13px; }
   .app { display: flex; flex-direction: column; gap: 12px; }
   .stage { display: contents; }
   .mat { order: 0; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; padding: 8px; border-radius: 10px; box-shadow: 0 6px 16px rgba(0,0,0,.18); display: flex; justify-content: center; align-items: flex-start; gap: 8px; }
-  .sheet { width: auto; height: min(36vh, 320px); }
-  .sheet svg { height: 100%; width: auto; }
+  .sheet { width: auto; height: min(36vh, 320px); min-width: 0; max-width: calc(100vw - 56px - min(32vw, 130px)); }
+  .sheet svg { height: 100%; width: auto; max-width: 100%; }
   .v3d { position: static; flex: 0 0 auto; width: min(32vw, 130px); }
   .panel { order: 1; padding: 14px; }
   .side { display: contents; }
@@ -200,17 +196,64 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
   .gallery { grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); }
   .gallery button { min-height: 52px; }
   .grp > summary { padding: 14px 0; }
-  .upbtn, .langs button, .v3d-head button { min-height: 36px; }
+  .upbtn, .v3d-head button { min-height: 36px; }
+  .langsel, .themebtn, .designsel { height: 36px; }
 }
+@media (max-width: 360px) {
+  .types { grid-template-columns: 1fr 1fr; }
+}
+
+/* ---------- Designs: Rundungen, Knöpfe, Schatten ---------- */
+/* a Salbei (Standard) */
+.panel { border-radius: 14px; border-color: transparent; box-shadow: 0 1px 2px rgba(31,43,38,.06), 0 4px 16px rgba(31,43,38,.06); }
+.mat { border-radius: 14px; box-shadow: inset 0 0 0 1px rgba(34,80,62,.12); }
+.types button, .btn { border-radius: 10px; }
+.seg button, .gallery button, .upbtn, .langsel, .themebtn, .designsel { border-radius: 8px; }
+.btn.primary { box-shadow: 0 2px 6px rgba(46,106,86,.28); }
+.sheet { box-shadow: 0 1px 2px rgba(20,50,40,.18), 0 10px 28px rgba(20,50,40,.18); }
+:root[data-theme="dark"] .panel { border-color: var(--line); box-shadow: none; }
+
+/* b Ahorn: warme Holzflächen, Knöpfe leicht erhaben */
+:root[data-design="b"] .panel { border-radius: 12px; border-color: transparent; box-shadow: 0 2px 10px rgba(95,60,25,.08); }
+:root[data-design="b"] .mat { border-radius: 12px; box-shadow: inset 0 2px 6px rgba(70,40,10,.18); }
+:root[data-design="b"] :is(.types button, .btn, .seg button, .gallery button, .upbtn, .langsel, .themebtn, .designsel) { border-radius: 9px; }
+:root[data-design="b"] .btn.primary { box-shadow: inset 0 -2px 0 rgba(120,70,10,.25), 0 2px 6px rgba(150,95,20,.25); }
+:root[data-design="b"] :is(.btn.secondary, .types button, .seg button) { box-shadow: 0 1px 0 var(--line); }
+:root[data-design="b"] .sheet { box-shadow: 0 1px 2px rgba(70,40,10,.22), 0 10px 26px rgba(70,40,10,.22); }
+:root[data-design="b"][data-theme="dark"] .panel { border-color: var(--line); box-shadow: none; }
+:root[data-design="b"][data-theme="dark"] .btn.primary { box-shadow: inset 0 -2px 0 rgba(0,0,0,.25); }
+/* Honig ist als Linie auf hellem Feld zu blass: Regler und Fokusrahmen dunkler */
+:root[data-design="b"]:not([data-theme="dark"]) input[type=range] { accent-color: #a8701c; }
+:root[data-design="b"]:not([data-theme="dark"]) :focus-visible { outline-color: #a8701c !important; }
+
+/* c Papier & Terrakotta: flach, kleine Rundungen, feine Linien */
+:root[data-design="c"] .panel { border-radius: 6px; border-color: transparent; box-shadow: 0 1px 0 var(--line); }
+:root[data-design="c"] .mat { border-radius: 6px; box-shadow: none; }
+:root[data-design="c"] :is(.types button, .btn, .seg button, .gallery button, .upbtn, .langsel, .themebtn, .designsel) { border-radius: 4px; }
+:root[data-design="c"] .btn.primary { box-shadow: 0 1px 0 rgba(90,30,15,.35); }
+:root[data-design="c"] .sheet { box-shadow: 0 1px 1px rgba(60,40,25,.2), 0 6px 18px rgba(60,40,25,.18); }
+:root[data-design="c"][data-theme="dark"] .panel { border-color: var(--line); box-shadow: none; }
+
+/* d Morgenhimmel: luftig, große Rundungen, Pillen-Knöpfe */
+:root[data-design="d"] .panel { border-radius: 18px; border-color: transparent; box-shadow: 0 2px 4px rgba(28,38,48,.04), 0 8px 24px rgba(28,38,48,.07); }
+:root[data-design="d"] .mat { border-radius: 18px; box-shadow: none; }
+:root[data-design="d"] :is(.btn, .langsel, .themebtn, .designsel, .seg button, .upbtn) { border-radius: 999px; }
+:root[data-design="d"] :is(.types button, .gallery button) { border-radius: 12px; }
+:root[data-design="d"] .btn.primary { box-shadow: 0 4px 12px rgba(31,108,118,.3); }
+:root[data-design="d"] :is(.v3d, .zbadge) { border-radius: 14px; }
+:root[data-design="d"] .sheet { box-shadow: 0 2px 4px rgba(20,40,60,.14), 0 14px 32px rgba(20,40,60,.18); }
+:root[data-design="d"][data-theme="dark"] .panel { border-color: var(--line); box-shadow: none; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <div class="langs" id="langs" role="group" aria-label="Sprache">
-      <button type="button" data-lang="de" lang="de">DE</button><button type="button" data-lang="nl" lang="nl">NL</button><button type="button" data-lang="en" lang="en">EN</button><button type="button" data-lang="fr" lang="fr">FR</button><button type="button" data-lang="sv" lang="sv">SV</button><button type="button" data-lang="es" lang="es">ES</button><button type="button" data-lang="it" lang="it">IT</button>
+    <div class="hbar">
+    <select class="langsel" id="langSel" data-ia="lang"></select>
+    <button type="button" class="themebtn" id="themeBtn" data-ia="darkMode" aria-pressed="false" aria-label="Dunkle Darstellung" title="Dunkle Darstellung">☾</button>
+    <select class="designsel" id="designSel" data-ia="design"><option value="a" data-i="dsgA">Salbei</option><option value="b" data-i="dsgB">Ahorn</option><option value="c" data-i="dsgC">Papier &amp; Terrakotta</option><option value="d" data-i="dsgD">Morgenhimmel</option></select>
     </div>
-    <h1 data-i="title">Löffelschablone</h1>
+    <div class="brand"><h1 data-i="title">Löffelschablone</h1><span class="ver" id="ver">v26</span></div>
     <p class="lede" data-i="lede">Löffelart wählen, Maße anpassen, Schablone in Originalgröße als PDF oder SVG speichern.</p>
   </header>
 
@@ -261,7 +304,9 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
 const I18N = {
   de: {
     title: "Löffelschablone", lede: "Löffelart wählen, Maße anpassen, Schablone in Originalgröße als PDF oder SVG speichern.",
-    settings: "Einstellungen", spoonType: "Löffelart", preview: "Vorschau der Schablone", lang: "Sprache",
+    settings: "Einstellungen", spoonType: "Löffelart", preview: "Vorschau der Schablone", lang: "Sprache", langName: "Deutsch",
+    darkMode: "Dunkle Darstellung",
+    design: "Design", dsgA: "Salbei", dsgB: "Ahorn", dsgC: "Papier & Terrakotta", dsgD: "Morgenhimmel",
     hide: "Ausblenden", show: "Einblenden", view3d: "3D-Ansicht des Löffels, zum Drehen ziehen",
     warn: "Crank über 15°: Bei geradfaserigem Holz entsteht an Hals und Laffenspitze Kurzfaser. Besser einen gebogenen Ast verwenden, dessen Wuchs der Kröpfung folgt.",
     pdf: "PDF speichern", svg: "SVG speichern", copy: "SVG-Code kopieren",
@@ -310,7 +355,9 @@ const I18N = {
   },
   nl: {
     title: "Lepelsjabloon", lede: "Kies het type lepel, pas de maten aan en sla het sjabloon op ware grootte op als PDF of SVG.",
-    settings: "Instellingen", spoonType: "Type lepel", preview: "Voorbeeld van het sjabloon", lang: "Taal",
+    settings: "Instellingen", spoonType: "Type lepel", preview: "Voorbeeld van het sjabloon", lang: "Taal", langName: "Nederlands",
+    darkMode: "Donkere weergave",
+    design: "Ontwerp", dsgA: "Salie", dsgB: "Esdoorn", dsgC: "Papier & Terracotta", dsgD: "Ochtendhemel",
     hide: "Verbergen", show: "Tonen", view3d: "3D-weergave van de lepel, sleep om te draaien",
     warn: "Crank boven 15°: bij recht gegroeid hout ontstaat bij de hals en de punt van de kom korte vezel. Gebruik liever een gebogen tak waarvan de groei de knik volgt.",
     pdf: "PDF opslaan", svg: "SVG opslaan", copy: "SVG-code kopiëren",
@@ -359,7 +406,9 @@ const I18N = {
   },
   en: {
     title: "Spoon Template", lede: "Choose a spoon type, adjust the measurements and save the template at full size as PDF or SVG.",
-    settings: "Settings", spoonType: "Spoon type", preview: "Template preview", lang: "Language",
+    settings: "Settings", spoonType: "Spoon type", preview: "Template preview", lang: "Language", langName: "English",
+    darkMode: "Dark mode",
+    design: "Design", dsgA: "Sage", dsgB: "Maple", dsgC: "Paper & Terracotta", dsgD: "Morning sky",
     hide: "Hide", show: "Show", view3d: "3D view of the spoon, drag to rotate",
     warn: "Crank above 15°: in straight-grained wood this creates short grain at the neck and the bowl tip. Better use a bent branch whose growth follows the crank.",
     pdf: "Save PDF", svg: "Save SVG", copy: "Copy SVG code",
@@ -408,7 +457,9 @@ const I18N = {
   },
   fr: {
     title: "Gabarit de cuillère", lede: "Choisissez le type de cuillère, ajustez les dimensions et enregistrez le gabarit en taille réelle au format PDF ou SVG.",
-    settings: "Réglages", spoonType: "Type de cuillère", preview: "Aperçu du gabarit", lang: "Langue",
+    settings: "Réglages", spoonType: "Type de cuillère", preview: "Aperçu du gabarit", lang: "Langue", langName: "Français",
+    darkMode: "Affichage sombre",
+    design: "Style", dsgA: "Sauge", dsgB: "Érable", dsgC: "Papier & Terre cuite", dsgD: "Ciel du matin",
     hide: "Masquer", show: "Afficher", view3d: "Vue 3D de la cuillère, faites glisser pour la tourner",
     warn: "Crank au-delà de 15° : dans un bois à fil droit, le fil devient court au col et à la pointe du cuilleron. Mieux vaut une branche courbe dont la croissance suit la cassure.",
     pdf: "Enregistrer en PDF", svg: "Enregistrer en SVG", copy: "Copier le code SVG",
@@ -457,7 +508,9 @@ const I18N = {
   },
   sv: {
     title: "Skedmall", lede: "Välj skedtyp, anpassa måtten och spara mallen i full storlek som PDF eller SVG.",
-    settings: "Inställningar", spoonType: "Skedtyp", preview: "Förhandsvisning av mallen", lang: "Språk",
+    settings: "Inställningar", spoonType: "Skedtyp", preview: "Förhandsvisning av mallen", lang: "Språk", langName: "Svenska",
+    darkMode: "Mörkt läge",
+    design: "Utseende", dsgA: "Salvia", dsgB: "Lönn", dsgC: "Papper & Terrakotta", dsgD: "Morgonhimmel",
     hide: "Dölj", show: "Visa", view3d: "3D-vy av skeden, dra för att vrida",
     warn: "Crank över 15°: i rakvuxet virke blir fibrerna korta vid halsen och skålens spets. Använd hellre en krokvuxen gren vars växt följer knäcken.",
     pdf: "Spara PDF", svg: "Spara SVG", copy: "Kopiera SVG-kod",
@@ -506,7 +559,9 @@ const I18N = {
   },
   es: {
     title: "Plantilla de cuchara", lede: "Elige el tipo de cuchara, ajusta las medidas y guarda la plantilla a tamaño real en PDF o SVG.",
-    settings: "Ajustes", spoonType: "Tipo de cuchara", preview: "Vista previa de la plantilla", lang: "Idioma",
+    settings: "Ajustes", spoonType: "Tipo de cuchara", preview: "Vista previa de la plantilla", lang: "Idioma", langName: "Español",
+    darkMode: "Modo oscuro",
+    design: "Diseño", dsgA: "Salvia", dsgB: "Arce", dsgC: "Papel y Terracota", dsgD: "Cielo de la mañana",
     hide: "Ocultar", show: "Mostrar", view3d: "Vista 3D de la cuchara, arrastra para girarla",
     warn: "Crank superior a 15°: en madera de fibra recta se forma fibra corta en el cuello y en la punta del cazo. Mejor usar una rama curva cuyo crecimiento siga el quiebre.",
     pdf: "Guardar PDF", svg: "Guardar SVG", copy: "Copiar código SVG",
@@ -555,7 +610,9 @@ const I18N = {
   },
   it: {
     title: "Dima per cucchiai", lede: "Scegli il tipo di cucchiaio, regola le misure e salva la dima a grandezza reale in PDF o SVG.",
-    settings: "Impostazioni", spoonType: "Tipo di cucchiaio", preview: "Anteprima della dima", lang: "Lingua",
+    settings: "Impostazioni", spoonType: "Tipo di cucchiaio", preview: "Anteprima della dima", lang: "Lingua", langName: "Italiano",
+    darkMode: "Modalità scura",
+    design: "Aspetto", dsgA: "Salvia", dsgB: "Acero", dsgC: "Carta e Terracotta", dsgD: "Cielo del mattino",
     hide: "Nascondi", show: "Mostra", view3d: "Vista 3D del cucchiaio, trascina per ruotarlo",
     warn: "Crank oltre 15°: nel legno a fibra dritta si crea fibra corta al collo e sulla punta della coppa. Meglio usare un ramo curvo la cui crescita segua la piega.",
     pdf: "Salva PDF", svg: "Salva SVG", copy: "Copia codice SVG",
@@ -601,15 +658,172 @@ const I18N = {
     warnMouth: "Coppa più grande di circa 45 × 65 mm: troppo grande per la bocca in un cucchiaio da tavola.", warnDepth: "Coppa più profonda di 8 mm: il labbro superiore non raggiunge il fondo dell'incavo e il cucchiaio si svuota male.",
     copied: "Codice SVG copiato.", copyFail: "Impossibile copiare.",
     zoomHint: "Rotella del mouse: zoom · Trascina: sposta · Doppio clic: foglio intero", zoomReset: "Foglio intero"
+  },
+  nb: {
+    title: "Skjemal", lede: "Velg skjetype, juster målene og lagre malen i full størrelse som PDF eller SVG.",
+    settings: "Innstillinger", spoonType: "Skjetype", preview: "Forhåndsvisning av malen", lang: "Språk", langName: "Norsk",
+    darkMode: "Mørk modus",
+    design: "Utseende", dsgA: "Salvie", dsgB: "Lønn", dsgC: "Papir & terrakotta", dsgD: "Morgenhimmel",
+    hide: "Skjul", show: "Vis", view3d: "3D-visning av skjeen, dra for å rotere",
+    warn: "Crank over 15°: I rettvokst ved blir fibrene korte ved halsen og bladets spiss. Bruk heller en krokvokst grein der veksten følger knekken.",
+    pdf: "Lagre PDF", svg: "Lagre SVG", copy: "Kopier SVG-kode",
+    note: "Velg «Faktisk størrelse» eller 100 % ved utskrift, og mål 50 mm-streken. Visningen ovenfra viser det utbrettede omrisset, sidevisningen den faktiske bøyen. Knekklinjen forbinder begge visningene; langs skaftet ligger de i samme høyde. Fibrene i emnet bør gå langs skaftet.",
+    blankMin: "Minste emne", drop: "Drop", paper: "Papirformat", portrait: "stående",
+    types: { ess: "Spiseskje", koch: "Kokesleiv", tee: "Kaffeskje", kelle: "Øse" },
+    files: { ess: "spiseskje", koch: "kokesleiv", tee: "kaffeskje", kelle: "ose", base: "skjemal" },
+    groups: { gesamt: "Generelt", laffe: "Blad", stiel: "Skaft", seite: "Sideprofil", erweitert: "Avansert" }, hollow: "Hulning",
+    fields: {
+      L: ["Total lengde"], bl: ["Bladlengde"], bw: ["Bladbredde"],
+      bd: ["Bladdybde", "Dybden på hulningen, uten veggtykkelse"],
+      p: ["Bredeste punkt", "Andel av bladlengden, målt fra spissen"],
+      bs: ["Bladform"], nw: ["Halsbredde"], ew: ["Største skaftbredde"], he: ["Skaftende"],
+      th: ["Skafttykkelse ved halsen", "Skaftet blir tynnere mot enden"],
+      ca: ["Crankvinkel θ", "Vinkel mellom korden langs bladkanten og skaftets akse. Kokesleiv 0–15°, spiseskje 15–20°, serveringsskje opptil 30°, øser 60–90°"],
+      kp: ["Knekkposisjon", "Andel av bladlengden, målt fra bakkanten av bladet. Skjeer 25–33 %, øser nær halsen"],
+      kr: ["Overgang ved knekken", "Jo større, desto mykere rundingen"],
+      hc: ["Skaftkrumning", "Positiv: skaftenden bøyer mot bladsiden. Negativ: S-form"],
+      fc: ["Fasettlinjer ved halsen"],
+      fs: ["Fasettstørrelse", "Lett: smal fas på kantene. Åttekantet: tverrsnitt med omtrent åtte like store flater."],
+      fr: ["Fasettområde", "Hals: kort fasett som løper ut mot blad og skaft. Hele skaftet: helt frem til formen på skaftenden."],
+      te: ["Skafttykkelse ved enden", "Andel av skafttykkelsen ved halsen"],
+      nv: ["Fortykning ved halsen", "Ekstra tykkelse rett bak bladet"],
+      wp: ["Plassering av største skaftbredde", "Andel av skaftlengden, målt fra halsen"],
+      wt: ["Veggtykkelse", "Avstanden fra innerlinjen til bladkanten"],
+      fe: ["Fasettslutt", "Flytter slutten; negativ = kortere"],
+      fv: ["Utløp", "Mindre: fasen holder seg bred lenger. Større: den smalner av tidligere."],
+      kh: ["Kjøl under", "Undersiden smalner i fasettområdet av med plane flater til en 2 mm bred kant. 0 % = flat, 100 % = skrå fra overkanten helt ned."],
+      pp: ["Papir for lange maler"],
+      hd: ["Hendthet", "Speilvender asymmetriske bladformer. Forlagene er tegnet for høyrehendte."]
+    },
+    shapes: { ei: "Spiss", rund: "Rund", schaufel: "Rett", gerade: "Rett", spitz: "Spiss" }, shapeNo: "Form",
+    specs: ["Total lengde", "Skaftlengde", "Bladbredde", "Bladlengde", "Crankvinkel", "Drop", "Skafttykkelse"],
+    check: "50 mm · kontrollmål", printAt: f => `Skriv ut i 100 % på ${f}`, units: "Mål i mm", grain: "Fiber langs skaftet",
+    glue: n => `Legg kanten av side ${n} her`, pageNo: (i, n) => `Side ${i}/${n}`, tooWide: " (for bred for A4)",
+    blank: "Emne", warn1: "Crank over 15°:", warn2: "bruk krokvokst grein", bend: "Knekk", facets: "Fasetter", fcOn: "På", fcOff: "Av", fsL: "Lett", fsA: "Åttekantet", frH: "Hals", frS: "Hele skaftet", saw: "Sagsnitt ca. 10 mm",
+    caMax: x => `Med denne knekkposisjonen er høyst ${x}° mulig, ellers bretter bladspissen seg over. Flytt knekken nærmere halsen.`, caMaxS: x => `Crank maks. ${x}° ved denne knekkposisjonen`,
+    saved: (f, x) => `${f} lagret${x}.`, handed: "Filen er overlevert.", declined: "Lagringen ble avbrutt.",
+    busy: "Et lagringsvindu er allerede åpent.", failed: "Lagringen mislyktes. Prøv igjen.", pdfLib: "PDF-en kunne ikke lages – PDF-funksjonen lastes fra internett. Last inn på nytt med internettforbindelse eller lagre som SVG.",
+    noSave: "Lagring er ikke tilgjengelig i denne visningen. Du kan kopiere SVG-koden.",
+    own: "egen form", upload: "Last opp egen form", remove: "Fjern egen form", upHintBowl: "SVG eller bilde: mørk omrisslinje eller fylt form på lys eller gjennomsiktig bakgrunn, spissen opp, halsen ned. Størrelsen spiller ingen rolle, bare proporsjonene teller.", upHintEnd: "SVG eller bilde: skaftenden opp, overgangen til skaftet ned, linjen kan være åpen der. Bredden nederst tilpasses skaftet.", uploaded: c => `Form ${c} lagt til.`, uploadFail: "Filen kunne ikke leses som form. Bruk én enkelt mørk omrisslinje på lys bakgrunn.", shapesLbl: "Former",
+    hdR: "Høyrehendt", hdL: "Venstrehendt", random: "Tilfeldig design", share: "Bladandel", guide: "veiledende",
+    warnMouth: "Bladet større enn ca. 45 × 65 mm: for stort for munnen på en spiseskje.", warnDepth: "Bladet dypere enn 8 mm: overleppen når ikke bunnen av hulningen, så skjeen er vanskelig å tømme.",
+    copied: "SVG-koden er kopiert.", copyFail: "Kopiering er ikke mulig.",
+    zoomHint: "Musehjul: zoom · Dra: flytt · Dobbeltklikk: hele arket", zoomReset: "Hele arket"
+  },
+  da: {
+    title: "Skeskabelon", lede: "Vælg sketype, tilpas målene og gem skabelonen i fuld størrelse som PDF eller SVG.",
+    settings: "Indstillinger", spoonType: "Sketype", preview: "Forhåndsvisning af skabelonen", lang: "Sprog", langName: "Dansk",
+    darkMode: "Mørk tilstand",
+    design: "Udseende", dsgA: "Salvie", dsgB: "Ahorn", dsgC: "Papir & terrakotta", dsgD: "Morgenhimmel",
+    hide: "Skjul", show: "Vis", view3d: "3D-visning af skeen, træk for at dreje",
+    warn: "Crank over 15°: I ligefibret træ opstår der korte fibre ved halsen og skålens spids. Brug hellere en krum gren, hvis vækst følger knækket.",
+    pdf: "Gem PDF", svg: "Gem SVG", copy: "Kopiér SVG-kode",
+    note: "Vælg „Faktisk størrelse“ eller 100 % ved udskrivning, og mål 50 mm-bjælken efter. Visningen ovenfra viser det udfoldede omrids, sidevisningen den faktiske bøjning. Knæklinjen forbinder de to visninger; langs skaftet ligger de i samme højde. Emnets fibre skal løbe langs skaftet.",
+    blankMin: "Mindste emne", drop: "Drop", paper: "Papirformat", portrait: "stående",
+    types: { ess: "Spiseske", koch: "Grydeske", tee: "Kaffeske", kelle: "Øse" },
+    files: { ess: "spiseske", koch: "grydeske", tee: "kaffeske", kelle: "ose", base: "skeskabelon" },
+    groups: { gesamt: "Generelt", laffe: "Skål", stiel: "Skaft", seite: "Sideprofil", erweitert: "Avanceret" }, hollow: "Fordybning",
+    fields: {
+      L: ["Samlet længde"], bl: ["Skållængde"], bw: ["Skålbredde"],
+      bd: ["Skåldybde", "Fordybningens dybde, uden godstykkelse"],
+      p: ["Bredeste sted", "Andel af skållængden, målt fra spidsen"],
+      bs: ["Skålform"], nw: ["Halsbredde"], ew: ["Største skaftbredde"], he: ["Skaftende"],
+      th: ["Skafttykkelse ved halsen", "Skaftet bliver tyndere mod enden"],
+      ca: ["Crankvinkel θ", "Vinkel mellem korden langs skålens kant og skaftets akse. Grydeske 0–15°, spiseske 15–20°, serveringsske op til 30°, øser 60–90°"],
+      kp: ["Knækkets placering", "Andel af skållængden, målt fra skålens bagkant. Skeer 25–33 %, øser tæt ved halsen"],
+      kr: ["Overgang ved knækket", "Jo større, desto blødere rundingen"],
+      hc: ["Skaftets krumning", "Positiv: skaftenden bøjer mod skålens side. Negativ: S-form"],
+      fc: ["Facetlinjer ved halsen"],
+      fs: ["Facetstørrelse", "Let: smal fas på kanterne. Ottekantet: tværsnit med omkring otte lige store flader."],
+      fr: ["Facetområde", "Hals: kort facet, der løber ud mod skål og skaft. Hele skaftet: helt hen til skaftendens form."],
+      te: ["Skafttykkelse ved enden", "Andel af skafttykkelsen ved halsen"],
+      nv: ["Fortykkelse ved halsen", "Ekstra tykkelse lige bag skålen"],
+      wp: ["Placering af største skaftbredde", "Andel af skaftlængden, målt fra halsen"],
+      wt: ["Godstykkelse", "Afstanden fra den indre linje til skålens kant"],
+      fe: ["Facetslut", "Flytter slutningen; negativ = kortere"],
+      fv: ["Udløb", "Mindre: fasen forbliver bred længere. Større: den spidser tidligere til."],
+      kh: ["Køl forneden", "Undersiden løber i facetområdet sammen med plane flader til en 2 mm bred kant. 0 % = flad, 100 % = skrå fra overkanten helt ned."],
+      pp: ["Papir til lange skabeloner"],
+      hd: ["Håndethed", "Spejlvender asymmetriske skålformer. Forlæggene er tegnet til højrehåndede."]
+    },
+    shapes: { ei: "Spids", rund: "Rund", schaufel: "Lige", gerade: "Lige", spitz: "Spids" }, shapeNo: "Form",
+    specs: ["Samlet længde", "Skaftlængde", "Skålbredde", "Skållængde", "Crankvinkel", "Drop", "Skafttykkelse"],
+    check: "50 mm · mål efter", printAt: f => `Udskriv i 100 % på ${f}`, units: "Mål i mm", grain: "Fibre langs skaftet",
+    glue: n => `Læg kanten af side ${n} her`, pageNo: (i, n) => `Side ${i}/${n}`, tooWide: " (for bred til A4)",
+    blank: "Emne", warn1: "Crank over 15°:", warn2: "brug en krum gren", bend: "Knæk", facets: "Facetter", fcOn: "Til", fcOff: "Fra", fsL: "Let", fsA: "Ottekantet", frH: "Hals", frS: "Hele skaftet", saw: "Savsnit ca. 10 mm",
+    caMax: x => `Ved denne knækplacering er højst ${x}° muligt, ellers folder skålens spids sig over. Flyt knækket tættere på halsen.`, caMaxS: x => `Crank maks. ${x}° ved denne knækplacering`,
+    saved: (f, x) => `${f} gemt${x}.`, handed: "Filen er overdraget.", declined: "Gemning annulleret.",
+    busy: "Der er allerede en gem-dialog åben.", failed: "Gemningen mislykkedes. Prøv igen.", pdfLib: "PDF'en kunne ikke oprettes – PDF-funktionen hentes fra internettet. Genindlæs med internetforbindelse, eller gem som SVG.",
+    noSave: "Gemning er ikke tilgængelig i denne visning. Du kan kopiere SVG-koden.",
+    own: "egen form", upload: "Upload egen form", remove: "Fjern egen form", upHintBowl: "SVG eller billede: mørk omridslinje eller udfyldt form på lys eller gennemsigtig baggrund, spidsen opad, halsen nedad. Størrelsen er ligegyldig, kun proportionerne tæller.", upHintEnd: "SVG eller billede: skaftenden opad, overgangen til skaftet nedad, linjen må være åben dér. Bredden forneden tilpasses skaftet.", uploaded: c => `Form ${c} tilføjet.`, uploadFail: "Filen kunne ikke læses som form. Brug en enkelt mørk omridslinje på lys baggrund.", shapesLbl: "Former",
+    hdR: "Højrehåndet", hdL: "Venstrehåndet", random: "Tilfældigt design", share: "Skålandel", guide: "vejledende",
+    warnMouth: "Skål større end ca. 45 × 65 mm: for stor til munden på en spiseske.", warnDepth: "Skål dybere end 8 mm: overlæben når ikke bunden af fordybningen, så skeen er svær at tømme.",
+    copied: "SVG-koden er kopieret.", copyFail: "Kopiering er ikke mulig.",
+    zoomHint: "Musehjul: zoom · Træk: flyt · Dobbeltklik: hele arket", zoomReset: "Hele arket"
+  },
+  pl: {
+    title: "Szablon łyżki", lede: "Wybierz rodzaj łyżki, dopasuj wymiary i zapisz szablon w rzeczywistym rozmiarze jako PDF lub SVG.",
+    settings: "Ustawienia", spoonType: "Rodzaj łyżki", preview: "Podgląd szablonu", lang: "Język", langName: "Polski",
+    darkMode: "Tryb ciemny",
+    design: "Wygląd", dsgA: "Szałwia", dsgB: "Klon", dsgC: "Papier i terakota", dsgD: "Poranne niebo",
+    hide: "Ukryj", show: "Pokaż", view3d: "Widok 3D łyżki, przeciągnij, aby obrócić",
+    warn: "Crank powyżej 15°: w drewnie o prostych włóknach przy szyjce i czubku czerpaka powstają krótkie włókna. Lepiej użyć wygiętej gałęzi, której przyrost podąża za wygięciem.",
+    pdf: "Zapisz PDF", svg: "Zapisz SVG", copy: "Kopiuj kod SVG",
+    note: "Przy drukowaniu wybierz „Rzeczywisty rozmiar” lub 100 % i zmierz pasek 50 mm. Widok z góry pokazuje rozwinięty obrys, widok z boku rzeczywiste wygięcie. Linia załamania łączy oba widoki; wzdłuż trzonka leżą na tej samej wysokości. Włókna półfabrykatu powinny biec wzdłuż trzonka.",
+    blankMin: "Półfabrykat co najmniej", drop: "Drop", paper: "Format papieru", portrait: "pionowo",
+    types: { ess: "Łyżka stołowa", koch: "Łyżka kuchenna", tee: "Łyżeczka do kawy", kelle: "Chochla" },
+    files: { ess: "lyzka-stolowa", koch: "lyzka-kuchenna", tee: "lyzeczka-do-kawy", kelle: "chochla", base: "szablon-lyzki" },
+    groups: { gesamt: "Ogólne", laffe: "Czerpak", stiel: "Trzonek", seite: "Profil boczny", erweitert: "Zaawansowane" }, hollow: "Wgłębienie",
+    fields: {
+      L: ["Długość całkowita"], bl: ["Długość czerpaka"], bw: ["Szerokość czerpaka"],
+      bd: ["Głębokość czerpaka", "Głębokość wgłębienia, bez grubości ścianki"],
+      p: ["Najszersze miejsce", "Udział długości czerpaka, mierzony od czubka"],
+      bs: ["Kształt czerpaka"], nw: ["Szerokość szyjki"], ew: ["Największa szerokość trzonka"], he: ["Koniec trzonka"],
+      th: ["Grubość trzonka przy szyjce", "Ku końcowi trzonek staje się cieńszy"],
+      ca: ["Kąt cranku θ", "Kąt między cięciwą krawędzi czerpaka a osią trzonka. Łyżka kuchenna 0–15°, łyżka stołowa 15–20°, łyżka do serwowania do 30°, chochle 60–90°"],
+      kp: ["Położenie załamania", "Udział długości czerpaka, mierzony od tylnego końca czerpaka. Łyżki 25–33 %, chochle blisko szyjki"],
+      kr: ["Przejście na załamaniu", "Im większe, tym łagodniejsze zaokrąglenie"],
+      hc: ["Krzywizna trzonka", "Dodatnia: koniec trzonka wygina się w stronę czerpaka. Ujemna: kształt S"],
+      fc: ["Linie faset przy szyjce"],
+      fs: ["Wielkość faset", "Lekkie: wąska faza na krawędziach. Ośmiokątne: przekrój z około ośmioma równymi ściankami."],
+      fr: ["Zakres faset", "Szyjka: krótka faseta wybiegająca ku czerpakowi i trzonkowi. Cały trzonek: aż do kształtu końca trzonka."],
+      te: ["Grubość trzonka na końcu", "Udział grubości trzonka przy szyjce"],
+      nv: ["Pogrubienie przy szyjce", "Dodatkowa grubość tuż za czerpakiem"],
+      wp: ["Położenie największej szerokości trzonka", "Udział długości trzonka, mierzony od szyjki"],
+      wt: ["Grubość ścianki", "Odległość linii wewnętrznej od krawędzi czerpaka"],
+      fe: ["Koniec fasety", "Przesuwa koniec; ujemnie = krócej"],
+      fv: ["Wybieg", "Mniej: faza dłużej pozostaje szeroka. Więcej: wcześniej zbiega się w szpic."],
+      kh: ["Kil od spodu", "W obszarze faset spód zbiega się płaskimi ściankami w krawędź szeroką na 2 mm. 0 % = płasko, 100 % = skos od górnej krawędzi do samego dołu."],
+      pp: ["Papier dla długich szablonów"],
+      hd: ["Ręczność", "Odbija lustrzanie asymetryczne kształty czerpaka. Wzory są narysowane dla praworęcznych."]
+    },
+    shapes: { ei: "Spiczasty", rund: "Okrągły", schaufel: "Prosty", gerade: "Prosty", spitz: "Spiczasty" }, shapeNo: "Kształt",
+    specs: ["Długość całkowita", "Długość trzonka", "Szerokość czerpaka", "Długość czerpaka", "Kąt cranku", "Drop", "Grubość trzonka"],
+    check: "50 mm · sprawdź", printAt: f => `Drukuj w skali 100 % na ${f}`, units: "Wymiary w mm", grain: "Włókna wzdłuż trzonka",
+    glue: n => `Tu przyłóż krawędź strony ${n}`, pageNo: (i, n) => `Strona ${i}/${n}`, tooWide: " (za szeroki na A4)",
+    blank: "Półfabrykat", warn1: "Crank powyżej 15°:", warn2: "użyj wygiętej gałęzi", bend: "Załamanie", facets: "Fasety", fcOn: "Wł.", fcOff: "Wył.", fsL: "Lekkie", fsA: "Ośmiokątne", frH: "Szyjka", frS: "Cały trzonek", saw: "Cięcie piłą ok. 10 mm",
+    caMax: x => `Przy tym położeniu załamania możliwe jest najwyżej ${x}°, inaczej czubek czerpaka się zawinie. Przesuń załamanie bliżej szyjki.`, caMaxS: x => `Crank maks. ${x}° przy tym położeniu załamania`,
+    saved: (f, x) => `Zapisano plik ${f}${x}.`, handed: "Plik przekazany.", declined: "Zapisywanie anulowane.",
+    busy: "Okno zapisywania jest już otwarte.", failed: "Zapisywanie nie powiodło się. Spróbuj ponownie.", pdfLib: "Nie udało się utworzyć pliku PDF – funkcja PDF jest ładowana z internetu. Załaduj stronę ponownie z połączeniem z internetem lub zapisz jako SVG.",
+    noSave: "W tym widoku zapisywanie nie jest dostępne. Możesz skopiować kod SVG.",
+    own: "własny kształt", upload: "Prześlij własny kształt", remove: "Usuń własny kształt", upHintBowl: "SVG lub obraz: ciemny obrys lub wypełniony kształt na jasnym lub przezroczystym tle, czubek u góry, szyjka u dołu. Rozmiar nie ma znaczenia, liczą się tylko proporcje.", upHintEnd: "SVG lub obraz: koniec trzonka u góry, połączenie z trzonkiem u dołu, tam linia może być otwarta. Szerokość u dołu zostanie dopasowana do trzonka.", uploaded: c => `Dodano kształt ${c}.`, uploadFail: "Nie udało się odczytać pliku jako kształtu. Użyj jednego ciemnego obrysu na jasnym tle.", shapesLbl: "Kształty",
+    hdR: "Praworęczny", hdL: "Leworęczny", random: "Losowy projekt", share: "Udział czerpaka", guide: "wartość orientacyjna",
+    warnMouth: "Czerpak większy niż ok. 45 × 65 mm: za duży do ust w łyżce stołowej.", warnDepth: "Czerpak głębszy niż 8 mm: górna warga nie sięga dna wgłębienia, więc łyżkę trudno opróżnić.",
+    copied: "Skopiowano kod SVG.", copyFail: "Nie można skopiować.",
+    zoomHint: "Kółko myszy: powiększenie · Przeciąganie: przesuwanie · Dwuklik: cały arkusz", zoomReset: "Cały arkusz"
   }
 };
 let lang = "de";
 try {
   const sv = localStorage.getItem("loeffel-lang");
-  const nav = (navigator.language || "de").slice(0, 2).toLowerCase();
+  let nav = (navigator.language || "de").slice(0, 2).toLowerCase();
+  if (nav === "no" || nav === "nn") nav = "nb";
   lang = I18N[sv] ? sv : I18N[nav] ? nav : "de";
 } catch (e) {}
 const T = k => I18N[lang][k];
+// Schablone (PDF/SVG) kann nur Latin-1: Sprachen mit anderen Zeichen holen die Schablonentexte aus dieser Sprache
+const TPL_LANG = { pl: "en" };
+const TS = k => I18N[TPL_LANG[lang] || lang][k];
 const PRESETS = {
   ess:   { L: 170, bl: 58, bw: 42, bd: 7,  p: 44, nw: 12, ew: 24, th: 10, ca: 18, kp: 30, kr: 25, hc: 4,  bs: "ei",       he: "rund", fc: "an", fs: "leicht", fr: "hals", pp: "a3", hd: "r", wt: 2.5, te: 50, nv: 25, wp: 78, fe: 0, fv: 1.2, kh: 0 },
   koch:  { L: 280, bl: 70, bw: 50, bd: 7,  p: 50, nw: 14, ew: 26, th: 14, ca: 5,  kp: 30, kr: 25, hc: 3,  bs: "schaufel", he: "spitz", fc: "an", fs: "leicht", fr: "hals", pp: "a3", hd: "r", wt: 2.5, te: 50, nv: 25, wp: 78, fe: 0, fv: 1.2, kh: 0 },
@@ -884,9 +1098,9 @@ function buildScene(P, name) {
   // oben head für den Prüfbalken, unten foot für das Schriftfeld; zusammen 79 mm wie bisher, damit die Blattwahl gleich bleibt
   const head = 25, foot = 54, m = 15, gap = 14, ov = 20;
   const fits = (pw, ph) => head + ext + foot <= ph && sideW + topW + 2 * gap + 2 * m <= pw;
-  const pg = fits(210, 297) ? { W: 210, H: 297, fmt: "a4", label: "A4 " + T("portrait") }
-    : P.pp === "2a4" && fits(210, 2 * 297 - ov) ? { W: 210, H: 2 * 297 - ov, fmt: "a4", label: "2 × A4 " + T("portrait"), off: [0, 297 - ov], PH: 297 }
-    : { W: 297, H: 420, fmt: "a3", label: "A3 " + T("portrait") + (P.pp === "2a4" ? T("tooWide") : "") };
+  const pg = fits(210, 297) ? { W: 210, H: 297, fmt: "a4", label: "A4 " + TS("portrait") }
+    : P.pp === "2a4" && fits(210, 2 * 297 - ov) ? { W: 210, H: 2 * 297 - ov, fmt: "a4", label: "2 × A4 " + TS("portrait"), off: [0, 297 - ov], PH: 297 }
+    : { W: 297, H: 420, fmt: "a3", label: "A3 " + TS("portrait") + (P.pp === "2a4" ? TS("tooWide") : "") };
   const W = pg.W, H = pg.H;
 
   const items = [];
@@ -899,31 +1113,31 @@ function buildScene(P, name) {
   const sbx = m, sby = m + 2;
   poly([[sbx, sby], [sbx + 50, sby]], "bar");
   for (let k = 0; k <= 50; k += 10) poly([[sbx + k, sby], [sbx + k, sby + (k % 50 ? 1.6 : 3)]], "thin");
-  text(sbx + 54, sby + 1, T("check"), 2.8);
-  text(sbx + 54, sby + 5.6, T("printAt")(pg.off ? "2 × A4" : pg.fmt.toUpperCase()), 2.8);
+  text(sbx + 54, sby + 1, TS("check"), 2.8);
+  text(sbx + 54, sby + 5.6, TS("printAt")(pg.off ? "2 × A4" : pg.fmt.toUpperCase()), 2.8);
 
   // Schriftfeld unten rechts wie bei einer technischen Zeichnung: Titelzeile, vier Zeilen mit je zwei Maßen,
   // Rohling und Faser, darunter Hinweise (Crank über 15°, nicht erreichbarer Crank-Winkel); wächst nach oben
-  const S = T("specs"), cw = [34, 20, 30, 22], tw = 106, rh = 4.6, trh = 7.4;
-  const rows = [[S[0], L, S[4], caAct + "°"], [S[1], Math.round(L - bl), S[5], drop], [S[3], Math.round(bl), S[6], th], [S[2], bw, T("shapesLbl"), `${bowlCode(P.bs)} · ${endCode(P.he)}`]];
+  const S = TS("specs"), cw = [34, 20, 30, 22], tw = 106, rh = 4.6, trh = 7.4;
+  const rows = [[S[0], L, S[4], caAct + "°"], [S[1], Math.round(L - bl), S[5], drop], [S[3], Math.round(bl), S[6], th], [S[2], bw, TS("shapesLbl"), `${bowlCode(P.bs)} · ${endCode(P.he)}`]];
   const notes = [];
-  if (P.ca > 15) notes.push(`${T("warn1")} ${T("warn2")}`);
-  if (caMax !== null) notes.push(T("caMaxS")(caMax));
+  if (P.ca > 15) notes.push(`${TS("warn1")} ${TS("warn2")}`);
+  if (caMax !== null) notes.push(TS("caMaxS")(caMax));
   const tx0 = W - m - tw, tx1 = W - m, tyB = H - 10, tyT = tyB - trh - (rows.length + 1 + notes.length) * rh;
   const ca = tx0 + cw[0], cb = ca + cw[1], cc = cb + cw[2], yD = tyT + trh, yR = yD + rows.length * rh, yN = yR + rh;
   poly([[tx0, tyT], [tx1, tyT], [tx1, tyB], [tx0, tyB]], "thin", true);
   for (let i = 0; i <= rows.length + notes.length; i++) poly([[tx0, yD + i * rh], [tx1, yD + i * rh]], "hair");
   poly([[ca, yD], [ca, yR]], "hair"); poly([[cb, yD], [cb, yN]], "hair"); poly([[cc, yD], [cc, yR]], "hair");
-  text(tx0 + 2, tyT + 5.3, mir ? `${name} · ${T("hdL")}` : name, 4.4, "start", true);
-  text(tx1 - 2, tyT + 5.3, T("units"), 2.8, "end");
+  text(tx0 + 2, tyT + 5.3, mir ? `${name} · ${TS("hdL")}` : name, 4.4, "start", true);
+  text(tx1 - 2, tyT + 5.3, TS("units"), 2.8, "end");
   const bl3 = y => y + rh - 1.3;
   rows.forEach(([k1, v1, k2, v2], i) => {
     const y = bl3(yD + i * rh);
     text(tx0 + 1.5, y, k1, 3); text(cb - 1.5, y, String(v1), 3, "end");
     text(cb + 1.5, y, k2, 3); text(tx1 - 1.5, y, String(v2), 3, "end");
   });
-  text(tx0 + 1.5, bl3(yR), T("blank"), 3); text(cb - 1.5, bl3(yR), `${blank.l} × ${blank.w} × ${blank.h}`, 3, "end");
-  text(cb + 1.5, bl3(yR), T("grain"), 3);
+  text(tx0 + 1.5, bl3(yR), TS("blank"), 3); text(cb - 1.5, bl3(yR), `${blank.l} × ${blank.w} × ${blank.h}`, 3, "end");
+  text(cb + 1.5, bl3(yR), TS("grain"), 3);
   notes.forEach((s, i) => text(tx0 + 1.5, bl3(yN + i * rh), s, 3, "start", true));
 
   // Ansichten nebeneinander
@@ -946,8 +1160,8 @@ function buildScene(P, name) {
   text(sx + zMin - 3, y0 + xk + 1, `Crank ${caAct}°`, 3, "end", true);
   poly([[sx + zMin - 2, y0 + xk], [sx + zMax + 2, y0 + xk]], "knick");
   poly([[cx - maxL - 2, y0 + xk], [cx + maxR + 2, y0 + xk]], "knick");
-  text(cx + maxR + 4, y0 + xk - 0.6, T("bend"), 2.6, "start", true);
-  text(cx + maxR + 4, y0 + xk + 3.6, T("saw"), 2.6);
+  text(cx + maxR + 4, y0 + xk - 0.6, TS("bend"), 2.6, "start", true);
+  text(cx + maxR + 4, y0 + xk + 3.6, TS("saw"), 2.6);
 
   poly([[dimX, y0], [dimX, y0 + L]], "thin");
   poly([[dimX - 1.2, y0 + 2.5], [dimX, y0], [dimX + 1.2, y0 + 2.5]], "thin");
@@ -988,16 +1202,16 @@ function buildScene(P, name) {
       poly([[cx - hwL(x), y0 + x], [cx - hwL(x2) + c2, y0 + x2]], "hatch");
       poly([[cx + hwR(x), y0 + x], [cx + hwR(x2) - c2, y0 + x2]], "hatch");
     }
-    text(cx + Math.max(...fx.map(hwR)) + 3, y0 + (facXa + facXb) / 2 + 1, T("facets"), 2.6, "start", true);
-    if (P.kh > 0) text(cx + Math.max(...fx.map(hwR)) + 3, y0 + (facXa + facXb) / 2 + 5, `${T("fields").kh[0]} ${P.kh} %`, 2.6);
+    text(cx + Math.max(...fx.map(hwR)) + 3, y0 + (facXa + facXb) / 2 + 1, TS("facets"), 2.6, "start", true);
+    if (P.kh > 0) text(cx + Math.max(...fx.map(hwR)) + 3, y0 + (facXa + facXb) / 2 + 5, `${TS("fields").kh[0]} ${P.kh} %`, 2.6);
   }
 
   // 2 × A4: Anlegelinien an beiden Seitenkanten der Überlappung, Passkreuze in ihrer Mitte, Seitenzahlen
   if (pg.off) {
     const ya = pg.off[1], yb = pg.PH, yc = (ya + yb) / 2;
     poly([[4, ya], [W - 4, ya]], "dash"); poly([[4, yb], [W - 4, yb]], "dash");
-    text(m, ya - 1.5, T("glue")(2), 2.6, "start", true); text(W - m, ya - 1.5, T("pageNo")(1, 2), 2.6, "end", true);
-    text(m, yb + 4, T("glue")(1), 2.6, "start", true); text(W - m, yb + 4, T("pageNo")(2, 2), 2.6, "end", true);
+    text(m, ya - 1.5, TS("glue")(2), 2.6, "start", true); text(W - m, ya - 1.5, TS("pageNo")(1, 2), 2.6, "end", true);
+    text(m, yb + 4, TS("glue")(1), 2.6, "start", true); text(W - m, yb + 4, TS("pageNo")(2, 2), 2.6, "end", true);
     [10, W - 10].forEach(x => {
       poly([[x - 4, yc], [x + 4, yc]], "thin"); poly([[x, yc - 4], [x, yc + 4]], "thin");
       poly(Array.from({ length: 24 }, (_, i) => [x + 2.5 * Math.cos(i * Math.PI / 12), yc + 2.5 * Math.sin(i * Math.PI / 12)]), "thin", true);
@@ -1301,7 +1515,7 @@ function syncFields() {
   }));
 }
 function update() {
-  const name = T("types")[state.type];
+  const name = TS("types")[state.type];
   scene = buildScene(state.P, name);
   $("sheet").innerHTML = toSVG(scene);
   $("sheet").classList.toggle("tall", !!scene.page.off);
@@ -1537,18 +1751,42 @@ function applyLang() {
   document.title = T("title");
   document.querySelectorAll("[data-i]").forEach(el => { el.textContent = T(el.dataset.i); });
   document.querySelectorAll("[data-ia]").forEach(el => el.setAttribute("aria-label", T(el.dataset.ia)));
-  $("langs").setAttribute("aria-label", T("lang"));
+  $("themeBtn").title = T("darkMode");
   $("sheet").title = T("zoomHint");
-  document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === lang));
+  $("langSel").value = lang;
   if (V3.mesh) $("v3dToggle").textContent = V3.on ? T("hide") : T("show");
   status("");
   renderTypes(); renderFields(); syncFields(); update();
 }
-$("langs").addEventListener("click", e => {
-  const b = e.target.closest("[data-lang]"); if (!b || b.dataset.lang === lang) return;
-  lang = b.dataset.lang;
+for (const l of Object.keys(I18N)) {
+  const o = document.createElement("option");
+  o.value = l; o.lang = l; o.textContent = I18N[l].langName;
+  $("langSel").appendChild(o);
+}
+$("langSel").addEventListener("change", () => {
+  lang = $("langSel").value;
   try { localStorage.setItem("loeffel-lang", lang); } catch (e) {}
   applyLang();
+});
+/* ---------- Hell/Dunkel ---------- */
+function applyTheme() {
+  const dark = document.documentElement.getAttribute("data-theme") === "dark";
+  $("themeBtn").textContent = dark ? "☀" : "☾";
+  $("themeBtn").setAttribute("aria-pressed", dark);
+}
+$("themeBtn").addEventListener("click", () => {
+  const dark = document.documentElement.getAttribute("data-theme") !== "dark";
+  document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+  try { localStorage.setItem("loeffel-theme", dark ? "dark" : "light"); } catch (e) {}
+  applyTheme();
+});
+applyTheme();
+/* ---------- Design (Salbei, Ahorn, Papier & Terrakotta, Morgenhimmel) ---------- */
+$("designSel").value = document.documentElement.getAttribute("data-design") || "a";
+$("designSel").addEventListener("change", () => {
+  const d = $("designSel").value;
+  document.documentElement.setAttribute("data-design", d);
+  try { localStorage.setItem("loeffel-design", d); } catch (e) {}
 });
 applyLang();
 </script>
