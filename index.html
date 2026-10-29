@@ -243,6 +243,49 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
 :root[data-design="d"] :is(.v3d, .zbadge) { border-radius: 14px; }
 :root[data-design="d"] .sheet { box-shadow: 0 2px 4px rgba(20,40,60,.14), 0 14px 32px rgba(20,40,60,.18); }
 :root[data-design="d"][data-theme="dark"] .panel { border-color: var(--line); box-shadow: none; }
+
+/* ---------- Formeditor: Dialog über der Seite; Desktop Zeichenfläche links, Vorschau rechts; Handy bildschirmfüllend ---------- */
+.ed { width: min(1040px, calc(100vw - 32px)); height: min(760px, calc(100dvh - 32px)); max-width: none; max-height: none; padding: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); color: var(--fg); overflow: hidden; }
+.ed[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+.ed::backdrop { background: rgba(0,0,0,.45); }
+.ed-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding: 14px 18px 10px; border-bottom: 1px solid var(--line); }
+.ed-head h2 { margin: 0; font: 700 18px var(--font-display); }
+.ed-sym { grid-template-columns: 1fr 1fr; margin: 0; min-width: 240px; }
+.ed-body { display: grid; grid-template-columns: minmax(0, 1fr) 260px; min-height: 0; }
+.ed-canvas { min-height: 0; min-width: 0; padding: 10px; background-color: var(--mat); background-image: linear-gradient(var(--mat-line) 1px, transparent 1px), linear-gradient(90deg, var(--mat-line) 1px, transparent 1px); background-size: 28px 28px; }
+#edSvg { display: block; width: 100%; height: 100%; touch-action: none; background: #fff; border-radius: 8px; cursor: crosshair; outline: none; }
+#edSvg:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ed-axis { stroke: #8a8a8a; stroke-width: 1; stroke-dasharray: 5 4; vector-effect: non-scaling-stroke; }
+.ed-shape { fill: color-mix(in srgb, var(--accent) 14%, transparent); stroke: #222; stroke-width: 2; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.ed-lab { fill: #555; font-family: var(--font-body); font-weight: 600; }
+.ed-pt { fill: #fff; stroke: var(--accent); stroke-width: 2.5; vector-effect: non-scaling-stroke; cursor: grab; }
+.ed-pt.end { fill: color-mix(in srgb, var(--accent) 30%, #fff); }
+.ed-pt.sel { fill: var(--accent); }
+.ed-fix { fill: #222; }
+.ed-side { display: grid; align-content: start; gap: 12px; padding: 14px; overflow-y: auto; border-left: 1px solid var(--line); }
+.ed-prev { height: 300px; display: grid; place-items: center; background: #fff; border-radius: 8px; padding: 6px; }
+.ed-prev svg { width: 100%; height: 100%; }
+.ed-pv { fill: none; stroke: #222; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.ed-pvhl { fill: color-mix(in srgb, var(--accent) 35%, transparent); stroke: var(--accent); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.ed-tools { display: flex; flex-wrap: wrap; gap: 6px; }
+.ed-imgsize { flex-basis: 100%; }
+.ed .hint { font-size: 12px; color: var(--muted); margin: 0; }
+.ed .warn { max-width: none; }
+.ed-foot { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 18px; border-top: 1px solid var(--line); }
+.ed-gap { flex: 1 1 auto; }
+@media (max-width: 760px) {
+  .ed { width: 100vw; height: 100dvh; border: 0; border-radius: 0; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .ed-head { padding: 10px 12px 8px; }
+  .ed-head h2 { font-size: 16px; }
+  .ed-sym { min-width: 0; flex: 1 1 200px; }
+  .ed-body { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; }
+  .ed-canvas { padding: 6px; }
+  .ed-side { border-left: 0; border-top: 1px solid var(--line); padding: 8px 12px; gap: 8px; max-height: 40dvh; }
+  .ed-prev { height: 64px; padding: 4px; }
+  .ed-foot { display: grid; grid-template-columns: 1fr 1fr; padding: 8px 12px; }
+  .ed-gap { display: none; }
+  .ed-foot .btn { min-height: 44px; padding: 8px 6px; font-size: 13px; }
+}
 </style>
 </head>
 <body>
@@ -253,7 +296,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
     <button type="button" class="themebtn" id="themeBtn" data-ia="darkMode" aria-pressed="false" aria-label="Dunkle Darstellung" title="Dunkle Darstellung">☾</button>
     <select class="designsel" id="designSel" data-ia="design"><option value="a" data-i="dsgA">Salbei</option><option value="b" data-i="dsgB">Ahorn</option><option value="c" data-i="dsgC">Papier &amp; Terrakotta</option><option value="d" data-i="dsgD">Morgenhimmel</option></select>
     </div>
-    <div class="brand"><h1 data-i="title">Löffelschablone</h1><span class="ver" id="ver">v27</span></div>
+    <div class="brand"><h1 data-i="title">Löffelschablone</h1><span class="ver" id="ver">v28</span></div>
     <p class="lede" data-i="lede">Löffelart wählen, Maße anpassen, Schablone in Originalgröße als PDF oder SVG speichern.</p>
   </header>
 
@@ -296,6 +339,35 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
     </main>
   </div>
 </div>
+
+<dialog class="ed" id="ed" aria-labelledby="edTitle">
+  <div class="ed-head">
+    <h2 id="edTitle"></h2>
+    <div class="seg ed-sym" id="edSymSeg" role="group"><button type="button" data-sym="1" data-i="edSym">Symmetrisch</button><button type="button" data-sym="0" data-i="edAsym">Asymmetrisch</button></div>
+  </div>
+  <div class="ed-body">
+    <div class="ed-canvas"><svg id="edSvg" tabindex="0" data-ia="edCanvas" role="img" aria-label="Zeichenfläche"><g id="edImgG"></g><g id="edG"></g></svg></div>
+    <div class="ed-side">
+      <div class="ed-prev" id="edPrev" role="img" data-ia="edPreview" aria-label="Draufsicht des ganzen Löffels"></div>
+      <p class="warn" id="edWarn" hidden></p>
+      <div class="ed-tools">
+        <label class="upbtn"><input type="file" accept="image/*,.svg" id="edImgIn"><span data-i="edImg">Bild zum Nachzeichnen</span></label>
+        <button type="button" class="upbtn" id="edImgDel" data-i="edImgDel" hidden>Bild entfernen</button>
+        <div class="field ed-imgsize" id="edImgSizeF" hidden><div class="row"><label for="edImgSize" data-i="edImgSize">Bildgröße</label><output id="edImgSizeO" for="edImgSize"></output></div><input type="range" id="edImgSize" min="50" max="200" step="5" value="100"></div>
+        <button type="button" class="upbtn" id="edExport" data-i="edExport">Als SVG speichern</button>
+      </div>
+      <p class="hint" data-i="edHelp"></p>
+      <span class="status" id="edStatus" role="status"></span>
+    </div>
+  </div>
+  <div class="ed-foot">
+    <button type="button" class="btn secondary" id="edUndo" data-i="edUndo" disabled>Rückgängig</button>
+    <button type="button" class="btn secondary" id="edReset" data-i="edReset">Auf Vorlage zurücksetzen</button>
+    <span class="ed-gap"></span>
+    <button type="button" class="btn secondary" id="edCancel" data-i="edCancel">Abbrechen</button>
+    <button type="button" class="btn primary" id="edApply" data-i="edApply">Übernehmen</button>
+  </div>
+</dialog>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -351,7 +423,16 @@ const I18N = {
     hdR: "Rechtshänder", hdL: "Linkshänder", random: "Zufallsdesign", share: "Laffenanteil", guide: "Richtwert",
     warnMouth: "Laffe größer als etwa 45 × 65 mm: Für einen Esslöffel ist das zu groß für den Mund.", warnDepth: "Laffe tiefer als 8 mm: Die Oberlippe erreicht den Boden der Mulde nicht, der Löffel lässt sich schlecht leer essen.",
     copied: "SVG-Code kopiert.", copyFail: "Kopieren nicht möglich.",
-    zoomHint: "Mausrad: zoomen · Ziehen: verschieben · Doppelklick: ganzes Blatt", zoomReset: "Ganzes Blatt"
+    zoomHint: "Mausrad: zoomen · Ziehen: verschieben · Doppelklick: ganzes Blatt", zoomReset: "Ganzes Blatt",
+    edit: "Form bearbeiten", edTitle: c => `Form bearbeiten · ${c}`, edSym: "Symmetrisch", edAsym: "Asymmetrisch", edUndo: "Rückgängig",
+    edReset: "Auf Vorlage zurücksetzen", edCancel: "Abbrechen", edApply: "Übernehmen", edImg: "Bild zum Nachzeichnen", edImgSize: "Bildgröße", edImgDel: "Bild entfernen",
+    edExport: "Als SVG speichern",
+    edHelp: "Punkte ziehen. Doppelklick oder Doppeltipp auf die Linie fügt einen Punkt hinzu, auf einen Punkt entfernt ihn (auch mit Entf). Strg+Z macht rückgängig.",
+    edCanvas: "Zeichenfläche: Umriss der Form, zum Formen die Punkte ziehen", edPreview: "Draufsicht des ganzen Löffels", edTip: "Spitze", edNeck: "Hals",
+    edEnd: "Griffende", edJoint: "Ansatz", edWarnOver: "Der Umriss läuft zurück (Überhang). Übernommen wird eine vereinfachte Form.",
+    edWarnWaist: "Eine Engstelle ist schmaler als 20 % der größten Breite.", edWarnLong: "Die Laffe ist mehr als 2,5-mal so lang wie breit.",
+    edWarnWide: "Die Laffe ist breiter als 1,7-mal ihre Länge.", edMin: "Mindestens 4 Punkte je Hälfte.", edMax: "Höchstens 16 Punkte je Hälfte.",
+    edSaved: c => `Form ${c} übernommen.`, edFile: "form", edImgFail: "Das Bild ließ sich nicht laden."
   },
   nl: {
     title: "Lepelsjabloon", lede: "Kies het type lepel, pas de maten aan en sla het sjabloon op ware grootte op als PDF of SVG.",
@@ -402,7 +483,16 @@ const I18N = {
     hdR: "Rechtshandig", hdL: "Linkshandig", random: "Willekeurig ontwerp", share: "Aandeel kom", guide: "richtwaarde",
     warnMouth: "Kom groter dan ca. 45 × 65 mm: voor een eetlepel te groot voor de mond.", warnDepth: "Kom dieper dan 8 mm: de bovenlip bereikt de bodem van de holte niet, de lepel is moeilijk leeg te eten.",
     copied: "SVG-code gekopieerd.", copyFail: "Kopiëren is niet mogelijk.",
-    zoomHint: "Muiswiel: zoomen · Slepen: verschuiven · Dubbelklik: hele blad", zoomReset: "Hele blad"
+    zoomHint: "Muiswiel: zoomen · Slepen: verschuiven · Dubbelklik: hele blad", zoomReset: "Hele blad",
+    edit: "Vorm bewerken", edTitle: c => `Vorm bewerken · ${c}`, edSym: "Symmetrisch", edAsym: "Asymmetrisch", edUndo: "Ongedaan maken", edReset: "Terug naar voorbeeld",
+    edCancel: "Annuleren", edApply: "Toepassen", edImg: "Afbeelding om over te trekken", edImgSize: "Grootte afbeelding", edImgDel: "Afbeelding verwijderen",
+    edExport: "Opslaan als SVG",
+    edHelp: "Punten verslepen. Dubbelklik of dubbeltik op de lijn voegt een punt toe, op een punt verwijdert het (ook met Delete). Ctrl+Z maakt ongedaan.",
+    edCanvas: "Tekenvlak: omtrek van de vorm, sleep de punten om te vormen", edPreview: "Bovenaanzicht van de hele lepel", edTip: "Punt", edNeck: "Hals",
+    edEnd: "Einde van de greep", edJoint: "Aansluiting", edWarnOver: "De omtrek loopt terug (overhang). Er wordt een vereenvoudigde vorm overgenomen.",
+    edWarnWaist: "Een vernauwing is smaller dan 20 % van de grootste breedte.", edWarnLong: "De kom is meer dan 2,5 keer zo lang als breed.",
+    edWarnWide: "De kom is breder dan 1,7 keer de lengte.", edMin: "Minstens 4 punten per helft.", edMax: "Hoogstens 16 punten per helft.",
+    edSaved: c => `Vorm ${c} toegepast.`, edFile: "vorm", edImgFail: "De afbeelding kon niet worden geladen."
   },
   en: {
     title: "Spoon Template", lede: "Choose a spoon type, adjust the measurements and save the template at full size as PDF or SVG.",
@@ -453,7 +543,15 @@ const I18N = {
     hdR: "Right-handed", hdL: "Left-handed", random: "Random design", share: "Bowl share", guide: "guide",
     warnMouth: "Bowl larger than about 45 × 65 mm: too big for the mouth on an eating spoon.", warnDepth: "Bowl deeper than 8 mm: the upper lip can't reach the bottom of the hollow, so the spoon is hard to empty.",
     copied: "SVG code copied.", copyFail: "Copying isn't possible.",
-    zoomHint: "Mouse wheel: zoom · Drag: pan · Double-click: whole sheet", zoomReset: "Whole sheet"
+    zoomHint: "Mouse wheel: zoom · Drag: pan · Double-click: whole sheet", zoomReset: "Whole sheet",
+    edit: "Edit shape", edTitle: c => `Edit shape · ${c}`, edSym: "Symmetric", edAsym: "Asymmetric", edUndo: "Undo", edReset: "Reset to original", edCancel: "Cancel",
+    edApply: "Apply", edImg: "Image to trace", edImgSize: "Image size", edImgDel: "Remove image", edExport: "Save as SVG",
+    edHelp: "Drag the points. Double-click or double-tap on the line to add a point, on a point to remove it (or press Delete). Ctrl+Z undoes.",
+    edCanvas: "Drawing area: outline of the shape, drag the points to shape it", edPreview: "Top view of the whole spoon", edTip: "Tip", edNeck: "Neck",
+    edEnd: "Handle end", edJoint: "Joint", edWarnOver: "The outline turns back on itself (overhang). A simplified shape will be applied.",
+    edWarnWaist: "A narrow point is less than 20 % of the greatest width.", edWarnLong: "The bowl is more than 2.5 times as long as it is wide.",
+    edWarnWide: "The bowl is wider than 1.7 times its length.", edMin: "At least 4 points per half.", edMax: "At most 16 points per half.",
+    edSaved: c => `Shape ${c} applied.`, edFile: "shape", edImgFail: "The image could not be loaded."
   },
   fr: {
     title: "Gabarit de cuillère", lede: "Choisissez le type de cuillère, ajustez les dimensions et enregistrez le gabarit en taille réelle au format PDF ou SVG.",
@@ -504,7 +602,16 @@ const I18N = {
     hdR: "Droitier", hdL: "Gaucher", random: "Design aléatoire", share: "Part du cuilleron", guide: "repère",
     warnMouth: "Cuilleron de plus d'environ 45 × 65 mm : trop grand pour la bouche pour une cuillère à soupe.", warnDepth: "Cuilleron de plus de 8 mm de profondeur : la lèvre supérieure n'atteint pas le fond du creux, la cuillère se vide mal.",
     copied: "Code SVG copié.", copyFail: "Impossible de copier.",
-    zoomHint: "Molette : zoomer · Glisser : déplacer · Double-clic : page entière", zoomReset: "Page entière"
+    zoomHint: "Molette : zoomer · Glisser : déplacer · Double-clic : page entière", zoomReset: "Page entière",
+    edit: "Modifier la forme", edTitle: c => `Modifier la forme · ${c}`, edSym: "Symétrique", edAsym: "Asymétrique", edUndo: "Annuler la dernière action",
+    edReset: "Revenir au modèle", edCancel: "Annuler", edApply: "Appliquer", edImg: "Image à décalquer", edImgSize: "Taille de l'image", edImgDel: "Retirer l'image",
+    edExport: "Enregistrer en SVG",
+    edHelp: "Faites glisser les points. Un double-clic ou double appui sur la ligne ajoute un point, sur un point le supprime (aussi avec Suppr). Ctrl+Z annule.",
+    edCanvas: "Zone de dessin : contour de la forme, faites glisser les points pour la modeler", edPreview: "Vue de dessus de toute la cuillère", edTip: "Pointe",
+    edNeck: "Col", edEnd: "Bout du manche", edJoint: "Jonction", edWarnOver: "Le contour revient en arrière (surplomb). Une forme simplifiée sera appliquée.",
+    edWarnWaist: "Un rétrécissement fait moins de 20 % de la plus grande largeur.", edWarnLong: "Le cuilleron est plus de 2,5 fois plus long que large.",
+    edWarnWide: "Le cuilleron est plus large que 1,7 fois sa longueur.", edMin: "Au moins 4 points par moitié.", edMax: "Au plus 16 points par moitié.",
+    edSaved: c => `Forme ${c} appliquée.`, edFile: "forme", edImgFail: "Impossible de charger l'image."
   },
   sv: {
     title: "Skedmall", lede: "Välj skedtyp, anpassa måtten och spara mallen i full storlek som PDF eller SVG.",
@@ -555,7 +662,14 @@ const I18N = {
     hdR: "Högerhänt", hdL: "Vänsterhänt", random: "Slumpad design", share: "Skålens andel", guide: "riktvärde",
     warnMouth: "Skålen större än ca 45 × 65 mm: för stor för munnen på en matsked.", warnDepth: "Skålen djupare än 8 mm: överläppen når inte botten av urholkningen, skeden blir svår att tömma.",
     copied: "SVG-koden har kopierats.", copyFail: "Det gick inte att kopiera.",
-    zoomHint: "Mushjul: zooma · Dra: flytta · Dubbelklick: hela arket", zoomReset: "Hela arket"
+    zoomHint: "Mushjul: zooma · Dra: flytta · Dubbelklick: hela arket", zoomReset: "Hela arket",
+    edit: "Redigera form", edTitle: c => `Redigera form · ${c}`, edSym: "Symmetrisk", edAsym: "Asymmetrisk", edUndo: "Ångra", edReset: "Återställ till förlagan",
+    edCancel: "Avbryt", edApply: "Använd", edImg: "Bild att rita av", edImgSize: "Bildstorlek", edImgDel: "Ta bort bild", edExport: "Spara som SVG",
+    edHelp: "Dra punkterna. Dubbelklick eller dubbeltryck på linjen lägger till en punkt, på en punkt tar bort den (även med Delete). Ctrl+Z ångrar.",
+    edCanvas: "Rityta: formens kontur, dra punkterna för att forma", edPreview: "Vy ovanifrån av hela skeden", edTip: "Spets", edNeck: "Hals", edEnd: "Skaftände",
+    edJoint: "Anslutning", edWarnOver: "Konturen går bakåt (överhäng). En förenklad form används.", edWarnWaist: "En midja är smalare än 20 % av den största bredden.",
+    edWarnLong: "Skålen är mer än 2,5 gånger så lång som bred.", edWarnWide: "Skålen är bredare än 1,7 gånger sin längd.", edMin: "Minst 4 punkter per halva.",
+    edMax: "Högst 16 punkter per halva.", edSaved: c => `Formen ${c} används.`, edFile: "form", edImgFail: "Bilden kunde inte laddas."
   },
   es: {
     title: "Plantilla de cuchara", lede: "Elige el tipo de cuchara, ajusta las medidas y guarda la plantilla a tamaño real en PDF o SVG.",
@@ -606,7 +720,15 @@ const I18N = {
     hdR: "Diestro", hdL: "Zurdo", random: "Diseño aleatorio", share: "Proporción del cazo", guide: "referencia",
     warnMouth: "Cazo mayor de unos 45 × 65 mm: demasiado grande para la boca en una cuchara de mesa.", warnDepth: "Cazo de más de 8 mm de profundidad: el labio superior no llega al fondo del hueco y cuesta vaciar la cuchara.",
     copied: "Código SVG copiado.", copyFail: "No se puede copiar.",
-    zoomHint: "Rueda del ratón: zoom · Arrastrar: mover · Doble clic: hoja completa", zoomReset: "Hoja completa"
+    zoomHint: "Rueda del ratón: zoom · Arrastrar: mover · Doble clic: hoja completa", zoomReset: "Hoja completa",
+    edit: "Editar forma", edTitle: c => `Editar forma · ${c}`, edSym: "Simétrica", edAsym: "Asimétrica", edUndo: "Deshacer", edReset: "Volver al modelo",
+    edCancel: "Cancelar", edApply: "Aplicar", edImg: "Imagen para calcar", edImgSize: "Tamaño de la imagen", edImgDel: "Quitar imagen", edExport: "Guardar como SVG",
+    edHelp: "Arrastra los puntos. Doble clic o doble toque en la línea añade un punto; sobre un punto lo elimina (también con Supr). Ctrl+Z deshace.",
+    edCanvas: "Área de dibujo: contorno de la forma, arrastra los puntos para darle forma", edPreview: "Vista superior de toda la cuchara", edTip: "Punta",
+    edNeck: "Cuello", edEnd: "Remate del mango", edJoint: "Unión", edWarnOver: "El contorno retrocede (voladizo). Se aplicará una forma simplificada.",
+    edWarnWaist: "Un estrechamiento mide menos del 20 % de la anchura máxima.", edWarnLong: "El cazo es más de 2,5 veces más largo que ancho.",
+    edWarnWide: "El cazo es más ancho que 1,7 veces su longitud.", edMin: "Al menos 4 puntos por mitad.", edMax: "Como máximo 16 puntos por mitad.",
+    edSaved: c => `Forma ${c} aplicada.`, edFile: "forma", edImgFail: "No se pudo cargar la imagen."
   },
   it: {
     title: "Dima per cucchiai", lede: "Scegli il tipo di cucchiaio, regola le misure e salva la dima a grandezza reale in PDF o SVG.",
@@ -657,7 +779,16 @@ const I18N = {
     hdR: "Destrorso", hdL: "Mancino", random: "Design casuale", share: "Quota della coppa", guide: "riferimento",
     warnMouth: "Coppa più grande di circa 45 × 65 mm: troppo grande per la bocca in un cucchiaio da tavola.", warnDepth: "Coppa più profonda di 8 mm: il labbro superiore non raggiunge il fondo dell'incavo e il cucchiaio si svuota male.",
     copied: "Codice SVG copiato.", copyFail: "Impossibile copiare.",
-    zoomHint: "Rotella del mouse: zoom · Trascina: sposta · Doppio clic: foglio intero", zoomReset: "Foglio intero"
+    zoomHint: "Rotella del mouse: zoom · Trascina: sposta · Doppio clic: foglio intero", zoomReset: "Foglio intero",
+    edit: "Modifica forma", edTitle: c => `Modifica forma · ${c}`, edSym: "Simmetrica", edAsym: "Asimmetrica", edUndo: "Annulla", edReset: "Ripristina il modello",
+    edCancel: "Annulla modifiche", edApply: "Applica", edImg: "Immagine da ricalcare", edImgSize: "Dimensione immagine", edImgDel: "Rimuovi immagine",
+    edExport: "Salva come SVG",
+    edHelp: "Trascina i punti. Doppio clic o doppio tocco sulla linea aggiunge un punto, su un punto lo rimuove (anche con Canc). Ctrl+Z annulla.",
+    edCanvas: "Area di disegno: contorno della forma, trascina i punti per modellarla", edPreview: "Vista dall'alto dell'intero cucchiaio", edTip: "Punta",
+    edNeck: "Collo", edEnd: "Estremità del manico", edJoint: "Attacco", edWarnOver: "Il contorno torna indietro (sottosquadro). Verrà applicata una forma semplificata.",
+    edWarnWaist: "Una strozzatura è più stretta del 20 % della larghezza massima.", edWarnLong: "La coppa è più di 2,5 volte lunga quanto larga.",
+    edWarnWide: "La coppa è più larga di 1,7 volte la sua lunghezza.", edMin: "Almeno 4 punti per metà.", edMax: "Al massimo 16 punti per metà.",
+    edSaved: c => `Forma ${c} applicata.`, edFile: "forma", edImgFail: "Impossibile caricare l'immagine."
   },
   nb: {
     title: "Skjemal", lede: "Velg skjetype, juster målene og lagre malen i full størrelse som PDF eller SVG.",
@@ -708,7 +839,15 @@ const I18N = {
     hdR: "Høyrehendt", hdL: "Venstrehendt", random: "Tilfeldig design", share: "Bladandel", guide: "veiledende",
     warnMouth: "Bladet større enn ca. 45 × 65 mm: for stort for munnen på en spiseskje.", warnDepth: "Bladet dypere enn 8 mm: overleppen når ikke bunnen av hulningen, så skjeen er vanskelig å tømme.",
     copied: "SVG-koden er kopiert.", copyFail: "Kopiering er ikke mulig.",
-    zoomHint: "Musehjul: zoom · Dra: flytt · Dobbeltklikk: hele arket", zoomReset: "Hele arket"
+    zoomHint: "Musehjul: zoom · Dra: flytt · Dobbeltklikk: hele arket", zoomReset: "Hele arket",
+    edit: "Rediger form", edTitle: c => `Rediger form · ${c}`, edSym: "Symmetrisk", edAsym: "Asymmetrisk", edUndo: "Angre", edReset: "Tilbakestill til forlaget",
+    edCancel: "Avbryt", edApply: "Bruk", edImg: "Bilde å tegne etter", edImgSize: "Bildestørrelse", edImgDel: "Fjern bilde", edExport: "Lagre som SVG",
+    edHelp: "Dra punktene. Dobbeltklikk eller dobbelttrykk på linjen legger til et punkt, på et punkt fjerner det (også med Delete). Ctrl+Z angrer.",
+    edCanvas: "Tegneflate: omrisset av formen, dra punktene for å forme", edPreview: "Sett ovenfra av hele skjeen", edTip: "Spiss", edNeck: "Hals", edEnd: "Skaftende",
+    edJoint: "Overgang", edWarnOver: "Omrisset går bakover (overheng). En forenklet form blir brukt.",
+    edWarnWaist: "En innsnevring er smalere enn 20 % av den største bredden.", edWarnLong: "Bladet er mer enn 2,5 ganger så langt som det er bredt.",
+    edWarnWide: "Bladet er bredere enn 1,7 ganger lengden.", edMin: "Minst 4 punkter per halvdel.", edMax: "Høyst 16 punkter per halvdel.",
+    edSaved: c => `Formen ${c} er brukt.`, edFile: "form", edImgFail: "Bildet kunne ikke lastes."
   },
   da: {
     title: "Skeskabelon", lede: "Vælg sketype, tilpas målene og gem skabelonen i fuld størrelse som PDF eller SVG.",
@@ -759,7 +898,15 @@ const I18N = {
     hdR: "Højrehåndet", hdL: "Venstrehåndet", random: "Tilfældigt design", share: "Skålandel", guide: "vejledende",
     warnMouth: "Skål større end ca. 45 × 65 mm: for stor til munden på en spiseske.", warnDepth: "Skål dybere end 8 mm: overlæben når ikke bunden af fordybningen, så skeen er svær at tømme.",
     copied: "SVG-koden er kopieret.", copyFail: "Kopiering er ikke mulig.",
-    zoomHint: "Musehjul: zoom · Træk: flyt · Dobbeltklik: hele arket", zoomReset: "Hele arket"
+    zoomHint: "Musehjul: zoom · Træk: flyt · Dobbeltklik: hele arket", zoomReset: "Hele arket",
+    edit: "Rediger form", edTitle: c => `Rediger form · ${c}`, edSym: "Symmetrisk", edAsym: "Asymmetrisk", edUndo: "Fortryd", edReset: "Nulstil til forlægget",
+    edCancel: "Annuller", edApply: "Anvend", edImg: "Billede at tegne efter", edImgSize: "Billedstørrelse", edImgDel: "Fjern billede", edExport: "Gem som SVG",
+    edHelp: "Træk i punkterne. Dobbeltklik eller dobbelttryk på linjen tilføjer et punkt, på et punkt fjerner det (også med Delete). Ctrl+Z fortryder.",
+    edCanvas: "Tegneflade: formens omrids, træk i punkterne for at forme", edPreview: "Set ovenfra af hele skeen", edTip: "Spids", edNeck: "Hals", edEnd: "Skaftende",
+    edJoint: "Overgang", edWarnOver: "Omridset løber baglæns (overhæng). En forenklet form bliver anvendt.",
+    edWarnWaist: "En indsnævring er smallere end 20 % af den største bredde.", edWarnLong: "Skålen er mere end 2,5 gange så lang som bred.",
+    edWarnWide: "Skålen er bredere end 1,7 gange sin længde.", edMin: "Mindst 4 punkter pr. halvdel.", edMax: "Højst 16 punkter pr. halvdel.",
+    edSaved: c => `Formen ${c} er anvendt.`, edFile: "form", edImgFail: "Billedet kunne ikke indlæses."
   },
   pl: {
     title: "Szablon łyżki", lede: "Wybierz rodzaj łyżki, dopasuj wymiary i zapisz szablon w rzeczywistym rozmiarze jako PDF lub SVG.",
@@ -810,7 +957,15 @@ const I18N = {
     hdR: "Praworęczny", hdL: "Leworęczny", random: "Losowy projekt", share: "Udział czerpaka", guide: "wartość orientacyjna",
     warnMouth: "Czerpak większy niż ok. 45 × 65 mm: za duży do ust w łyżce stołowej.", warnDepth: "Czerpak głębszy niż 8 mm: górna warga nie sięga dna wgłębienia, więc łyżkę trudno opróżnić.",
     copied: "Skopiowano kod SVG.", copyFail: "Nie można skopiować.",
-    zoomHint: "Kółko myszy: powiększenie · Przeciąganie: przesuwanie · Dwuklik: cały arkusz", zoomReset: "Cały arkusz"
+    zoomHint: "Kółko myszy: powiększenie · Przeciąganie: przesuwanie · Dwuklik: cały arkusz", zoomReset: "Cały arkusz",
+    edit: "Edytuj kształt", edTitle: c => `Edytuj kształt · ${c}`, edSym: "Symetryczny", edAsym: "Asymetryczny", edUndo: "Cofnij", edReset: "Przywróć wzór",
+    edCancel: "Anuluj", edApply: "Zastosuj", edImg: "Obraz do odrysowania", edImgSize: "Rozmiar obrazu", edImgDel: "Usuń obraz", edExport: "Zapisz jako SVG",
+    edHelp: "Przeciągaj punkty. Dwuklik lub podwójne stuknięcie w linię dodaje punkt, w punkt – usuwa go (także klawiszem Delete). Ctrl+Z cofa.",
+    edCanvas: "Obszar rysowania: obrys kształtu, przeciągaj punkty, aby go formować", edPreview: "Widok z góry całej łyżki", edTip: "Czubek", edNeck: "Szyjka",
+    edEnd: "Koniec trzonka", edJoint: "Połączenie", edWarnOver: "Obrys cofa się (podcięcie). Zostanie zastosowany uproszczony kształt.",
+    edWarnWaist: "Przewężenie jest węższe niż 20 % największej szerokości.", edWarnLong: "Czerpak jest ponad 2,5 raza dłuższy niż szerszy.",
+    edWarnWide: "Czerpak jest szerszy niż 1,7 jego długości.", edMin: "Co najmniej 4 punkty na połowę.", edMax: "Najwyżej 16 punktów na połowę.",
+    edSaved: c => `Zastosowano kształt ${c}.`, edFile: "ksztalt", edImgFail: "Nie udało się wczytać obrazu."
   }
 };
 let lang = "de";
@@ -927,9 +1082,11 @@ const ENDS = {
 16:[2.508,[1000,1094,1168,1238,1308,1361,1400,1441,1478,1482,1458,1426,1398,1375,1352,1328,1308,1290,1273,1259,1244,1225,1206,1191,1180,1172,1163,1155,1144,1132,1128,1127,1123,1115,1109,1098,1085,1080,1076,1065,1057,1055,1051,1044,1040,1038,1031,1020,1016,1019,1022,1015,1004,1003,1006,1003,1004,1008,1006,997,968]]
 };
 /* ---------- Eigene Formen (im Browser gespeichert) ---------- */
-// u<n> = eigene Laffe [ar, links, rechts], w<n> = eigenes Griffende [ar, profil]; Nummern laufen fort und werden nie wiederverwendet
-let CUSTOM = { nb: 1, ne: 1, bowls: {}, ends: {} };
+// u<n> = eigene Laffe [ar, links, rechts] (symmetrisch auch nur [ar, profil]), w<n> = eigenes Griffende [ar, profil];
+// Nummern laufen fort und werden nie wiederverwendet. edit: Kontrollpunkte aus dem Formeditor je Kennung (ältere Einträge haben keine)
+let CUSTOM = { nb: 1, ne: 1, bowls: {}, ends: {}, edit: {} };
 try { const c = JSON.parse(localStorage.getItem("loeffel-custom") || "null"); if (c && c.bowls && c.ends) CUSTOM = c; } catch (e) {}
+if (!CUSTOM.edit) CUSTOM.edit = {};
 const saveCustom = () => { try { localStorage.setItem("loeffel-custom", JSON.stringify(CUSTOM)); } catch (e) {} };
 const bowlData = v => v && v[0] === "d" ? BOWLS[v.slice(1)] : v && v[0] === "u" ? CUSTOM.bowls[v.slice(1)] : null;
 const endData = v => v && v[0] === "e" ? ENDS[v.slice(1)] : v && v[0] === "w" ? CUSTOM.ends[v.slice(1)] : null;
@@ -1472,7 +1629,7 @@ function renderFields() {
         const code = fd.k === "bs" ? bowlCode(v) : endCode(v), own = v[0] === "u" || v[0] === "w";
         const t = T("shapes")[v] ? `${code} · ${T("shapes")[v]}` : own ? `${code} · ${T("own")}` : code;
         return `<button type="button" data-ck="${fd.k}" data-v="${v}" title="${t}" class="${own ? "own" : ""}">${fd.k === "bs" ? thumb(v) : endThumb(v)}<span>${code}</span></button>`; }).join("") + `</div>
-      <div class="upl"><label class="upbtn"><input type="file" accept=".svg,.png,.jpg,.jpeg,.webp,image/*" data-up="${fd.k}">${T("upload")}</label><button type="button" class="upbtn" data-del="${fd.k}" hidden>${T("remove")}</button></div>
+      <div class="upl"><button type="button" class="upbtn" data-edit="${fd.k}"><span aria-hidden="true">✎</span> ${T("edit")}</button><label class="upbtn"><input type="file" accept=".svg,.png,.jpg,.jpeg,.webp,image/*" data-up="${fd.k}">${T("upload")}</label><button type="button" class="upbtn" data-del="${fd.k}" hidden>${T("remove")}</button></div>
       <span class="hint">${T(fd.k === "bs" ? "upHintBowl" : "upHintEnd")}</span></div>` :
     fd.choice ?
     `<div class="field" id="fld-${fd.k}"${fd.fac ? " data-fac" : ""}><span class="flabel" id="l-${fd.k}">${T("fields")[fd.k][0]}</span><div class="seg" role="group" aria-labelledby="l-${fd.k}">` +
@@ -1552,6 +1709,7 @@ $("fields").addEventListener("click", e => {
   const b = e.target.closest("[data-del]"); if (!b) return;
   const k = b.dataset.del, v = state.P[k];
   if (v[0] === "u") delete CUSTOM.bowls[v.slice(1)]; else if (v[0] === "w") delete CUSTOM.ends[v.slice(1)]; else return;
+  delete CUSTOM.edit[v];
   saveCustom(); state.P[k] = PRESETS[state.type][k];
   renderFields(); syncFields(); update();
 });
@@ -1775,6 +1933,359 @@ $("designSel").addEventListener("change", () => {
   try { localStorage.setItem("loeffel-design", d); } catch (e) {}
 });
 applyLang();
+/* ---------- Formeditor ---------- */
+// Formt den Umriss der Draufsicht einer Laffe (bs) oder eines Griffendes (he) über Kontrollpunkte; buildScene bleibt unverändert.
+// Zeichnung in Längeneinheiten: y = 0 (Spitze bzw. Griffende) … 1 (Hals bzw. Ansatz), x = halbe Breite / Länge.
+// Je Hälfte eine Punktliste [[x, y], …]: der erste Punkt liegt fest auf der Mittellinie, der letzte fest auf y = 1 (nur seitlich verschiebbar).
+// Die Kurve ist ein zentripetaler Catmull-Rom-Spline durch die Punkte. Gespeichert werden wie beim Bild-Import die Abtastwerte
+// (Laffe 101, Griffende 61) und zusätzlich die Punkte in CUSTOM.edit, damit sich die Form wieder öffnen lässt.
+// Während der Editor offen ist, liegt der Entwurf als u0 bzw. w0 in CUSTOM (Nummer 0 wird nie vergeben) und wird nicht gespeichert.
+const ED = { open: false };
+const ED_N = 10, ED_MIN = 4, ED_MAX = 16, ED_HIT = 22;
+const r4 = v => Math.round(v * 10000) / 10000;
+const clamp01 = v => Math.min(1, Math.max(0, v));
+
+// Dichte Linie einer Hälfte A; B = andere Hälfte. Vor der Spitze liegt der gespiegelte zweite Punkt von B (runde Spitze),
+// hinter dem letzten Punkt geht die Linie gerade in Längsrichtung weiter (in den Stiel). Jeder Punkt trägt die Nummer seines Abschnitts.
+function edCurve(A, B) {
+  const n = A.length, last = A[n - 1];
+  const P = [[-B[1][0], B[1][1]]].concat(A, [[last[0], 2 * last[1] - A[n - 2][1]]]), out = [];
+  const gap = (a, b) => Math.max(1e-4, Math.sqrt(Math.hypot(b[0] - a[0], b[1] - a[1])));
+  for (let i = 0; i < n - 1; i++) {
+    const p0 = P[i], p1 = P[i + 1], p2 = P[i + 2], p3 = P[i + 3];
+    const t1 = gap(p0, p1), t2 = t1 + gap(p1, p2), t3 = t2 + gap(p2, p3);
+    for (let k = 0; k < 24; k++) {
+      const t = t1 + (t2 - t1) * k / 24;
+      const mix = (a, b, ta, tb) => { const u = (t - ta) / (tb - ta); return [a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u]; };
+      const A1 = mix(p0, p1, 0, t1), A2 = mix(p1, p2, t1, t2), A3 = mix(p2, p3, t2, t3);
+      const C = mix(mix(A1, A2, 0, t2), mix(A2, A3, t1, t3), t1, t2);
+      out.push([C[0], C[1], i]);
+    }
+  }
+  out.push([last[0], last[1], n - 2]);
+  return out;
+}
+// Abtastwerte: halbe Breite an m gleich verteilten Stellen y; läuft die Linie zurück, zählt die äußerste Stelle
+function edSample(curve, m) {
+  return Array.from({ length: m }, (_, k) => {
+    const t = k / (m - 1);
+    let best = 0;
+    for (let i = 0; i < curve.length - 1; i++) {
+      const a = curve[i], b = curve[i + 1], ya = clamp01(a[1]), yb = clamp01(b[1]);
+      if (t < Math.min(ya, yb) || t > Math.max(ya, yb)) continue;
+      const x = ya === yb ? Math.max(a[0], b[0]) : a[0] + (b[0] - a[0]) * (t - ya) / (yb - ya);
+      if (x > best) best = x;
+    }
+    return best;
+  });
+}
+// Punkte für eine Form ohne gespeicherte Punkte: h(y) = halbe Breite / Länge. Verteilt nach Länge plus Richtungsänderung
+// des Umrisses (auf einem groben Raster, damit Rauschen in gescannten Vorlagen nicht zählt), so dass an Spitze und Kurven mehr Punkte liegen.
+function edFit(h, n = ED_N) {
+  const M = 100, pts = [[0, 0]];
+  for (let k = 0; k <= M; k++) pts.push([Math.max(0, h(k / M)), k / M]);
+  const m = [0];
+  let a0 = null;
+  for (let i = 1; i < pts.length; i++) {
+    const dx = pts[i][0] - pts[i - 1][0], dy = pts[i][1] - pts[i - 1][1], len = Math.hypot(dx, dy);
+    let turn = 0;
+    if (len > 1e-9) { const a = Math.atan2(dy, dx); if (a0 !== null) { turn = Math.abs(a - a0); if (turn > Math.PI) turn = 2 * Math.PI - turn; } a0 = a; }
+    m.push(m[i - 1] + len + 0.12 * turn);
+  }
+  const out = [[0, 0]];
+  for (let j = 1; j < n - 1; j++) {
+    const target = m[m.length - 1] * j / (n - 1), i = Math.max(1, m.findIndex(v => v >= target)), u = (target - m[i - 1]) / (m[i] - m[i - 1] || 1);
+    out.push([r4(pts[i - 1][0] + (pts[i][0] - pts[i - 1][0]) * u), r4(pts[i - 1][1] + (pts[i][1] - pts[i - 1][1]) * u)]);
+  }
+  out.push([r4(Math.max(0, h(1))), 1]);
+  return out;
+}
+// Draufsicht aus einer Szene: [x, halbe Breite links, rechts] an jedem 4. Messpunkt (wie sc.geo)
+const sceneHalf = sc => sc.geo.map((g, k) => [sc.L * (1 - Math.cos(Math.PI * Math.min(500, k * 4) / 500)) / 2, g[3], g[4]]);
+function halfAt(sh, x) {
+  let i = 1;
+  while (i < sh.length - 1 && sh[i][0] < x) i++;
+  const a = sh[i - 1], b = sh[i], u = b[0] > a[0] ? clamp01((x - a[0]) / (b[0] - a[0])) : 0;
+  return a[1] + (b[1] - a[1]) * u;
+}
+const edBl = ar => Math.min(130, Math.max(25, Math.round(state.P.bw * ar)));
+const edBlEff = () => Math.min(state.P.bl, state.P.L * 0.6);
+
+// Startpunkte: gespeicherte Punkte einer eigenen Form, sonst aus den Abtastwerten bzw. der aktuellen Form umgerechnet.
+// Laffen im aktuellen Längen-/Breitenverhältnis, Vorlagen-Griffenden in ihrem eigenen, parametrische Griffenden aus der aktuellen Szene.
+function edStart(k) {
+  const v = state.P[k], saved = CUSTOM.edit[v] && (k === "bs" ? CUSTOM.bowls : CUSTOM.ends)[v.slice(1)] ? CUSTOM.edit[v] : null;
+  if (saved) return JSON.parse(JSON.stringify(saved));
+  if (k === "bs") {
+    const BP = bowlProfile(v, state.P.p / 100), r = state.P.bw / edBlEff();
+    const A = edFit(t => BP.lr(t)[0] * r);
+    return isAsym(v) ? { sym: false, A, B: edFit(t => BP.lr(t)[1] * r) } : { sym: true, A, B: null };
+  }
+  const E = endData(v);
+  // buildScene nutzt das Profil nur im Verhältnis zum Wert am Ansatz: auf Ansatz = 1000 umrechnen, Länge E[0] bleibt
+  if (E) return { sym: true, A: edFit(t => lerpArr(E[1], t) / lerpArr(E[1], 1) / (2 * E[0])), B: null };
+  const sh = sceneHalf(scene), L = scene.L, len = Math.max(4, Math.min(1.6 * state.P.ew, 0.6 * (L - edBlEff())));
+  return { sym: true, A: edFit(t => halfAt(sh, L - t * len) / len), B: null };
+}
+
+// Abtastwerte im Speicherformat: Laffe [ar, links(, rechts)] mit größter Gesamtbreite 1000, Griffende [ar, profil] mit Ansatz = 1000
+function edData(c = ED.cur, bowl = ED.bowl) {
+  const A = c.A, B = c.sym ? A : c.B, m = bowl ? 101 : 61;
+  const ca = edCurve(A, B), cb = c.sym ? ca : edCurve(B, A), sa = edSample(ca, m), sb = c.sym ? sa : edSample(cb, m);
+  let data;
+  if (bowl) {
+    const mw = Math.max(1e-4, ...sa.map((v, i) => v + sb[i])), q = v => Math.round(v / mw * 1000);
+    data = c.sym ? [Math.round(1000 / mw) / 1000, sa.map(q)] : [Math.round(1000 / mw) / 1000, sa.map(q), sb.map(q)];
+  } else {
+    const ref = Math.max(0.005, A[A.length - 1][0]);
+    data = [Math.round(1000 / (2 * ref)) / 1000, sa.map(v => Math.round(v / ref * 1000))];
+  }
+  return { data, ca, cb, sa, sb };
+}
+// Hinweise bei seltsamen Formen (keine Sperre): Überhang, Engstelle unter 20 % der größten Breite, Laffe sehr lang oder sehr breit
+function edWarnings(d, bowl = ED.bowl) {
+  const out = [], back = cv => cv.some((p, i) => i && clamp01(p[1]) < clamp01(cv[i - 1][1]) - 1e-3);
+  if (back(d.ca) || back(d.cb)) out.push(T("edWarnOver"));
+  const w = d.sa.map((v, i) => v + d.sb[i]), mx = Math.max(...w);
+  let pre = 0;
+  const post = w.map((_, i) => Math.max(...w.slice(i)));
+  if (w.some((v, i) => { pre = Math.max(pre, v); return v < 0.2 * mx && pre > 0.4 * mx && post[i] > 0.4 * mx; })) out.push(T("edWarnWaist"));
+  if (bowl && d.data[0] > 2.5) out.push(T("edWarnLong"));
+  if (bowl && d.data[0] < 1 / 1.7) out.push(T("edWarnWide"));
+  return out;
+}
+
+/* Öffnen, Schließen, Übernehmen */
+function edOpen(k) {
+  const v = state.P[k];
+  ED.k = k; ED.bowl = k === "bs"; ED.src = v; ED.own = v[0] === (ED.bowl ? "u" : "w");
+  ED.cur = edStart(k); ED.base = JSON.stringify(ED.cur); ED.undo = []; ED.sel = null; ED.drag = null; ED.tap = null;
+  ED.open = true;
+  $("edTitle").textContent = T("edTitle")(ED.bowl ? bowlCode(v) : endCode(v));
+  $("edSymSeg").hidden = !ED.bowl;
+  edStatus("");
+  $("ed").showModal();
+  edRefresh(true);
+  $("edSvg").focus({ preventScroll: true });
+}
+// Aufräumen: Entwurf aus CUSTOM entfernen, Hintergrundbild freigeben
+function edCleanup() {
+  if (!ED.open) return;
+  ED.open = false; ED.drag = null;
+  delete CUSTOM.bowls[0]; delete CUSTOM.ends[0];
+  edImg(null);
+}
+function edClose() { edCleanup(); if ($("ed").open) $("ed").close(); }
+function edApply() {
+  if (JSON.stringify(ED.cur) === ED.base) { edClose(); return; }
+  const d = edData(), cur = ED.cur, bowl = ED.bowl;
+  edClose();
+  let v = ED.own ? ED.src : null;
+  if (bowl) { if (!v) v = "u" + CUSTOM.nb++; CUSTOM.bowls[v.slice(1)] = d.data; state.P.bl = edBl(d.data[0]); }
+  else { if (!v) v = "w" + CUSTOM.ne++; CUSTOM.ends[v.slice(1)] = d.data; }
+  CUSTOM.edit[v] = { sym: cur.sym, A: cur.A, B: cur.sym ? null : cur.B };
+  saveCustom(); state.P[ED.k] = v;
+  renderFields(); syncFields(); update();
+  status(T("edSaved")(bowl ? bowlCode(v) : endCode(v)));
+}
+const edStatus = msg => { $("edStatus").textContent = msg; };
+
+/* Zeichnen */
+// Bildschirm-Koordinaten der Zeichnung: Laffe mit der Spitze oben; Griffende wie im Löffel mit dem Ansatz oben
+const edY = y => ED.bowl ? y : 1 - y;
+const edHalves = () => ED.cur.sym ? [{ key: "A", side: -1 }, { key: "A", side: 1 }] : [{ key: "A", side: -1 }, { key: "B", side: 1 }];
+function edFitView() {
+  const c = ED.cur, xs = c.A.concat(c.sym ? [] : c.B).map(p => p[0]);
+  const X = Math.max(0.45, Math.max(...xs) * 1.2 + 0.06);
+  ED.vb = [-X, -0.14, 2 * X, 1.28];
+  $("edSvg").setAttribute("viewBox", ED.vb.join(" "));
+}
+function edRefresh(fit) {
+  if (fit) edFitView();
+  edDraw(); edPreviewSoon();
+}
+function edDraw() {
+  const svg = $("edSvg"), d = edData(), ctm = svg.getScreenCTM(), k = 1 / ((ctm && ctm.a) || 400);
+  ED.last = d;
+  const fx = n => n.toFixed(4), P = (x, y) => `${fx(x)} ${fx(edY(y))}`;
+  const left = d.ca.slice().reverse().map(p => P(-p[0], p[1])), right = (ED.cur.sym ? d.ca : d.cb).map(p => P(p[0], p[1]));
+  const X = ED.vb[0], Y0 = ED.vb[1], H = ED.vb[3], ln = (x1, y1, x2, y2, cls) => `<line x1="${fx(x1)}" y1="${fx(y1)}" x2="${fx(x2)}" y2="${fx(y2)}" class="${cls}"/>`;
+  let s = ln(0, Y0, 0, Y0 + H, "ed-axis") + ln(X, edY(1), -X, edY(1), "ed-axis") + ln(X, edY(0), -X, edY(0), "ed-axis");
+  s += `<path d="M${left.join(" L")} L${right.join(" L")}" class="ed-shape"/>`;
+  const fs = 12 * k, lab = (y, t) => `<text x="${fx(X + 6 * k)}" y="${fx(edY(y) + (edY(y) < 0.5 ? -5 : 13) * k)}" font-size="${fx(fs)}" class="ed-lab">${esc(t)}</text>`;
+  s += lab(0, T(ED.bowl ? "edTip" : "edEnd")) + lab(1, T(ED.bowl ? "edNeck" : "edJoint"));
+  ED.handles = [];
+  const coarse = window.matchMedia && matchMedia("(pointer: coarse)").matches, r = (coarse ? 10 : 7) * k;
+  edHalves().forEach(h => ED.cur[h.key].forEach((p, j) => {
+    if (j === 0 && h.side > 0) return;
+    const x = h.side * p[0], y = edY(p[1]), sel = ED.sel && ED.sel.key === h.key && ED.sel.j === j;
+    ED.handles.push({ key: h.key, side: h.side, j, x, y });
+    s += j === 0 ? `<rect x="${fx(x - r * 0.7)}" y="${fx(y - r * 0.7)}" width="${fx(r * 1.4)}" height="${fx(r * 1.4)}" class="ed-fix"/>`
+      : `<circle cx="${fx(x)}" cy="${fx(y)}" r="${fx(sel ? r * 1.25 : r)}" class="ed-pt${sel ? " sel" : ""}${j === ED.cur[h.key].length - 1 ? " end" : ""}"/>`;
+  }));
+  $("edG").innerHTML = s;
+  const w = edWarnings(d);
+  $("edWarn").hidden = !w.length; $("edWarn").textContent = w.join(" ");
+  document.querySelectorAll("#edSymSeg [data-sym]").forEach(b => b.setAttribute("aria-pressed", (b.dataset.sym === "1") === ED.cur.sym));
+  $("edUndo").disabled = !ED.undo.length;
+}
+// Live-Draufsicht des ganzen Löffels mit dem Entwurf; der bearbeitete Teil ist hervorgehoben. Auf dem Handy quer.
+function edPreviewSoon() {
+  if (ED.pv) return;
+  ED.pv = requestAnimationFrame(() => { ED.pv = 0; if (ED.open) edPreview(); });
+}
+function edPreview() {
+  const d = ED.last || edData(), P = { ...state.P };
+  if (ED.bowl) { CUSTOM.bowls[0] = d.data; P.bs = "u0"; P.bl = edBl(d.data[0]); } else { CUSTOM.ends[0] = d.data; P.he = "w0"; }
+  const sc = buildScene(P, TS("types")[state.type]), sh = sceneHalf(sc), L = sc.L, bl = Math.min(P.bl, L * 0.6);
+  const [a, b] = ED.bowl ? [0, bl] : [L - Math.min(d.data[0] * P.ew, (L - bl) * 0.6), L];
+  const mx = Math.max(...sh.map(q => Math.max(q[1], q[2]))), m = 4;
+  const across = window.matchMedia && matchMedia("(max-width: 760px)").matches;
+  const pt = (x, w) => across ? `${x.toFixed(2)} ${w.toFixed(2)}` : `${w.toFixed(2)} ${x.toFixed(2)}`;
+  const path = "M" + sh.map(q => pt(q[0], -q[1])).concat(sh.slice().reverse().map(q => pt(q[0], q[2]))).join(" L") + " Z";
+  const vb = across ? [-m, -mx - m, L + 2 * m, 2 * mx + 2 * m] : [-mx - m, -m, 2 * mx + 2 * m, L + 2 * m];
+  const hl = across ? [a, -mx - m, b - a, 2 * mx + 2 * m] : [-mx - m, a, 2 * mx + 2 * m, b - a];
+  $("edPrev").innerHTML = `<svg viewBox="${vb.join(" ")}" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="edclip"><rect x="${hl[0]}" y="${hl[1]}" width="${hl[2]}" height="${hl[3]}"/></clipPath></defs>` +
+    `<path d="${path}" class="ed-pv"/><path d="${path}" class="ed-pvhl" clip-path="url(#edclip)"/></svg>`;
+}
+
+/* Bedienung */
+function edPush() { ED.undo.push(JSON.stringify(ED.cur)); if (ED.undo.length > 200) ED.undo.shift(); }
+function edUndo() { if (!ED.undo.length) return; ED.cur = JSON.parse(ED.undo.pop()); ED.sel = null; edRefresh(true); }
+function edReset() { if (JSON.stringify(ED.cur) === ED.base) return; edPush(); ED.cur = JSON.parse(ED.base); ED.sel = null; edRefresh(true); }
+function edSym(sym) {
+  if (ED.cur.sym === sym) return;
+  edPush();
+  // asymmetrisch: rechte Hälfte startet als Spiegelbild der linken; symmetrisch: die linke Hälfte gilt
+  ED.cur = sym ? { sym, A: ED.cur.A, B: null } : { sym, A: ED.cur.A, B: JSON.parse(JSON.stringify(ED.cur.A)) };
+  ED.sel = null; edRefresh(true);
+}
+function edPt(e) {
+  const svg = $("edSvg"), p = svg.createSVGPoint();
+  p.x = e.clientX; p.y = e.clientY;
+  const q = p.matrixTransform(svg.getScreenCTM().inverse());
+  return [q.x, q.y];
+}
+const edPx = () => { const c = $("edSvg").getScreenCTM(); return (c && c.a) || 400; };
+function edHit(q) {
+  let best = null, bd = ED_HIT / edPx();
+  for (const h of ED.handles) { const dd = Math.hypot(h.x - q[0], h.y - q[1]); if (dd < bd) { bd = dd; best = h; } }
+  return best;
+}
+// Punkt auf der Linie einfügen: nächste Stelle der dichten Linie, zwischen die Punkte ihres Abschnitts
+function edInsert(q) {
+  let best = null, bd = ED_HIT / edPx();
+  edHalves().forEach(h => (h.key === "A" || ED.cur.sym ? ED.last.ca : ED.last.cb).forEach(c => {
+    const dd = Math.hypot(h.side * c[0] - q[0], edY(c[1]) - q[1]);
+    if (dd < bd && c[1] > 0.002 && c[1] < 0.998) { bd = dd; best = { key: h.key, c }; }
+  }));
+  if (!best) return;
+  const arr = ED.cur[best.key];
+  if (arr.length >= ED_MAX) { edStatus(T("edMax")); return; }
+  edPush();
+  arr.splice(best.c[2] + 1, 0, [r4(Math.max(0, best.c[0])), r4(clamp01(best.c[1]))]);
+  ED.sel = { key: best.key, j: best.c[2] + 1 }; edStatus(""); edRefresh(true);
+}
+function edRemove(key, j) {
+  const arr = ED.cur[key];
+  if (j <= 0 || j >= arr.length - 1) return;
+  if (arr.length <= ED_MIN) { edStatus(T("edMin")); return; }
+  edPush(); arr.splice(j, 1); ED.sel = null; edStatus(""); edRefresh(true);
+}
+// Punkt verschieben: Spitze fest, letzter Punkt nur seitlich, kein Punkt über die Mittellinie, y zwischen Spitze und Ansatz
+function edMove(key, j, x, y) {
+  const arr = ED.cur[key], last = j === arr.length - 1;
+  arr[j] = [r4(Math.min(-ED.vb[0] * 0.98, Math.max(last && !ED.bowl ? 0.005 : 0, x))), last ? 1 : r4(clamp01(y))];
+}
+$("edSvg").addEventListener("pointerdown", e => {
+  if (e.button !== 0 || !ED.open) return;
+  const q = edPt(e), now = performance.now(), h = edHit(q);
+  const dbl = ED.tap && now - ED.tap.t < 350 && Math.hypot(e.clientX - ED.tap.x, e.clientY - ED.tap.y) < 24;
+  ED.tap = dbl ? null : { t: now, x: e.clientX, y: e.clientY };
+  e.preventDefault();
+  if (dbl) { if (h) edRemove(h.key, h.j); else edInsert(q); return; }
+  ED.sel = h ? { key: h.key, j: h.j } : null;
+  if (h && h.j > 0) { ED.drag = { ...h, x0: e.clientX, y0: e.clientY, moved: false }; $("edSvg").setPointerCapture(e.pointerId); }
+  edDraw();
+});
+$("edSvg").addEventListener("pointermove", e => {
+  const dr = ED.drag; if (!dr) return;
+  if (!dr.moved) { if (Math.hypot(e.clientX - dr.x0, e.clientY - dr.y0) < 3) return; edPush(); dr.moved = true; ED.tap = null; }
+  const q = edPt(e);
+  edMove(dr.key, dr.j, dr.side * q[0], ED.bowl ? q[1] : 1 - q[1]);
+  edDraw(); edPreviewSoon();
+});
+const edDragEnd = () => { const dr = ED.drag; ED.drag = null; if (dr && dr.moved) edRefresh(true); };
+$("edSvg").addEventListener("pointerup", edDragEnd);
+$("edSvg").addEventListener("pointercancel", edDragEnd);
+$("ed").addEventListener("keydown", e => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") { e.preventDefault(); edUndo(); return; }
+  if (e.target.tagName === "INPUT" || !ED.sel) return;
+  const { key, j } = ED.sel;
+  if (e.key === "Delete" || e.key === "Backspace") { e.preventDefault(); edRemove(key, j); return; }
+  const dir = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+  if (!dir || e.target !== $("edSvg") || j === 0) return;
+  e.preventDefault();
+  const st = e.shiftKey ? 0.02 : 0.005, side = edHalves().find(h => h.key === key).side, p = ED.cur[key][j];
+  edPush(); edMove(key, j, p[0] + dir[0] * side * st, p[1] + dir[1] * st * (ED.bowl ? 1 : -1)); edRefresh(true);
+});
+$("edSymSeg").addEventListener("click", e => { const b = e.target.closest("[data-sym]"); if (b) edSym(b.dataset.sym === "1"); });
+$("edUndo").addEventListener("click", edUndo);
+$("edReset").addEventListener("click", edReset);
+$("edCancel").addEventListener("click", edClose);
+$("edApply").addEventListener("click", edApply);
+$("ed").addEventListener("close", edCleanup);
+$("fields").addEventListener("click", e => { const b = e.target.closest("[data-edit]"); if (b) edOpen(b.dataset.edit); });
+
+/* Hintergrundbild zum Nachzeichnen: zwischen Spitze und Ansatz eingepasst, halbtransparent, nicht gespeichert */
+function edImg(img) {
+  if (ED.img) URL.revokeObjectURL(ED.img.url);
+  ED.img = img;
+  $("edImgDel").hidden = $("edImgSizeF").hidden = !img;
+  if (!img) { $("edImgG").innerHTML = ""; $("edImgIn").value = ""; return; }
+  $("edImgSize").value = 100; edImgDraw();
+}
+function edImgDraw() {
+  const im = ED.img; if (!im) return;
+  const s = Number($("edImgSize").value) / 100, h = s, w = h * im.w / im.h;
+  $("edImgSizeO").textContent = $("edImgSize").value + " %";
+  $("edImgG").innerHTML = `<image href="${im.url}" x="${(-w / 2).toFixed(4)}" y="${(0.5 - h / 2).toFixed(4)}" width="${w.toFixed(4)}" height="${h.toFixed(4)}" preserveAspectRatio="none" opacity="0.35"/>`;
+}
+$("edImgIn").addEventListener("change", e => {
+  const file = e.target.files[0]; if (!file) return;
+  const url = URL.createObjectURL(file), img = new Image();
+  img.onload = () => edImg({ url, w: img.naturalWidth || 1, h: img.naturalHeight || 1 });
+  img.onerror = () => { URL.revokeObjectURL(url); edStatus(T("edImgFail")); };
+  img.src = url;
+});
+$("edImgDel").addEventListener("click", () => edImg(null));
+$("edImgSize").addEventListener("input", edImgDraw);
+
+/* Export als SVG: schwarz gefüllter Umriss, Spitze bzw. Griffende oben, so dass der Bild-Import (loadShapeFile) die Datei wieder einliest */
+function edSVG(d = edData(), bowl = ED.bowl) {
+  const D = d.data, H = 600, mg = 10;
+  const sc = bowl ? H / D[0] / 1000 : H / (2 * D[0]) / 1000, Lh = D[1].map(v => v * sc), Rh = (bowl && D[2] ? D[2] : D[1]).map(v => v * sc);
+  const n = Lh.length, ax = mg + Math.max(...Lh), W = ax + Math.max(...Rh) + mg, y = k => mg + H * k / (n - 1);
+  const pts = [[ax, mg]].concat(Lh.map((v, k) => [ax - v, y(k)]), Rh.map((v, k) => [ax + v, y(k)]).reverse());
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${Math.ceil(W)}" height="${H + 2 * mg}" viewBox="0 0 ${Math.ceil(W)} ${H + 2 * mg}"><path d="M${pts.map(p => p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" L")} Z" fill="#000000"/></svg>`;
+}
+async function edExport() {
+  const v = ED.own ? ED.src : (ED.bowl ? "u" + CUSTOM.nb : "w" + CUSTOM.ne);
+  const filename = `${T("edFile")}-${ED.bowl ? bowlCode(v) : endCode(v)}.svg`, data = edSVG();
+  if (!inClaude) { plainDownload(filename, data, "image/svg+xml"); edStatus(T("saved")(filename, "")); return; }
+  const dl = await downloadsP;
+  if (!dl) return;
+  try {
+    const res = await dl.save({ filename, data });
+    edStatus(res.status === "saved" ? T("saved")(filename, "") : T("handed"));
+  } catch (err) {
+    const c = err && err.code;
+    edStatus(c === "declined" ? T("declined") : c === "rate_limited" ? T("busy") : T("failed"));
+  }
+}
+$("edExport").addEventListener("click", edExport);
+downloadsP.then(dl => { if (!dl && inClaude) $("edExport").hidden = true; });
+window.addEventListener("resize", () => { if (ED.open) { edDraw(); edPreviewSoon(); } });
 </script>
 </body>
 </html>
