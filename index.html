@@ -32,85 +32,122 @@ body {
   padding-right: max(16px, env(safe-area-inset-right, 0px));
   padding-block: 24px 40px;
 }
-.wrap { max-width: 1280px; margin: 0 auto; display: grid; gap: 20px; }
-header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; }
-.hbar { display: flex; align-items: center; gap: 6px; }
-header { padding-right: clamp(130px, 21vw, 252px); }
-.langsel, .themebtn, .designsel { font: 600 12px var(--font-mono); letter-spacing: .04em; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 6px; padding: 5px 9px; cursor: pointer; }
-.langsel, .themebtn, .designsel { height: 26px; }
-.themebtn { font-size: 18px; line-height: 1; padding: 0; width: 30px; }
-.themebtn[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
-.langsel:focus-visible, .themebtn:focus-visible, .designsel:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* Tönung für Symbolkacheln und Hover, passt sich jedem Design und dem Dunkelmodus an */
+:root { --tint: color-mix(in srgb, var(--accent) 11%, var(--panel)); }
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+svg.i { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+svg.chev { width: 14px; height: 14px; transition: transform .15s; }
+[aria-expanded="true"] > svg.chev { transform: rotate(180deg); }
+:is(button, select, input[type=range]):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.wrap { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
+/* Kopfzeile: links Titel mit Version und Untertitel, rechts Sprache · Design · Standardwerte */
+header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 24px; }
+.brandcol { display: grid; gap: 2px; min-width: 0; }
 .brand { display: flex; align-items: baseline; gap: 8px; }
 .ver { font: 500 12px var(--font-mono); color: var(--muted); }
-h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 4vw, 36px); letter-spacing: -.01em; margin: 0; text-wrap: balance; }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: 34px; line-height: 1.1; letter-spacing: -.01em; margin: 0; text-wrap: balance; }
 .lede { color: var(--muted); margin: 0; max-width: 60ch; }
+.hbar { display: flex; align-items: center; gap: 8px; position: relative; }
+
+/* Steuerknopf: Sprache, Design, ⚙, Zufallsdesign, Klapper „Formen“, Hochladen/Entfernen */
+.ctl, .upbtn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 36px; padding: 0 12px; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; font: 500 13px var(--font-body); color: var(--fg); cursor: pointer; white-space: nowrap; }
+.ctl:hover, .upbtn:hover { border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); }
+.ctl.icon { width: 36px; padding: 0; }
+.ctl.ghost, .upbtn { background: transparent; }
+.ctl.sm, .upbtn { height: 32px; padding: 0 10px; }
+.upbtn { position: relative; }
+.upbtn input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.upbtn:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+select.ctl { appearance: none; padding-right: 30px; background-repeat: no-repeat; background-position: right 9px center; background-size: 14px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' fill='none' stroke='%2353645d' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E"); }
+:root[data-theme="dark"] select.ctl { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' fill='none' stroke='%23a3aea9' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E"); }
+
+/* Paletten-Menü unter dem Knopf „Design“, rechtsbündig */
+.palmenu { position: absolute; top: calc(100% + 6px); right: 0; z-index: 50; width: 250px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 32px rgba(31,43,38,.18); padding: 6px; display: grid; gap: 2px; }
+.pm-h { font: 600 11px var(--font-body); text-transform: uppercase; letter-spacing: .09em; color: var(--muted); padding: 6px 8px 4px; }
+.palmenu button { display: flex; align-items: center; gap: 10px; border: 0; background: transparent; border-radius: 8px; padding: 7px 8px; cursor: pointer; text-align: left; font: 400 14px var(--font-body); color: var(--fg); }
+.palmenu button:hover { background: var(--tint); }
+.palmenu button:focus-visible { outline-offset: -2px; }
+.palmenu .sw { width: 22px; height: 22px; border-radius: 50%; flex: none; background: linear-gradient(135deg, var(--sw1) 50%, var(--sw2) 50%); box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); }
+.palmenu .ck { margin-left: auto; width: 16px; height: 16px; color: var(--accent); visibility: hidden; }
+.palmenu [aria-checked="true"][role="menuitemradio"] { font-weight: 600; }
+.palmenu [aria-checked="true"] .ck { visibility: visible; }
+.palmenu hr { border: 0; border-top: 1px solid var(--line); margin: 4px 2px; }
+.palmenu .dm { padding: 8px; }
+.switch { margin-left: auto; width: 34px; height: 20px; border-radius: 10px; background: var(--line); position: relative; flex: none; transition: background .15s; }
+.switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.2); transition: transform .15s; }
+.dm[aria-checked="true"] .switch { background: var(--accent); }
+.dm[aria-checked="true"] .switch::after { transform: translateX(14px); }
+
 .app { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 20px; align-items: start; }
 
-.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px; display: grid; gap: 20px; }
+/* ---------- Bedienfeld: Löffelart, darunter Akkordeon mit genau einer offenen Gruppe ---------- */
+.panel, .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; }
+.panel { padding: 18px; display: grid; gap: 14px; }
+.typeblock { display: grid; gap: 8px; }
+.typehead { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.lbl { font: 600 11px var(--font-body); text-transform: uppercase; letter-spacing: .09em; color: var(--muted); }
 .types { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .types button {
-  font: 500 14px/1.2 var(--font-body); color: var(--fg); background: transparent;
-  border: 1px solid var(--line); border-radius: 7px; padding: 10px 8px; cursor: pointer; text-align: left;
+  font: 500 14px/1.2 var(--font-body); color: var(--fg); background: var(--panel);
+  border: 1px solid var(--line); border-radius: 10px; padding: 9px 10px; cursor: pointer; text-align: left;
 }
-.types button small { display: block; color: var(--muted); font: 400 12px var(--font-mono); margin-top: 2px; }
+.types button small { display: block; color: var(--muted); font: 400 12px var(--font-mono); margin-top: 3px; }
 .types button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
 .types button[aria-pressed="true"] small { color: inherit; opacity: .8; }
-.types button:focus-visible, .btn:focus-visible, input[type=range]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .grp { border-top: 1px solid var(--line); }
-.grp > summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font: 600 11px var(--font-body); text-transform: uppercase; letter-spacing: .09em; color: var(--muted); }
-.grp > summary::-webkit-details-marker { display: none; }
-.grp > summary::after { content: ""; width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin-right: 4px; transition: transform .15s; }
-.grp[open] > summary::after { transform: rotate(-135deg); }
-.grp > summary:hover { color: var(--fg); }
-.grp > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.grp-body { display: grid; gap: 12px; padding-bottom: 14px; }
+.grp-h { width: 100%; display: flex; align-items: center; gap: 10px; padding: 11px 0; border: 0; background: transparent; cursor: pointer; text-align: left; color: var(--fg); font: 600 15px var(--font-display); }
+.grp-h .ico { width: 28px; height: 28px; border-radius: 8px; background: var(--tint); color: var(--accent); display: grid; place-items: center; flex: none; }
+.grp-h[aria-expanded="true"] .ico { background: var(--accent); color: var(--accent-fg); }
+.grp-h > svg.chev { margin-left: auto; width: 16px; height: 16px; color: var(--muted); }
+.grp-b { display: grid; gap: 10px; padding: 2px 0 16px; }
 /* Zwischenüberschriften im Bereich „Erweitert“ */
 .subh { font: 600 12px var(--font-body); color: var(--fg); padding-top: 10px; border-top: 1px dashed var(--line); }
-.grp-body > .subh:first-child { border-top: 0; padding-top: 0; }
-/* Klappbarer Block in einer Gruppe (Facetten-Einstellungen im Stiel) */
-.fold { border-top: 1px dashed var(--line); }
-.fold > summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding-top: 10px; font: 600 12px var(--font-body); color: var(--fg); }
-.fold > summary::-webkit-details-marker { display: none; }
-.fold > summary::after { content: ""; width: 6px; height: 6px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin-right: 4px; transition: transform .15s; }
-.fold[open] > summary::after { transform: rotate(-135deg); }
-.fold > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.fold-body { display: grid; gap: 12px; padding-top: 12px; }
-@media (prefers-reduced-motion: reduce) { .grp > summary::after, .fold > summary::after { transition: none; } }
+.grp-b > .subh:first-child { border-top: 0; padding-top: 0; }
+@media (prefers-reduced-motion: reduce) { svg.chev, .switch, .switch::after { transition: none; } }
 .field { display: grid; gap: 2px; }
 .field .row { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
 .field label { font-size: 14px; }
 .field output { font: 500 14px var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .field .hint { font-size: 12px; color: var(--muted); }
 .flabel { font-size: 14px; }
-.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 4px; margin-top: 4px; max-height: 236px; overflow-y: auto; padding: 2px; }
-.gallery button { display: grid; justify-items: center; gap: 0; color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 6px; padding: 4px 2px 3px; cursor: pointer; font: 500 10px var(--font-mono); }
-.gallery button.own { border-style: dashed; }
-.upl { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-.upbtn { font: 500 12px var(--font-body); color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 6px; padding: 5px 9px; cursor: pointer; }
-.upbtn input { position: absolute; width: 1px; height: 1px; opacity: 0; }
-.upbtn:focus-within, .upbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.gallery button svg { width: 100%; height: 30px; }
-.gallery button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
-.gallery button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 4px; }
-.seg button { font: 500 13px var(--font-body); color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 6px; padding: 7px 4px; cursor: pointer; }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 4px; margin-top: 4px; }
+.seg button { height: 36px; font: 500 13px var(--font-body); color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 0 6px; cursor: pointer; }
 .seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
-.seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
 
+/* Galerie: gewählte Form mit Kennung und Klapper „Formen“; offen darunter Raster, Hochladen, Hinweis */
+.flabel-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.edit { border: 0; background: transparent; color: var(--accent); font: 600 13px var(--font-body); cursor: pointer; padding: 0; white-space: nowrap; }
+.edit:hover { text-decoration: underline; }
+.galrow { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 10px; padding: 6px 6px 6px 8px; margin-top: 4px; }
+.bigshape { flex: none; color: var(--fg); }
+.bigshape svg { display: block; width: 44px; height: 38px; }
+.bigshape .fl { fill: color-mix(in srgb, var(--accent) 10%, transparent); }
+.gcode { display: grid; line-height: 1.25; font: 600 13px var(--font-mono); min-width: 0; }
+.gcode span { font: 400 12px var(--font-body); color: var(--muted); }
+.galtog { margin-left: auto; }
+.gal-open { display: grid; gap: 8px; margin-top: 8px; }
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 4px; max-height: 236px; overflow-y: auto; padding: 2px; }
+.gallery button { display: grid; justify-items: center; gap: 0; color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 4px 2px 3px; cursor: pointer; font: 500 10px var(--font-mono); }
+.gallery button.own { border-style: dashed; }
+.gallery button svg { width: 100%; height: 30px; }
+.gallery button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.upl { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ---------- Vorschau: Schneidematte mit Blatt, 3D-Fenster oben rechts, Zoom-Anzeige oben links ---------- */
 .stage { display: grid; gap: 12px; min-width: 0; }
 .mat {
   background-color: var(--mat);
   background-image: linear-gradient(var(--mat-line) 1px, transparent 1px), linear-gradient(90deg, var(--mat-line) 1px, transparent 1px);
-  background-size: 28px 28px; border-radius: 10px; padding: clamp(14px, 3vw, 32px);
+  background-size: 28px 28px; border-radius: 14px; padding: var(--mp); --mp: clamp(14px, 3vw, 32px);
 }
 .mat { display: grid; justify-items: center; position: relative; }
-.v3d { position: fixed; z-index: 20; top: calc(env(safe-area-inset-top, 0px) + 12px); right: max(12px, env(safe-area-inset-right, 0px)); width: clamp(120px, 20vw, 240px); background: var(--ov-bg); border: 1px solid var(--ov-line); color: var(--ov-fg); border-radius: 8px; overflow: hidden; backdrop-filter: blur(3px); box-shadow: 0 4px 14px rgba(0,0,0,.12); }
-.v3d-head { display: flex; justify-content: space-between; align-items: center; padding: 4px 6px 4px 9px; color: var(--ov-fg); font: 600 11px var(--font-body); letter-spacing: .09em; }
-.v3d-head button { font: 500 11px var(--font-body); color: var(--ov-fg); background: transparent; border: 1px solid var(--ov-line); border-radius: 5px; padding: 2px 7px; cursor: pointer; }
-.v3d-head button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.v3d { position: absolute; z-index: 20; top: 12px; right: 12px; width: var(--v3w); --v3w: clamp(150px, 12vw, 200px); background: var(--ov-bg); border: 1px solid var(--ov-line); color: var(--ov-fg); border-radius: 10px; overflow: hidden; backdrop-filter: blur(3px); box-shadow: 0 4px 14px rgba(0,0,0,.12); }
+.v3d-head { display: flex; justify-content: space-between; align-items: center; padding: 5px 6px 5px 10px; color: var(--ov-fg); font: 600 11px var(--font-body); letter-spacing: .09em; }
+.v3d-head button { font: 500 11px var(--font-body); color: var(--ov-fg); background: transparent; border: 1px solid var(--ov-line); border-radius: 6px; padding: 2px 8px; cursor: pointer; }
+.v3d-head button:focus-visible { outline-offset: 1px; }
 #c3d { display: block; width: 100%; aspect-ratio: 1; cursor: grab; touch-action: none; }
 #c3d:active { cursor: grabbing; }
 .sheet { width: min(100%, 560px); background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25), 0 8px 24px rgba(0,0,0,.25); }
@@ -123,81 +160,91 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
 .zmini svg { display: block; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.4); }
 .zlvl { font: 600 13px var(--font-mono); font-variant-numeric: tabular-nums; line-height: 1; }
 .zbadge button { font: 500 11px var(--font-body); color: var(--ov-fg); background: transparent; border: 1px solid var(--ov-line); border-radius: 5px; padding: 3px 8px; cursor: pointer; white-space: nowrap; }
-.zbadge button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.zbadge button:focus-visible { outline-offset: 1px; }
 
-.facts { display: flex; flex-wrap: wrap; gap: 8px 28px; font-size: 14px; }
-.facts div { display: grid; }
+/* Angaben-Karte: PDF | SVG, Statuszeile, Linie, Angaben im 2-Spalten-Raster */
+.factcard { padding: 14px; display: grid; gap: 12px; }
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.btn { font: 600 14px var(--font-body); border-radius: 10px; padding: 10px 16px; cursor: pointer; border: 1px solid var(--accent); }
+.actions .btn { height: 42px; padding: 0 8px; }
+.btn.primary { background: var(--accent); color: var(--accent-fg); }
+.btn.secondary { background: var(--panel); color: var(--fg); border-color: var(--line); }
+.btn:disabled { opacity: .5; cursor: default; }
+#copyBtn, .actions .status { grid-column: 1 / -1; }
+.status { font-size: 13px; color: var(--muted); }
+.status:empty { display: none; }
+.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; margin: 0; padding-top: 12px; border-top: 1px solid var(--line); }
+.facts .w { grid-column: 1 / -1; }
 .facts dt { font: 600 11px var(--font-body); text-transform: uppercase; letter-spacing: .09em; color: var(--muted); }
 .facts dd { margin: 0; font: 500 15px var(--font-mono); font-variant-numeric: tabular-nums; }
+.facts dd small { display: block; font: 400 12px var(--font-body); color: var(--muted); }
+.facts dd small::first-letter { text-transform: uppercase; }
+.warn { margin: 0; font-size: 13px; max-width: 70ch; padding: 9px 12px; border-left: 3px solid #c58a2a; border-radius: 0 8px 8px 0; background: color-mix(in srgb, #c58a2a 12%, transparent); }
+/* Drucktipps: Klappzeile, Text eingerückt */
+.tips { border-top: 1px solid var(--line); padding-top: 4px; }
+.tips-h { width: 100%; display: flex; align-items: center; gap: 8px; padding: 6px 0; border: 0; background: transparent; cursor: pointer; text-align: left; font: 600 13px var(--font-body); color: var(--fg); }
+.tips-h > svg.i:first-child { color: var(--accent); }
+.tips-h > svg.chev { margin-left: auto; width: 15px; height: 15px; color: var(--muted); }
+.note { font-size: 13px; color: var(--muted); margin: 0; max-width: 70ch; padding: 2px 0 6px 26px; }
 
-.actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-.btn { font: 600 14px var(--font-body); border-radius: 7px; padding: 10px 16px; cursor: pointer; border: 1px solid var(--accent); }
-.btn.primary { background: var(--accent); color: var(--accent-fg); }
-.btn.secondary { background: transparent; color: var(--fg); border-color: var(--line); }
-.btn:disabled { opacity: .5; cursor: default; }
-.btn.rnd { width: 100%; margin-top: 8px; padding: 8px 12px; font-size: 13px; }
-.status { font-size: 13px; color: var(--muted); }
-.warn { margin: 0; font-size: 13px; max-width: 70ch; padding: 8px 12px; border-left: 3px solid #c58a2a; background: color-mix(in srgb, #c58a2a 12%, transparent); }
-.note { font-size: 13px; color: var(--muted); margin: 0; max-width: 70ch; }
-
+/* Angaben, Warnungen und Drucktipps unter bzw. neben der Vorschau */
+.side { display: grid; gap: 12px; align-content: start; min-width: 0; }
 /* ---------- Desktop: Vorschau bleibt neben den Reglern sichtbar ---------- */
 @media (min-width: 761px) {
   .stage { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); }
-  .sheet { width: min(100%, 560px, calc((100vh - 330px) / 1.415)); }
-  .sheet.tall { width: min(100%, 560px, calc((100vh - 330px) / 2.87)); }
+  /* Blatt mittig, aber höchstens so weit rechts, dass das 3D-Fenster es nicht verdeckt */
+  .mat { container-type: inline-size; }
+  .sheet { --s: min(100cqw, 560px, calc((100vh - 330px) / 1.415)); width: var(--s); justify-self: start; margin-left: max(0px, min((100cqw - var(--s)) / 2, 100cqw - var(--s) - var(--v3w) - 24px + var(--mp))); }
+  .sheet.tall { --s: min(100cqw, 560px, calc((100vh - 330px) / 2.87)); }
 }
 @media (min-width: 761px) and (max-width: 960px) { .app { grid-template-columns: 290px minmax(0, 1fr); } }
-/* Angaben, Hinweise und Speichern unter bzw. neben der Vorschau */
-.side { display: grid; gap: 12px; align-content: start; min-width: 0; }
-/* ---------- Breite Fenster: Vorschau füllt die Fensterhöhe, Angaben und Speichern rechts daneben, unterhalb des 3D-Fensters ---------- */
+/* ---------- Breite Fenster: Vorschau füllt die Fensterhöhe, rechts Angaben-Karte, Warnungen, Drucktipps ---------- */
 @media (min-width: 1100px) {
   .wrap { max-width: 1600px; }
-  .stage { height: calc(100vh - 32px); grid-template-columns: minmax(0, 1fr) clamp(220px, 20vw, 280px); }
-  .mat { container-type: size; min-height: 0; padding: 12px; align-content: center; }
-  .sheet { width: min(100cqw, 100cqh / 1.415); }
-  .sheet.tall { width: min(100cqw, 100cqh / 2.867); }
-  /* oben Platz für das 3D-Fenster lassen; reicht die Höhe nicht, scrollt die Spalte, Speichern steht zuerst */
-  .side { align-self: stretch; align-content: safe end; overflow-y: auto; padding-top: calc(clamp(120px, 20vw, 240px) + 32px); }
-  .side .actions { order: -1; }
+  .stage { height: calc(100vh - 32px); grid-template-columns: minmax(0, 1fr) 280px; gap: 14px; }
+  .mat { container-type: size; min-height: 0; --mp: 12px; align-content: center; }
+  .sheet { --s: min(100cqw, 100cqh / 1.415); }
+  .sheet.tall { --s: min(100cqw, 100cqh / 2.867); }
+  /* reicht die Höhe nicht, scrollt die Spalte */
+  .side { align-self: stretch; overflow-y: auto; }
 }
 
 /* ---------- Handy: Vorschau oben angeheftet, Regler darunter, Speichern unten ---------- */
 @media (max-width: 760px) {
-  body { padding-block: 12px calc(84px + env(safe-area-inset-bottom, 0px)); }
+  body { padding-block: 12px calc(100px + env(safe-area-inset-bottom, 0px)); }
   body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 40; background: var(--bg); }
-  header { padding-right: 0; gap: 6px 12px; align-items: center; }
-  .wrap { grid-template-columns: minmax(0, 1fr); }
-  .brand { order: 1; }
-  .hbar { order: 2; margin-left: auto; }
-  .hbar { flex-wrap: wrap; justify-content: flex-end; max-width: 100%; gap: 4px; }
-  .langsel, .designsel { padding: 5px 4px; }
-  .lede { order: 3; flex-basis: 100%; }
+  .wrap { gap: 12px; }
+  header { gap: 10px; }
   h1 { font-size: 22px; }
-  .lede { font-size: 13px; }
-  .app { display: flex; flex-direction: column; gap: 12px; }
+  .lede { display: none; }
+  .hbar { flex-basis: 100%; }
+  .langsel { flex: 1 1 auto; min-width: 0; }
+  .app { display: flex; flex-direction: column; align-items: stretch; gap: 12px; }
   .stage { display: contents; }
-  .mat { order: 0; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; padding: 8px; border-radius: 10px; box-shadow: 0 6px 16px rgba(0,0,0,.18); display: flex; justify-content: center; align-items: flex-start; gap: 8px; }
-  .sheet { width: auto; height: min(36vh, 320px); min-width: 0; max-width: calc(100vw - 56px - min(32vw, 130px)); }
+  .mat { order: 0; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; padding: 8px; box-shadow: 0 6px 16px rgba(0,0,0,.18); display: flex; justify-content: center; align-items: flex-start; gap: 8px; }
+  .sheet { width: auto; height: min(36vh, 320px); min-width: 0; max-width: calc(100vw - 56px - min(32vw, 120px)); }
   .sheet svg { height: 100%; width: auto; max-width: 100%; }
-  .v3d { position: static; flex: 0 0 auto; width: min(32vw, 130px); }
+  .v3d { position: static; flex: 0 0 auto; width: min(32vw, 120px); }
   .panel { order: 1; padding: 14px; }
   .side { display: contents; }
-  .facts, .warn, .note { order: 2; }
-  .types { grid-template-columns: repeat(4, 1fr); }
-  .types button { padding: 8px 5px; font-size: 13px; text-align: center; }
-  .actions { position: fixed; z-index: 30; left: 0; right: 0; bottom: 0; gap: 8px; background: var(--panel); border-top: 1px solid var(--line); padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
-  .actions .btn { flex: 1 1 0; min-height: 44px; }
-  .actions .status { flex-basis: 100%; order: 2; font-size: 12px; }
-  .actions .status:empty { display: none; }
+  .factcard, .warn, .tips { order: 2; }
+  .factcard { padding: 14px 16px; }
+  .facts { border-top: 0; padding-top: 0; }
+  .types { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .types button { padding: 8px 2px; font-size: 13px; text-align: center; }
+  .grp-h { padding: 12px 0; }
+  /* feste Leiste unten: PDF | SVG, darunter die Statuszeile */
+  .actions { position: fixed; z-index: 30; left: 0; right: 0; bottom: 0; gap: 8px; background: var(--panel); border-top: 1px solid var(--line); padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+  .actions .btn { height: 44px; }
+  .actions .status { font-size: 12px; }
 }
 /* Touch-Bedienung: größere Ziele */
 @media (pointer: coarse) {
   input[type=range] { height: 32px; }
   .gallery { grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); }
   .gallery button { min-height: 52px; }
-  .grp > summary { padding: 14px 0; }
-  .upbtn, .v3d-head button { min-height: 36px; }
-  .langsel, .themebtn, .designsel { height: 36px; }
+  .grp-h { padding: 14px 0; }
+  .v3d-head button { min-height: 36px; }
 }
 @media (max-width: 360px) {
   .types { grid-template-columns: 1fr 1fr; }
@@ -205,44 +252,48 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
 
 /* ---------- Designs: Rundungen, Knöpfe, Schatten ---------- */
 /* a Salbei (Standard) */
-.panel { border-radius: 14px; border-color: transparent; box-shadow: 0 1px 2px rgba(31,43,38,.06), 0 4px 16px rgba(31,43,38,.06); }
-.mat { border-radius: 14px; box-shadow: inset 0 0 0 1px rgba(34,80,62,.12); }
-.types button, .btn { border-radius: 10px; }
-.seg button, .gallery button, .upbtn, .langsel, .themebtn, .designsel { border-radius: 8px; }
+.panel, .card { border-color: transparent; box-shadow: 0 1px 2px rgba(31,43,38,.06), 0 4px 16px rgba(31,43,38,.06); }
+.mat { box-shadow: inset 0 0 0 1px rgba(34,80,62,.12); }
 .btn.primary { box-shadow: 0 2px 6px rgba(46,106,86,.28); }
 .sheet { box-shadow: 0 1px 2px rgba(20,50,40,.18), 0 10px 28px rgba(20,50,40,.18); }
-:root[data-theme="dark"] .panel { border-color: var(--line); box-shadow: none; }
+:root[data-theme="dark"] :is(.panel, .card) { border-color: var(--line); box-shadow: none; }
+:root[data-theme="dark"] .palmenu { box-shadow: 0 12px 32px rgba(0,0,0,.45); }
 
 /* b Ahorn: warme Holzflächen, Knöpfe leicht erhaben */
-:root[data-design="b"] .panel { border-radius: 12px; border-color: transparent; box-shadow: 0 2px 10px rgba(95,60,25,.08); }
+:root[data-design="b"] :is(.panel, .card) { border-radius: 12px; border-color: transparent; box-shadow: 0 2px 10px rgba(95,60,25,.08); }
 :root[data-design="b"] .mat { border-radius: 12px; box-shadow: inset 0 2px 6px rgba(70,40,10,.18); }
-:root[data-design="b"] :is(.types button, .btn, .seg button, .gallery button, .upbtn, .langsel, .themebtn, .designsel) { border-radius: 9px; }
+:root[data-design="b"] :is(.types button, .btn, .seg button, .gallery button, .ctl, .upbtn, .galrow) { border-radius: 9px; }
 :root[data-design="b"] .btn.primary { box-shadow: inset 0 -2px 0 rgba(120,70,10,.25), 0 2px 6px rgba(150,95,20,.25); }
-:root[data-design="b"] :is(.btn.secondary, .types button, .seg button) { box-shadow: 0 1px 0 var(--line); }
+:root[data-design="b"] :is(.btn.secondary, .types button, .seg button, .ctl:not(.ghost)) { box-shadow: 0 1px 0 var(--line); }
 :root[data-design="b"] .sheet { box-shadow: 0 1px 2px rgba(70,40,10,.22), 0 10px 26px rgba(70,40,10,.22); }
-:root[data-design="b"][data-theme="dark"] .panel { border-color: var(--line); box-shadow: none; }
+:root[data-design="b"][data-theme="dark"] :is(.panel, .card) { border-color: var(--line); box-shadow: none; }
 :root[data-design="b"][data-theme="dark"] .btn.primary { box-shadow: inset 0 -2px 0 rgba(0,0,0,.25); }
-/* Honig ist als Linie auf hellem Feld zu blass: Regler und Fokusrahmen dunkler */
+/* Honig ist als Linie oder Schrift auf hellem Feld zu blass: Regler, Fokusrahmen, Symbole und Textknöpfe dunkler */
 :root[data-design="b"]:not([data-theme="dark"]) input[type=range] { accent-color: #a8701c; }
 :root[data-design="b"]:not([data-theme="dark"]) :focus-visible { outline-color: #a8701c !important; }
+:root[data-design="b"]:not([data-theme="dark"]) :is(.grp-h[aria-expanded="false"] .ico, .edit, .tips-h > svg.i:first-child, .palmenu .ck) { color: #95621a; }
 
 /* c Papier & Terrakotta: flach, kleine Rundungen, feine Linien */
-:root[data-design="c"] .panel { border-radius: 6px; border-color: transparent; box-shadow: 0 1px 0 var(--line); }
+:root[data-design="c"] :is(.panel, .card) { border-radius: 6px; border-color: transparent; box-shadow: 0 1px 0 var(--line); }
 :root[data-design="c"] .mat { border-radius: 6px; box-shadow: none; }
-:root[data-design="c"] :is(.types button, .btn, .seg button, .gallery button, .upbtn, .langsel, .themebtn, .designsel) { border-radius: 4px; }
+:root[data-design="c"] :is(.types button, .btn, .seg button, .gallery button, .ctl, .upbtn, .galrow, .grp-h .ico) { border-radius: 4px; }
+:root[data-design="c"] .palmenu { border-radius: 6px; box-shadow: 0 8px 20px rgba(60,40,25,.16); }
+:root[data-design="c"] .palmenu button { border-radius: 4px; }
 :root[data-design="c"] .btn.primary { box-shadow: 0 1px 0 rgba(90,30,15,.35); }
 :root[data-design="c"] .sheet { box-shadow: 0 1px 1px rgba(60,40,25,.2), 0 6px 18px rgba(60,40,25,.18); }
-:root[data-design="c"][data-theme="dark"] .panel { border-color: var(--line); box-shadow: none; }
+:root[data-design="c"][data-theme="dark"] :is(.panel, .card) { border-color: var(--line); box-shadow: none; }
 
 /* d Morgenhimmel: luftig, große Rundungen, Pillen-Knöpfe */
-:root[data-design="d"] .panel { border-radius: 18px; border-color: transparent; box-shadow: 0 2px 4px rgba(28,38,48,.04), 0 8px 24px rgba(28,38,48,.07); }
+:root[data-design="d"] :is(.panel, .card) { border-radius: 18px; border-color: transparent; box-shadow: 0 2px 4px rgba(28,38,48,.04), 0 8px 24px rgba(28,38,48,.07); }
 :root[data-design="d"] .mat { border-radius: 18px; box-shadow: none; }
-:root[data-design="d"] :is(.btn, .langsel, .themebtn, .designsel, .seg button, .upbtn) { border-radius: 999px; }
-:root[data-design="d"] :is(.types button, .gallery button) { border-radius: 12px; }
+:root[data-design="d"] :is(.btn, .ctl, .seg button, .upbtn) { border-radius: 999px; }
+:root[data-design="d"] :is(.types button, .gallery button, .galrow) { border-radius: 12px; }
+:root[data-design="d"] .grp-h .ico { border-radius: 50%; }
+:root[data-design="d"] .palmenu { border-radius: 16px; }
 :root[data-design="d"] .btn.primary { box-shadow: 0 4px 12px rgba(31,108,118,.3); }
 :root[data-design="d"] :is(.v3d, .zbadge) { border-radius: 14px; }
 :root[data-design="d"] .sheet { box-shadow: 0 2px 4px rgba(20,40,60,.14), 0 14px 32px rgba(20,40,60,.18); }
-:root[data-design="d"][data-theme="dark"] .panel { border-color: var(--line); box-shadow: none; }
+:root[data-design="d"][data-theme="dark"] :is(.panel, .card) { border-color: var(--line); box-shadow: none; }
 
 /* ---------- Formeditor: Dialog über der Seite; Desktop Zeichenfläche links, Vorschau rechts; Handy bildschirmfüllend ---------- */
 .ed { width: min(1040px, calc(100vw - 32px)); height: min(760px, calc(100dvh - 32px)); max-width: none; max-height: none; padding: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); color: var(--fg); overflow: hidden; }
@@ -289,7 +340,6 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
 
 /* Standardwerte (Dialog #df): Tabelle Werte × Löffelarten, geänderte Werte markiert */
 .df { width: min(760px, calc(100vw - 32px)); height: auto; max-height: calc(100dvh - 32px); }
-.dfbtn { font-size: 16px; }
 .df-body { min-height: 0; overflow-y: auto; padding: 12px 18px 16px; display: grid; grid-auto-rows: max-content; gap: 10px; align-content: start; }
 .df-body h3 { margin: 8px 0 0; font: 700 15px var(--font-display); }
 .df .hint { font-size: 12px; color: var(--muted); margin: 0; }
@@ -301,7 +351,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
 .df-tab { table-layout: fixed; }
 .df-tab th[scope="row"], .df-tab thead th:first-child { width: 32%; }
 .df-sub th { padding-top: 10px; font: 600 12px var(--font-body); color: var(--fg); border-bottom: 1px dashed var(--line); }
-.df input { width: 100%; min-width: 52px; font: 500 13px var(--font-mono); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 4px 6px; text-align: right; }
+.df input { width: 100%; min-width: 52px; font: 500 13px var(--font-mono); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 5px 6px; text-align: right; }
 .df input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .df input.chg { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); font-weight: 600; }
 .df .ed-foot { align-items: center; }
@@ -324,25 +374,52 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
 </style>
 </head>
 <body>
+<!-- Symbole (viewBox 24, Linien in currentColor); Zahnrad: Lucide „settings“, ISC-Lizenz -->
+<svg class="sprite" aria-hidden="true">
+  <symbol id="i-chev" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></symbol>
+  <symbol id="i-gesamt" viewBox="0 0 24 24"><path d="M3 12h18M3 8v8M21 8v8M6.5 9.5 3.5 12l3 2.5M17.5 9.5l3 2.5-3 2.5"/></symbol>
+  <symbol id="i-laffe" viewBox="0 0 24 24"><path d="M12 3c3.6 0 6 3 6 7.2 0 3.7-2.6 6.3-6 6.3s-6-2.6-6-6.3C6 6 8.4 3 12 3z"/><path d="M12 16.5V21"/></symbol>
+  <symbol id="i-stiel" viewBox="0 0 24 24"><path d="M10 3h4l-.6 10.5c1.8 1.2 2.6 3 2.6 4.5 0 1.9-1.6 3-4 3s-4-1.1-4-3c0-1.5.8-3.3 2.6-4.5z"/></symbol>
+  <symbol id="i-seite" viewBox="0 0 24 24"><path d="M3 15c2.5 0 4-1 5.5-2.5S12 9 15 9h6"/><path d="M3 15c1.4 1.6 3.3 2 5 1.3"/></symbol>
+  <symbol id="i-erweitert" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></symbol>
+  <symbol id="i-dice" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3.5"/><circle cx="9" cy="9" r=".6" fill="currentColor"/><circle cx="15" cy="9" r=".6" fill="currentColor"/><circle cx="12" cy="12" r=".6" fill="currentColor"/><circle cx="9" cy="15" r=".6" fill="currentColor"/><circle cx="15" cy="15" r=".6" fill="currentColor"/></symbol>
+  <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.2 0 1.8-.8 1.8-1.7 0-1.2-1-1.6-1-2.6 0-.9.7-1.5 1.7-1.5H17c2.3 0 4-1.6 4-4C21 6.6 17 3 12 3z"/><circle cx="7.5" cy="11" r="1.2"/><circle cx="10.5" cy="7.2" r="1.2"/><circle cx="15" cy="7.5" r="1.2"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></symbol>
+</svg>
 <div class="wrap">
   <header>
-    <div class="hbar">
-    <select class="langsel" id="langSel" data-ia="lang"></select>
-    <button type="button" class="themebtn" id="themeBtn" data-ia="darkMode" aria-pressed="false" aria-label="Dunkle Darstellung" title="Dunkle Darstellung">☾</button>
-    <button type="button" class="themebtn dfbtn" id="dfBtn" data-ia="dfTitle" aria-haspopup="dialog" aria-label="Standardwerte" title="Standardwerte">⚙&#xFE0E;</button>
-    <select class="designsel" id="designSel" data-ia="design"><option value="a" data-i="dsgA">Salbei</option><option value="b" data-i="dsgB">Ahorn</option><option value="c" data-i="dsgC">Papier &amp; Terrakotta</option><option value="d" data-i="dsgD">Morgenhimmel</option></select>
+    <div class="brandcol">
+      <div class="brand"><h1 data-i="title">Löffelschablone</h1><span class="ver" id="ver">v30</span></div>
+      <p class="lede" data-i="lede">Löffelart wählen, Maße anpassen, Schablone in Originalgröße als PDF oder SVG speichern.</p>
     </div>
-    <div class="brand"><h1 data-i="title">Löffelschablone</h1><span class="ver" id="ver">v29</span></div>
-    <p class="lede" data-i="lede">Löffelart wählen, Maße anpassen, Schablone in Originalgröße als PDF oder SVG speichern.</p>
+    <div class="hbar">
+      <select class="ctl langsel" id="langSel" data-ia="lang"></select>
+      <button type="button" class="ctl" id="palBtn" aria-haspopup="menu" aria-expanded="false" aria-controls="palMenu"><svg class="i" aria-hidden="true"><use href="#i-palette"/></svg><span data-i="design">Design</span><svg class="i chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
+      <button type="button" class="ctl icon" id="dfBtn" data-ia="dfTitle" aria-haspopup="dialog" aria-label="Standardwerte" title="Standardwerte"><svg class="i" aria-hidden="true"><use href="#i-gear"/></svg></button>
+      <!-- Paletten-Menü: vier Designs (Farbkreis = Akzent und Matte des hellen Designs), dazu Dunkle Darstellung -->
+      <div class="palmenu" id="palMenu" role="menu" data-ia="design" aria-label="Design" hidden>
+        <div class="pm-h" data-i="design" aria-hidden="true">Design</div>
+        <button type="button" role="menuitemradio" data-dsg="a" aria-checked="false"><span class="sw" style="--sw1:#2e6a56;--sw2:#a5bfaf"></span><span data-i="dsgA">Salbei</span><svg class="i ck" aria-hidden="true"><use href="#i-check"/></svg></button>
+        <button type="button" role="menuitemradio" data-dsg="b" aria-checked="false"><span class="sw" style="--sw1:#d69a35;--sw2:#c8a47a"></span><span data-i="dsgB">Ahorn</span><svg class="i ck" aria-hidden="true"><use href="#i-check"/></svg></button>
+        <button type="button" role="menuitemradio" data-dsg="c" aria-checked="false"><span class="sw" style="--sw1:#ad472c;--sw2:#c6b59d"></span><span data-i="dsgC">Papier &amp; Terrakotta</span><svg class="i ck" aria-hidden="true"><use href="#i-check"/></svg></button>
+        <button type="button" role="menuitemradio" data-dsg="d" aria-checked="false"><span class="sw" style="--sw1:#1f6c76;--sw2:#a7bacb"></span><span data-i="dsgD">Morgenhimmel</span><svg class="i ck" aria-hidden="true"><use href="#i-check"/></svg></button>
+        <hr>
+        <button type="button" role="menuitemcheckbox" class="dm" id="themeBtn" aria-checked="false"><svg class="i" aria-hidden="true"><use href="#i-moon"/></svg><span data-i="darkMode">Dunkle Darstellung</span><span class="switch" aria-hidden="true"></span></button>
+      </div>
+    </div>
   </header>
 
   <div class="app">
     <aside class="panel" data-ia="settings" aria-label="Einstellungen">
-      <div>
+      <div class="typeblock">
+        <div class="typehead"><span class="lbl" data-i="spoonType">Löffelart</span><button class="ctl ghost sm" id="rndBtn" type="button"><svg class="i" aria-hidden="true"><use href="#i-dice"/></svg><span data-i="random">Zufallsdesign</span></button></div>
         <div class="types" id="types" role="group" data-ia="spoonType" aria-label="Löffelart"></div>
-        <button class="btn secondary rnd" id="rndBtn" type="button" data-i="random">Zufallsdesign</button>
       </div>
-      <div id="fields"></div>
+      <div class="acc" id="fields"></div>
     </aside>
 
     <main class="stage">
@@ -359,18 +436,24 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
         </div>
       </div>
       <div class="side">
-      <dl class="facts" id="facts"></dl>
+      <!-- Angaben-Karte: Speichern oben (am Handy feste Leiste unten), darunter die Angaben -->
+      <section class="card factcard">
+        <div class="actions">
+          <button class="btn primary" id="pdfBtn" type="button" data-i="pdf" disabled>PDF speichern</button>
+          <button class="btn secondary" id="svgBtn" type="button" data-i="svg" disabled>SVG speichern</button>
+          <button class="btn secondary" id="copyBtn" type="button" data-i="copy" hidden>SVG-Code kopieren</button>
+          <span class="status" id="status" role="status"></span>
+        </div>
+        <dl class="facts" id="facts"></dl>
+      </section>
       <p class="warn" id="warn" hidden></p>
       <p class="warn" id="warnMax" hidden></p>
       <p class="warn" id="warnMouth" hidden></p>
       <p class="warn" id="warnDepth" hidden></p>
-      <div class="actions">
-        <button class="btn primary" id="pdfBtn" type="button" data-i="pdf" disabled>PDF speichern</button>
-        <button class="btn secondary" id="svgBtn" type="button" data-i="svg" disabled>SVG speichern</button>
-        <button class="btn secondary" id="copyBtn" type="button" data-i="copy" hidden>SVG-Code kopieren</button>
-        <span class="status" id="status" role="status"></span>
+      <div class="tips">
+        <button type="button" class="tips-h" id="tipsBtn" aria-expanded="false" aria-controls="tipsNote"><svg class="i" aria-hidden="true"><use href="#i-info"/></svg><span data-i="tips">Drucktipps</span><svg class="i chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
+        <p class="note" id="tipsNote" data-i="note" hidden>Beim Drucken „Tatsächliche Größe“ bzw. 100 % wählen und den 50‑mm‑Balken nachmessen. Die Draufsicht zeigt den abgewickelten Umriss, die Seitenansicht die echte Biegung. Die Knicklinie verbindet beide Ansichten; im Stiel stehen sie auf gleicher Höhe. Die Faser des Rohlings sollte entlang des Stiels laufen.</p>
       </div>
-      <p class="note" data-i="note">Beim Drucken „Tatsächliche Größe“ bzw. 100 % wählen und den 50‑mm‑Balken nachmessen. Die Draufsicht zeigt den abgewickelten Umriss, die Seitenansicht die echte Biegung. Die Knicklinie verbindet beide Ansichten; im Stiel stehen sie auf gleicher Höhe. Die Faser des Rohlings sollte entlang des Stiels laufen.</p>
       </div>
     </main>
   </div>
@@ -425,7 +508,7 @@ const I18N = {
   de: {
     title: "Löffelschablone", lede: "Löffelart wählen, Maße anpassen, Schablone in Originalgröße als PDF oder SVG speichern.",
     settings: "Einstellungen", spoonType: "Löffelart", preview: "Vorschau der Schablone", lang: "Sprache", langName: "Deutsch",
-    darkMode: "Dunkle Darstellung",
+    darkMode: "Dunkle Darstellung", tips: "Drucktipps",
     design: "Design", dsgA: "Salbei", dsgB: "Ahorn", dsgC: "Papier & Terrakotta", dsgD: "Morgenhimmel",
     hide: "Ausblenden", show: "Einblenden", view3d: "3D-Ansicht des Löffels, zum Drehen ziehen",
     warn: n => `Crank über ${n}°: Bei geradfaserigem Holz entsteht an Hals und Laffenspitze Kurzfaser. Besser einen gebogenen Ast verwenden, dessen Wuchs der Kröpfung folgt.`,
@@ -487,7 +570,7 @@ const I18N = {
   nl: {
     title: "Lepelsjabloon", lede: "Kies het type lepel, pas de maten aan en sla het sjabloon op ware grootte op als PDF of SVG.",
     settings: "Instellingen", spoonType: "Type lepel", preview: "Voorbeeld van het sjabloon", lang: "Taal", langName: "Nederlands",
-    darkMode: "Donkere weergave",
+    darkMode: "Donkere weergave", tips: "Printtips",
     design: "Ontwerp", dsgA: "Salie", dsgB: "Esdoorn", dsgC: "Papier & Terracotta", dsgD: "Ochtendhemel",
     hide: "Verbergen", show: "Tonen", view3d: "3D-weergave van de lepel, sleep om te draaien",
     warn: n => `Crank boven ${n}°: bij recht gegroeid hout ontstaat bij de hals en de punt van de kom korte vezel. Gebruik liever een gebogen tak waarvan de groei de knik volgt.`,
@@ -549,7 +632,7 @@ const I18N = {
   en: {
     title: "Spoon Template", lede: "Choose a spoon type, adjust the measurements and save the template at full size as PDF or SVG.",
     settings: "Settings", spoonType: "Spoon type", preview: "Template preview", lang: "Language", langName: "English",
-    darkMode: "Dark mode",
+    darkMode: "Dark mode", tips: "Printing tips",
     design: "Design", dsgA: "Sage", dsgB: "Maple", dsgC: "Paper & Terracotta", dsgD: "Morning sky",
     hide: "Hide", show: "Show", view3d: "3D view of the spoon, drag to rotate",
     warn: n => `Crank above ${n}°: in straight-grained wood this creates short grain at the neck and the bowl tip. Better use a bent branch whose growth follows the crank.`,
@@ -610,7 +693,7 @@ const I18N = {
   fr: {
     title: "Gabarit de cuillère", lede: "Choisissez le type de cuillère, ajustez les dimensions et enregistrez le gabarit en taille réelle au format PDF ou SVG.",
     settings: "Réglages", spoonType: "Type de cuillère", preview: "Aperçu du gabarit", lang: "Langue", langName: "Français",
-    darkMode: "Affichage sombre",
+    darkMode: "Affichage sombre", tips: "Conseils d'impression",
     design: "Style", dsgA: "Sauge", dsgB: "Érable", dsgC: "Papier & Terre cuite", dsgD: "Ciel du matin",
     hide: "Masquer", show: "Afficher", view3d: "Vue 3D de la cuillère, faites glisser pour la tourner",
     warn: n => `Crank au-delà de ${n}° : dans un bois à fil droit, le fil devient court au col et à la pointe du cuilleron. Mieux vaut une branche courbe dont la croissance suit la cassure.`,
@@ -672,7 +755,7 @@ const I18N = {
   sv: {
     title: "Skedmall", lede: "Välj skedtyp, anpassa måtten och spara mallen i full storlek som PDF eller SVG.",
     settings: "Inställningar", spoonType: "Skedtyp", preview: "Förhandsvisning av mallen", lang: "Språk", langName: "Svenska",
-    darkMode: "Mörkt läge",
+    darkMode: "Mörkt läge", tips: "Utskriftstips",
     design: "Utseende", dsgA: "Salvia", dsgB: "Lönn", dsgC: "Papper & Terrakotta", dsgD: "Morgonhimmel",
     hide: "Dölj", show: "Visa", view3d: "3D-vy av skeden, dra för att vrida",
     warn: n => `Crank över ${n}°: i rakvuxet virke blir fibrerna korta vid halsen och skålens spets. Använd hellre en krokvuxen gren vars växt följer knäcken.`,
@@ -732,7 +815,7 @@ const I18N = {
   es: {
     title: "Plantilla de cuchara", lede: "Elige el tipo de cuchara, ajusta las medidas y guarda la plantilla a tamaño real en PDF o SVG.",
     settings: "Ajustes", spoonType: "Tipo de cuchara", preview: "Vista previa de la plantilla", lang: "Idioma", langName: "Español",
-    darkMode: "Modo oscuro",
+    darkMode: "Modo oscuro", tips: "Consejos de impresión",
     design: "Diseño", dsgA: "Salvia", dsgB: "Arce", dsgC: "Papel y Terracota", dsgD: "Cielo de la mañana",
     hide: "Ocultar", show: "Mostrar", view3d: "Vista 3D de la cuchara, arrastra para girarla",
     warn: n => `Crank superior a ${n}°: en madera de fibra recta se forma fibra corta en el cuello y en la punta del cazo. Mejor usar una rama curva cuyo crecimiento siga el quiebre.`,
@@ -793,7 +876,7 @@ const I18N = {
   it: {
     title: "Dima per cucchiai", lede: "Scegli il tipo di cucchiaio, regola le misure e salva la dima a grandezza reale in PDF o SVG.",
     settings: "Impostazioni", spoonType: "Tipo di cucchiaio", preview: "Anteprima della dima", lang: "Lingua", langName: "Italiano",
-    darkMode: "Modalità scura",
+    darkMode: "Modalità scura", tips: "Consigli di stampa",
     design: "Aspetto", dsgA: "Salvia", dsgB: "Acero", dsgC: "Carta e Terracotta", dsgD: "Cielo del mattino",
     hide: "Nascondi", show: "Mostra", view3d: "Vista 3D del cucchiaio, trascina per ruotarlo",
     warn: n => `Crank oltre ${n}°: nel legno a fibra dritta si crea fibra corta al collo e sulla punta della coppa. Meglio usare un ramo curvo la cui crescita segua la piega.`,
@@ -855,7 +938,7 @@ const I18N = {
   nb: {
     title: "Skjemal", lede: "Velg skjetype, juster målene og lagre malen i full størrelse som PDF eller SVG.",
     settings: "Innstillinger", spoonType: "Skjetype", preview: "Forhåndsvisning av malen", lang: "Språk", langName: "Norsk",
-    darkMode: "Mørk modus",
+    darkMode: "Mørk modus", tips: "Utskriftstips",
     design: "Utseende", dsgA: "Salvie", dsgB: "Lønn", dsgC: "Papir & terrakotta", dsgD: "Morgenhimmel",
     hide: "Skjul", show: "Vis", view3d: "3D-visning av skjeen, dra for å rotere",
     warn: n => `Crank over ${n}°: I rettvokst ved blir fibrene korte ved halsen og bladets spiss. Bruk heller en krokvokst grein der veksten følger knekken.`,
@@ -916,7 +999,7 @@ const I18N = {
   da: {
     title: "Skeskabelon", lede: "Vælg sketype, tilpas målene og gem skabelonen i fuld størrelse som PDF eller SVG.",
     settings: "Indstillinger", spoonType: "Sketype", preview: "Forhåndsvisning af skabelonen", lang: "Sprog", langName: "Dansk",
-    darkMode: "Mørk tilstand",
+    darkMode: "Mørk tilstand", tips: "Udskrivningstips",
     design: "Udseende", dsgA: "Salvie", dsgB: "Ahorn", dsgC: "Papir & terrakotta", dsgD: "Morgenhimmel",
     hide: "Skjul", show: "Vis", view3d: "3D-visning af skeen, træk for at dreje",
     warn: n => `Crank over ${n}°: I ligefibret træ opstår der korte fibre ved halsen og skålens spids. Brug hellere en krum gren, hvis vækst følger knækket.`,
@@ -977,7 +1060,7 @@ const I18N = {
   pl: {
     title: "Szablon łyżki", lede: "Wybierz rodzaj łyżki, dopasuj wymiary i zapisz szablon w rzeczywistym rozmiarze jako PDF lub SVG.",
     settings: "Ustawienia", spoonType: "Rodzaj łyżki", preview: "Podgląd szablonu", lang: "Język", langName: "Polski",
-    darkMode: "Tryb ciemny",
+    darkMode: "Tryb ciemny", tips: "Wskazówki drukowania",
     design: "Wygląd", dsgA: "Szałwia", dsgB: "Klon", dsgC: "Papier i terakota", dsgD: "Poranne niebo",
     hide: "Ukryj", show: "Pokaż", view3d: "Widok 3D łyżki, przeciągnij, aby obrócić",
     warn: n => `Crank powyżej ${n}°: w drewnie o prostych włóknach przy szyjce i czubku czerpaka powstają krótkie włókna. Lepiej użyć wygiętej gałęzi, której przyrost podąża za wygięciem.`,
@@ -1072,9 +1155,8 @@ const GROUPS = [
     { k: "nw", min: 6, max: 30 },
     { k: "ew", min: 10, max: 45 },
     { k: "he", gallery: true },
+    // fac = nur bei Facetten „An“ sichtbar
     { k: "fc", choice: [["an", "fcOn"], ["aus", "fcOff"]] },
-    // fold = klappbarer Block bis zum Ende der Gruppe; fac = nur bei Facetten „An“ sichtbar
-    { fold: "facets", fac: true },
     { k: "fs", choice: [["leicht", "fsL"], ["acht", "fsA"]], fac: true },
     { k: "fr", choice: [["hals", "frH"], ["stiel", "frS"]], fac: true },
     { k: "fe", min: -30, max: 30, fac: true },
@@ -1685,14 +1767,18 @@ function renderTypes() {
   $("types").innerHTML = Object.entries(PRESETS).map(([k, v]) =>
     `<button type="button" data-k="${k}" aria-pressed="${k === state.type}">${T("types")[k]}<small>${v.L} mm</small></button>`).join("");
 }
+// Symbol aus dem Sprite in shell.html (#i-…); chev = Pfeil der Klapper
+const ico = (n, cls = "") => `<svg class="i${cls}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+const chev = () => ico("chev", " chev");
 const SHAPES = () => ["ei", "rund", "schaufel"].concat(Object.keys(BOWLS).map(k => "d" + k), Object.keys(CUSTOM.bowls).map(k => "u" + k));
-function thumb(bs) {
+// Vorschaubild einer Form; big = große Anzeige der gewählten Form mit getönter Fläche (Klasse fl)
+function thumb(bs, big) {
   const pr = bowlProfile(bs, 0.44), h = Math.min(30, 36 * pr.ar), w = h / pr.ar, top = 17 - h / 2, n = 48, l = [], r = [];
   for (let j = 0; j <= n; j++) { const t = Math.min(0.9995, Math.max(0.0005, j / n)), [a, b] = pr.lr(t), y = top + h * j / n; l.push(`${(20 - a * w).toFixed(1)} ${y.toFixed(1)}`); r.unshift(`${(20 + b * w).toFixed(1)} ${y.toFixed(1)}`); }
-  return `<svg viewBox="0 0 40 34" aria-hidden="true"><path d="M20 ${top.toFixed(1)} L${l.join(" L")} L20 ${(top + h).toFixed(1)} L${r.join(" L")} Z" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>`;
+  return `<svg viewBox="0 0 40 34" aria-hidden="true"><path${big ? ' class="fl"' : ""} d="M20 ${top.toFixed(1)} L${l.join(" L")} L20 ${(top + h).toFixed(1)} L${r.join(" L")} Z" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>`;
 }
 const ENDSHAPES = () => ["rund", "gerade", "spitz"].concat(Object.keys(ENDS).map(k => "e" + k), Object.keys(CUSTOM.ends).map(k => "w" + k));
-function endThumb(he) {
+function endThumb(he, big) {
   const E = endData(he);
   let pr;
   if (E) pr = d => lerpArr(E[1], d);
@@ -1701,50 +1787,66 @@ function endThumb(he) {
   else pr = d => d < 0.45 ? Math.sqrt(1 - Math.pow((0.45 - d) / 0.45, 2)) : 1;
   const ar = Math.min(E ? E[0] : 2, 2.6), h = 28, w = Math.min(14, h / ar), n = 40, l = [], r = [];
   for (let j = 0; j <= n; j++) { const v = pr(j / n) * w / 2, y = 3 + h * j / n; l.push(`${(20 - v).toFixed(1)} ${y.toFixed(1)}`); r.unshift(`${(20 + v).toFixed(1)} ${y.toFixed(1)}`); }
-  return `<svg viewBox="0 0 40 34" aria-hidden="true"><path d="M${l.join(" L")} M${r.join(" L")} M${l[0]} L${r[r.length - 1]}" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>`;
+  // unten offen: Fläche (nur groß) geschlossen, Linie ohne Unterkante
+  return `<svg viewBox="0 0 40 34" aria-hidden="true">${big ? `<path class="fl" d="M${l.join(" L")} L${r.join(" L")} Z" stroke="none"/>` : ""}<path d="M${l.join(" L")} M${r.join(" L")} M${l[0]} L${r[r.length - 1]}" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>`;
 }
+// Kennung und Name einer Form (Name nur bei benannten und eigenen Formen)
+function shapeName(k, v) {
+  const code = k === "bs" ? bowlCode(v) : endCode(v), own = v[0] === "u" || v[0] === "w";
+  return [code, T("shapes")[v] || (own ? T("own") : "")];
+}
+// Akkordeon: genau eine Gruppe offen; beim ersten Besuch „Gesamt“, danach die zuletzt offene (loeffel-group)
+let openGroup = "gesamt";
+try {
+  const g = localStorage.getItem("loeffel-group"); if (GROUPS.some(x => x.id === g)) openGroup = g;
+  ["loeffel-closed", "loeffel-adv", "loeffel-fold"].forEach(k => localStorage.removeItem(k)); // Zustände vor v30
+} catch (e) {}
+// Raster „Formen“ je Galerie: beim Laden zu, nicht gemerkt; bleibt über renderFields hinweg offen
+const galOpen = { bs: false, he: false };
 function renderFields() {
-  // Auf dem Handy sind beim ersten Besuch nur „Gesamt“ und „Laffe“ offen
-  let closed = window.matchMedia && matchMedia("(max-width: 760px)").matches ? ["stiel", "seite"] : [];
-  try { const c = localStorage.getItem("loeffel-closed"); if (c) closed = JSON.parse(c); } catch (e) {}
-  // „Erweitert“ bleibt zu, bis man es öffnet (eigener Schlüssel, damit ältere gespeicherte Listen es nicht öffnen)
-  let advOpen = false;
-  try { advOpen = localStorage.getItem("loeffel-adv") === "1"; } catch (e) {}
-  closed = closed.filter(id => id !== "erweitert"); if (!advOpen) closed.push("erweitert");
-  // Klappbarer Block (fold, Facetten im Stiel): anfangs zu, Zustand wird gemerkt; reicht bis zum Ende der Gruppe
-  let foldOpen = false;
-  try { foldOpen = localStorage.getItem("loeffel-fold") === "1"; } catch (e) {}
-  $("fields").innerHTML = GROUPS.map(g => `<details class="grp" data-g="${g.id}"${closed.includes(g.id) ? "" : " open"}><summary>${T("groups")[g.id]}</summary><div class="grp-body">` + g.fields.map(fd => fd.fold ?
-    `<details class="fold"${fd.fac ? " data-fac" : ""}${foldOpen ? " open" : ""}><summary>${T(fd.fold)}</summary><div class="fold-body">` :
-    fd.sub ? `<div class="subh"${fd.fac ? " data-fac" : ""}>${T("groups")[fd.sub] || T(fd.sub)}</div>` : fd.gallery ?
-    `<div class="field"><span class="flabel" id="l-${fd.k}">${T("fields")[fd.k][0]}</span><div class="gallery" role="group" aria-labelledby="l-${fd.k}">` +
+  $("fields").innerHTML = GROUPS.map(g => { const on = g.id === openGroup; return `<div class="grp" data-g="${g.id}"><button type="button" class="grp-h" id="gh-${g.id}" data-acc="${g.id}" aria-expanded="${on}" aria-controls="gb-${g.id}"><span class="ico">${ico(g.id)}</span><span>${T("groups")[g.id]}</span>${chev()}</button><div class="grp-b" id="gb-${g.id}" role="region" aria-labelledby="gh-${g.id}"${on ? "" : " hidden"}>` + g.fields.map(fd =>
+    fd.sub ? `<div class="subh">${T("groups")[fd.sub] || T(fd.sub)}</div>` : fd.gallery ?
+    // Galerie: gewählte Form groß mit Kennung, Klapper „Formen“ öffnet Raster, Hochladen und Entfernen
+    `<div class="field"><div class="flabel-row"><span class="flabel" id="l-${fd.k}">${T("fields")[fd.k][0]}</span><button type="button" class="edit" data-edit="${fd.k}"><span aria-hidden="true">✎</span> ${T("edit")}</button></div>
+      <div class="galrow"><div class="bigshape" id="big-${fd.k}"></div><div class="gcode" id="code-${fd.k}"></div><button type="button" class="ctl sm galtog" data-galtog="${fd.k}" aria-expanded="${galOpen[fd.k]}" aria-controls="go-${fd.k}">${T("shapesLbl")}${chev()}</button></div>
+      <div class="gal-open" id="go-${fd.k}"${galOpen[fd.k] ? "" : " hidden"}><div class="gallery" role="group" aria-labelledby="l-${fd.k}">` +
       (fd.k === "bs" ? SHAPES() : ENDSHAPES()).map(v => {
-        const code = fd.k === "bs" ? bowlCode(v) : endCode(v), own = v[0] === "u" || v[0] === "w";
-        const t = T("shapes")[v] ? `${code} · ${T("shapes")[v]}` : own ? `${code} · ${T("own")}` : code;
-        return `<button type="button" data-ck="${fd.k}" data-v="${v}" title="${t}" class="${own ? "own" : ""}">${fd.k === "bs" ? thumb(v) : endThumb(v)}<span>${code}</span></button>`; }).join("") + `</div>
-      <div class="upl"><button type="button" class="upbtn" data-edit="${fd.k}"><span aria-hidden="true">✎</span> ${T("edit")}</button><label class="upbtn"><input type="file" accept=".svg,.png,.jpg,.jpeg,.webp,image/*" data-up="${fd.k}">${T("upload")}</label><button type="button" class="upbtn" data-del="${fd.k}" hidden>${T("remove")}</button></div>
-      <span class="hint">${T(fd.k === "bs" ? "upHintBowl" : "upHintEnd")}</span></div>` :
+        const [code, name] = shapeName(fd.k, v), own = v[0] === "u" || v[0] === "w";
+        return `<button type="button" data-ck="${fd.k}" data-v="${v}" title="${name ? `${code} · ${name}` : code}" class="${own ? "own" : ""}">${fd.k === "bs" ? thumb(v) : endThumb(v)}<span>${code}</span></button>`; }).join("") + `</div>
+      <div class="upl"><label class="upbtn"><input type="file" accept=".svg,.png,.jpg,.jpeg,.webp,image/*" data-up="${fd.k}">${ico("upload")}${T("upload")}</label><button type="button" class="upbtn" data-del="${fd.k}" hidden>${T("remove")}</button></div>
+      <span class="hint">${T(fd.k === "bs" ? "upHintBowl" : "upHintEnd")}</span></div></div>` :
     fd.choice ?
     `<div class="field" id="fld-${fd.k}"${fd.fac ? " data-fac" : ""}><span class="flabel" id="l-${fd.k}">${T("fields")[fd.k][0]}</span><div class="seg" role="group" aria-labelledby="l-${fd.k}">` +
       fd.choice.map(([v, t]) => `<button type="button" data-ck="${fd.k}" data-v="${v}">${T(t) || t}</button>`).join("") + `</div>${T("fields")[fd.k][1] ? `<span class="hint">${T("fields")[fd.k][1]}</span>` : ""}</div>` :
     `<div class="field" id="fld-${fd.k}"${fd.fac ? " data-fac" : ""}><div class="row"><label for="f-${fd.k}">${T("fields")[fd.k][0]}</label><output id="o-${fd.k}" for="f-${fd.k}"></output></div>
      <input type="range" id="f-${fd.k}" data-k="${fd.k}" min="${fd.min}" max="${fd.max}" step="${fd.step || 1}">
-     ${T("fields")[fd.k][1] ? `<span class="hint">${T("fields")[fd.k][1]}</span>` : ""}</div>`).join("") + (g.fields.some(fd => fd.fold) ? "</div></details>" : "") + `</div></details>`).join("");
-  $("fields").querySelectorAll("details.grp").forEach(d => d.addEventListener("toggle", () => {
-    const shut = [...$("fields").querySelectorAll("details.grp:not([open])")].map(x => x.dataset.g);
-    try { localStorage.setItem("loeffel-closed", JSON.stringify(shut)); localStorage.setItem("loeffel-adv", shut.includes("erweitert") ? "0" : "1"); } catch (e) {}
-  }));
-  $("fields").querySelectorAll("details.fold").forEach(d => d.addEventListener("toggle", () => {
-    try { localStorage.setItem("loeffel-fold", d.open ? "1" : "0"); } catch (e) {}
-  }));
+     ${T("fields")[fd.k][1] ? `<span class="hint">${T("fields")[fd.k][1]}</span>` : ""}</div>`).join("") + `</div></div>`; }).join("");
 }
+$("fields").addEventListener("click", e => {
+  const h = e.target.closest("[data-acc]");
+  if (h) {
+    // ein Klick auf die offene Gruppe lässt sie offen
+    openGroup = h.dataset.acc;
+    $("fields").querySelectorAll("[data-acc]").forEach(x => { const on = x === h; x.setAttribute("aria-expanded", on); $("gb-" + x.dataset.acc).hidden = !on; });
+    try { localStorage.setItem("loeffel-group", openGroup); } catch (e) {}
+    return;
+  }
+  const t = e.target.closest("[data-galtog]"); if (!t) return;
+  const k = t.dataset.galtog; galOpen[k] = !galOpen[k];
+  t.setAttribute("aria-expanded", galOpen[k]); $("go-" + k).hidden = !galOpen[k];
+});
 function syncFields() {
   $("fld-p").hidden = !!bowlData(state.P.bs);
   $("fld-hd").hidden = !isAsym(state.P.bs);
   document.querySelectorAll("[data-fac]").forEach(el => { el.hidden = state.P.fc !== "an"; });
   document.querySelectorAll("[data-del]").forEach(b => { const v = state.P[b.dataset.del]; b.hidden = !(v[0] === "u" || v[0] === "w"); });
   GROUPS.forEach(g => g.fields.forEach(fd => {
-    if (fd.sub || fd.fold) return;
+    if (fd.sub) return;
+    if (fd.gallery) {
+      const v = state.P[fd.k], [code, name] = shapeName(fd.k, v);
+      $("big-" + fd.k).innerHTML = fd.k === "bs" ? thumb(v, true) : endThumb(v, true);
+      $("code-" + fd.k).innerHTML = `${code}${name ? `<span>${name}</span>` : ""}`;
+    }
     if (fd.choice || fd.gallery) { document.querySelectorAll(`[data-ck="${fd.k}"]`).forEach(b => b.setAttribute("aria-pressed", b.dataset.v === state.P[fd.k])); return; }
     $("f-" + fd.k).value = state.P[fd.k];
     $("o-" + fd.k).textContent = state.P[fd.k].toLocaleString(lang) + (fd.unit === "" ? "" : " " + (fd.unit || "mm"));
@@ -1758,11 +1860,12 @@ function update() {
   zoomRefresh();
   update3D(scene);
   const b = scene.blank;
+  // Angaben im 2-Spalten-Raster (w = volle Breite), Richtwert als zweite Zeile
   $("facts").innerHTML =
-    `<div><dt>${T("blankMin")}</dt><dd>${b.l} × ${b.w} × ${b.h} mm</dd></div>` +
+    `<div class="w"><dt>${T("blankMin")}</dt><dd>${b.l} × ${b.w} × ${b.h} mm</dd></div>` +
     `<div><dt>${T("drop")}</dt><dd>${scene.drop} mm</dd></div>` +
     `<div><dt>${T("paper")}</dt><dd>${scene.page.label}</dd></div>` +
-    `<div><dt>${T("share")}</dt><dd>${Math.round(Math.min(state.P.bl, state.P.L * 0.6) / state.P.L * 100)} % · ${T("guide")} ${SHARE[state.type][0]} ${SHARE[state.type][1]} %</dd></div>`;
+    `<div class="w"><dt>${T("share")}</dt><dd>${Math.round(Math.min(state.P.bl, state.P.L * 0.6) / state.P.L * 100)} %<small>${T("guide")} ${SHARE[state.type][0]} ${SHARE[state.type][1]} %</small></dd></div>`;
   $("warn").hidden = state.P.ca <= LIMITS.ca; $("warn").textContent = T("warn")(LIMITS.ca);
   // Mundgröße beim Esslöffel: Laffe höchstens ca. 45 × 65 mm und 8 mm tief (Grenzen in LIMITS)
   const ess = state.type === "ess";
@@ -1988,7 +2091,6 @@ function applyLang() {
   document.title = T("title");
   document.querySelectorAll("[data-i]").forEach(el => { el.textContent = T(el.dataset.i); });
   document.querySelectorAll("[data-ia]").forEach(el => el.setAttribute("aria-label", T(el.dataset.ia)));
-  $("themeBtn").title = T("darkMode");
   $("dfBtn").title = T("dfTitle");
   $("sheet").title = T("zoomHint");
   $("langSel").value = lang;
@@ -2006,25 +2108,42 @@ $("langSel").addEventListener("change", () => {
   try { localStorage.setItem("loeffel-lang", lang); } catch (e) {}
   applyLang();
 });
-/* ---------- Hell/Dunkel ---------- */
+/* ---------- Paletten-Menü: Design (Salbei, Ahorn, Papier & Terrakotta, Morgenhimmel) und Hell/Dunkel ---------- */
+// Auswahl wirkt sofort; das Menü schließt bei Klick außerhalb und mit Esc
 function applyTheme() {
-  const dark = document.documentElement.getAttribute("data-theme") === "dark";
-  $("themeBtn").textContent = dark ? "☀" : "☾";
-  $("themeBtn").setAttribute("aria-pressed", dark);
+  const root = document.documentElement, d = root.getAttribute("data-design") || "a";
+  $("themeBtn").setAttribute("aria-checked", root.getAttribute("data-theme") === "dark");
+  document.querySelectorAll("[data-dsg]").forEach(b => b.setAttribute("aria-checked", b.dataset.dsg === d));
 }
+function palMenu(open, focusBtn) {
+  $("palMenu").hidden = !open; $("palBtn").setAttribute("aria-expanded", open);
+  if (open) $("palMenu").querySelector('[aria-checked="true"]').focus(); else if (focusBtn) $("palBtn").focus();
+}
+$("palBtn").addEventListener("click", () => palMenu($("palMenu").hidden));
+$("palMenu").addEventListener("click", e => {
+  const b = e.target.closest("[data-dsg]"); if (!b) return;
+  document.documentElement.setAttribute("data-design", b.dataset.dsg);
+  try { localStorage.setItem("loeffel-design", b.dataset.dsg); } catch (e) {}
+  applyTheme();
+});
 $("themeBtn").addEventListener("click", () => {
   const dark = document.documentElement.getAttribute("data-theme") !== "dark";
   document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
   try { localStorage.setItem("loeffel-theme", dark ? "dark" : "light"); } catch (e) {}
   applyTheme();
 });
+// Pfeiltasten wandern durch die Einträge
+$("palMenu").addEventListener("keydown", e => {
+  const items = [...$("palMenu").querySelectorAll("button")], i = items.indexOf(document.activeElement);
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); items[(i + (e.key === "ArrowDown" ? 1 : items.length - 1)) % items.length].focus(); }
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("palMenu").hidden) palMenu(false, true); });
+document.addEventListener("click", e => { if (!$("palMenu").hidden && !e.target.closest("#palMenu, #palBtn")) palMenu(false); });
 applyTheme();
-/* ---------- Design (Salbei, Ahorn, Papier & Terrakotta, Morgenhimmel) ---------- */
-$("designSel").value = document.documentElement.getAttribute("data-design") || "a";
-$("designSel").addEventListener("change", () => {
-  const d = $("designSel").value;
-  document.documentElement.setAttribute("data-design", d);
-  try { localStorage.setItem("loeffel-design", d); } catch (e) {}
+/* ---------- Drucktipps: beim Laden zu, nicht gemerkt ---------- */
+$("tipsBtn").addEventListener("click", () => {
+  const open = $("tipsNote").hidden;
+  $("tipsNote").hidden = !open; $("tipsBtn").setAttribute("aria-expanded", open);
 });
 applyLang();
 /* ---------- Formeditor ---------- */
@@ -2400,8 +2519,9 @@ function dfRender() {
   GROUPS.forEach(g => {
     const gn = T("groups")[g.id];
     if (!g.fields[0].sub) rows += sub(gn);
-    g.fields.forEach(fd => {
-      if (fd.fold) { rows += sub(`${gn} · ${T(fd.fold)}`); return; }
+    g.fields.forEach((fd, i) => {
+      // Facetten-Werte unter eigener Zwischenzeile (vor dem ersten Feld mit fac)
+      if (fd.fac && !(i && g.fields[i - 1].fac)) rows += sub(`${gn} · ${T("facets")}`);
       if (fd.sub) { rows += sub(`${gn} · ${T("groups")[fd.sub] || T(fd.sub)}`); return; }
       if (fd.min === undefined) return;
       rows += `<tr><th scope="row">${T("fields")[fd.k][0]} <small>${unit(fd)}</small></th>` +
