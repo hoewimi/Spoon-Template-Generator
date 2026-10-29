@@ -286,6 +286,41 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
   .ed-gap { display: none; }
   .ed-foot .btn { min-height: 44px; padding: 8px 6px; font-size: 13px; }
 }
+
+/* Standardwerte (Dialog #df): Tabelle Werte × Löffelarten, geänderte Werte markiert */
+.df { width: min(760px, calc(100vw - 32px)); height: auto; max-height: calc(100dvh - 32px); }
+.dfbtn { font-size: 16px; }
+.df-body { min-height: 0; overflow-y: auto; padding: 12px 18px 16px; display: grid; grid-auto-rows: max-content; gap: 10px; align-content: start; }
+.df-body h3 { margin: 8px 0 0; font: 700 15px var(--font-display); }
+.df .hint { font-size: 12px; color: var(--muted); margin: 0; }
+.df-tab { border-collapse: collapse; width: 100%; font-size: 13px; }
+.df-tab th, .df-tab td { padding: 3px 4px; text-align: left; font-weight: 500; }
+.df-tab thead { position: sticky; top: -12px; z-index: 1; background: var(--panel); }
+.df-tab thead th { font-weight: 600; font-size: 12px; color: var(--muted); text-align: center; }
+.df-tab th small { font: 500 11px var(--font-mono); color: var(--muted); }
+.df-tab { table-layout: fixed; }
+.df-tab th[scope="row"], .df-tab thead th:first-child { width: 32%; }
+.df-sub th { padding-top: 10px; font: 600 12px var(--font-body); color: var(--fg); border-bottom: 1px dashed var(--line); }
+.df input { width: 100%; min-width: 52px; font: 500 13px var(--font-mono); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 4px 6px; text-align: right; }
+.df input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.df input.chg { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); font-weight: 600; }
+.df .ed-foot { align-items: center; }
+@media (max-width: 760px) {
+  .df { width: 100vw; max-height: 100dvh; }
+  .df-body { padding: 8px 10px 12px; }
+  /* Handy: Beschriftung als eigene Zeile, darunter die vier Löffelarten nebeneinander */
+  .df-tab, .df-tab thead, .df-tab tbody { display: block; }
+  .df-tab thead { top: -8px; }
+  .df-tab tr { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 4px; }
+  .df-tab th[scope="row"], .df-sub th { grid-column: 1 / -1; }
+  .df-tab th[scope="row"] { width: auto; padding: 6px 2px 0; font-size: 12px; }
+  .df-tab thead th { font-size: 11px; line-height: 1.25; padding: 4px 0; }
+  .df-tab thead th:first-child { display: none; }
+  .df-tab td { padding: 2px 0; }
+  .df .ed-foot #dfFactory { grid-column: 1 / -1; }
+  .df .ed-foot .status { grid-column: 1 / -1; order: 3; font-size: 12px; }
+  .df .ed-foot .status:empty { display: none; }
+}
 </style>
 </head>
 <body>
@@ -294,9 +329,10 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
     <div class="hbar">
     <select class="langsel" id="langSel" data-ia="lang"></select>
     <button type="button" class="themebtn" id="themeBtn" data-ia="darkMode" aria-pressed="false" aria-label="Dunkle Darstellung" title="Dunkle Darstellung">☾</button>
+    <button type="button" class="themebtn dfbtn" id="dfBtn" data-ia="dfTitle" aria-haspopup="dialog" aria-label="Standardwerte" title="Standardwerte">⚙&#xFE0E;</button>
     <select class="designsel" id="designSel" data-ia="design"><option value="a" data-i="dsgA">Salbei</option><option value="b" data-i="dsgB">Ahorn</option><option value="c" data-i="dsgC">Papier &amp; Terrakotta</option><option value="d" data-i="dsgD">Morgenhimmel</option></select>
     </div>
-    <div class="brand"><h1 data-i="title">Löffelschablone</h1><span class="ver" id="ver">v28</span></div>
+    <div class="brand"><h1 data-i="title">Löffelschablone</h1><span class="ver" id="ver">v29</span></div>
     <p class="lede" data-i="lede">Löffelart wählen, Maße anpassen, Schablone in Originalgröße als PDF oder SVG speichern.</p>
   </header>
 
@@ -324,10 +360,10 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
       </div>
       <div class="side">
       <dl class="facts" id="facts"></dl>
-      <p class="warn" id="warn" data-i="warn" hidden>Crank über 15°: Bei geradfaserigem Holz entsteht an Hals und Laffenspitze Kurzfaser. Besser einen gebogenen Ast verwenden, dessen Wuchs der Kröpfung folgt.</p>
+      <p class="warn" id="warn" hidden></p>
       <p class="warn" id="warnMax" hidden></p>
-      <p class="warn" id="warnMouth" data-i="warnMouth" hidden></p>
-      <p class="warn" id="warnDepth" data-i="warnDepth" hidden></p>
+      <p class="warn" id="warnMouth" hidden></p>
+      <p class="warn" id="warnDepth" hidden></p>
       <div class="actions">
         <button class="btn primary" id="pdfBtn" type="button" data-i="pdf" disabled>PDF speichern</button>
         <button class="btn secondary" id="svgBtn" type="button" data-i="svg" disabled>SVG speichern</button>
@@ -369,6 +405,18 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
   </div>
 </dialog>
 
+<dialog class="ed df" id="df" aria-labelledby="dfHead">
+  <div class="ed-head"><h2 id="dfHead" data-i="dfTitle">Standardwerte</h2></div>
+  <div class="df-body" id="dfBody"></div>
+  <div class="ed-foot">
+    <button type="button" class="btn secondary" id="dfFactory" data-i="dfFactory">Auf Werkseinstellung</button>
+    <span class="status" id="dfStatus" role="status"></span>
+    <span class="ed-gap"></span>
+    <button type="button" class="btn secondary" id="dfCancel" data-i="edCancel">Abbrechen</button>
+    <button type="button" class="btn primary" id="dfApply" data-i="edApply">Übernehmen</button>
+  </div>
+</dialog>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -380,7 +428,7 @@ const I18N = {
     darkMode: "Dunkle Darstellung",
     design: "Design", dsgA: "Salbei", dsgB: "Ahorn", dsgC: "Papier & Terrakotta", dsgD: "Morgenhimmel",
     hide: "Ausblenden", show: "Einblenden", view3d: "3D-Ansicht des Löffels, zum Drehen ziehen",
-    warn: "Crank über 15°: Bei geradfaserigem Holz entsteht an Hals und Laffenspitze Kurzfaser. Besser einen gebogenen Ast verwenden, dessen Wuchs der Kröpfung folgt.",
+    warn: n => `Crank über ${n}°: Bei geradfaserigem Holz entsteht an Hals und Laffenspitze Kurzfaser. Besser einen gebogenen Ast verwenden, dessen Wuchs der Kröpfung folgt.`,
     pdf: "PDF speichern", svg: "SVG speichern", copy: "SVG-Code kopieren",
     note: "Beim Drucken „Tatsächliche Größe“ bzw. 100 % wählen und den 50‑mm‑Balken nachmessen. Die Draufsicht zeigt den abgewickelten Umriss, die Seitenansicht die echte Biegung. Die Knicklinie verbindet beide Ansichten; im Stiel stehen sie auf gleicher Höhe. Die Faser des Rohlings sollte entlang des Stiels laufen.",
     blankMin: "Rohling mindestens", drop: "Drop", paper: "Blattgröße", portrait: "hoch",
@@ -414,14 +462,14 @@ const I18N = {
     specs: ["Gesamtlänge", "Stiellänge", "Laffenbreite", "Laffenlänge", "Crank-Winkel", "Drop", "Stielstärke"],
     check: "50 mm · nachmessen", printAt: f => `Mit 100 % auf ${f} drucken`, units: "Maße in mm", grain: "Faser längs zum Stiel",
     glue: n => `Kante von Seite ${n} hier anlegen`, pageNo: (i, n) => `Seite ${i}/${n}`, tooWide: " (zu breit für A4)",
-    blank: "Rohling", warn1: "Crank über 15°:", warn2: "gebogenen Ast verwenden", bend: "Knick", facets: "Facetten", fcOn: "An", fcOff: "Aus", fsL: "Leicht", fsA: "Achteckig", frH: "Hals", frS: "Ganzer Stiel", saw: "Sägeschnitt ca. 10 mm",
+    blank: "Rohling", warn1: n => `Crank über ${n}°:`, warn2: "gebogenen Ast verwenden", bend: "Knick", facets: "Facetten", fcOn: "An", fcOff: "Aus", fsL: "Leicht", fsA: "Achteckig", frH: "Hals", frS: "Ganzer Stiel", saw: "Sägeschnitt ca. 10 mm",
     caMax: x => `Bei dieser Knickposition sind höchstens ${x}° möglich, sonst klappt die Laffenspitze über. Knick näher an den Hals legen.`, caMaxS: x => `Crank max. ${x}° bei dieser Knickposition`,
     saved: (f, x) => `${f} gespeichert${x}.`, handed: "Datei übergeben.", declined: "Speichern abgebrochen.",
     busy: "Es ist schon ein Speichern-Dialog offen.", failed: "Speichern hat nicht geklappt. Bitte erneut versuchen.", pdfLib: "PDF konnte nicht erstellt werden – die PDF-Funktion wird aus dem Internet geladen. Bitte mit Internetverbindung neu laden oder als SVG speichern.",
     noSave: "Speichern ist in dieser Ansicht nicht verfügbar. Du kannst den SVG-Code kopieren.",
     own: "eigene Form", upload: "Eigene Form hochladen", remove: "Eigene Form entfernen", upHintBowl: "SVG oder Bild: dunkle Umrisslinie oder gefüllte Form auf hellem bzw. transparentem Grund, Spitze oben, Hals unten. Die Größe ist egal, es zählen nur die Proportionen.", upHintEnd: "SVG oder Bild: Griffende oben, Ansatz am Stiel unten, unten darf die Linie offen sein. Die Breite unten wird an den Stiel angepasst.", uploaded: c => `Form ${c} hinzugefügt.`, uploadFail: "Die Datei konnte nicht als Form gelesen werden. Bitte eine einzelne dunkle Umrisslinie auf hellem Grund verwenden.", shapesLbl: "Formen",
     hdR: "Rechtshänder", hdL: "Linkshänder", random: "Zufallsdesign", share: "Laffenanteil", guide: "Richtwert",
-    warnMouth: "Laffe größer als etwa 45 × 65 mm: Für einen Esslöffel ist das zu groß für den Mund.", warnDepth: "Laffe tiefer als 8 mm: Die Oberlippe erreicht den Boden der Mulde nicht, der Löffel lässt sich schlecht leer essen.",
+    warnMouth: (w, l) => `Laffe größer als etwa ${w} × ${l} mm: Für einen Esslöffel ist das zu groß für den Mund.`, warnDepth: n => `Laffe tiefer als ${n} mm: Die Oberlippe erreicht den Boden der Mulde nicht, der Löffel lässt sich schlecht leer essen.`,
     copied: "SVG-Code kopiert.", copyFail: "Kopieren nicht möglich.",
     zoomHint: "Mausrad: zoomen · Ziehen: verschieben · Doppelklick: ganzes Blatt", zoomReset: "Ganzes Blatt",
     edit: "Form bearbeiten", edTitle: c => `Form bearbeiten · ${c}`, edSym: "Symmetrisch", edAsym: "Asymmetrisch", edUndo: "Rückgängig",
@@ -432,7 +480,9 @@ const I18N = {
     edEnd: "Griffende", edJoint: "Ansatz", edWarnOver: "Der Umriss läuft zurück (Überhang). Übernommen wird eine vereinfachte Form.",
     edWarnWaist: "Eine Engstelle ist schmaler als 20 % der größten Breite.", edWarnLong: "Die Laffe ist mehr als 2,5-mal so lang wie breit.",
     edWarnWide: "Die Laffe ist breiter als 1,7-mal ihre Länge.", edMin: "Mindestens 4 Punkte je Hälfte.", edMax: "Höchstens 16 Punkte je Hälfte.",
-    edSaved: c => `Form ${c} übernommen.`, edFile: "form", edImgFail: "Das Bild ließ sich nicht laden."
+    edSaved: c => `Form ${c} übernommen.`, edFile: "form", edImgFail: "Das Bild ließ sich nicht laden.",
+    dfTitle: "Standardwerte", dfHelp: "Startwerte gelten ab dem nächsten Klick auf eine Löffelart, Richtwerte und Warngrenzen sofort. Geänderte Werte sind markiert. Gespeichert wird nur in diesem Browser.", dfStart: "Startwerte je Löffelart", dfLimits: "Richtwerte und Warngrenzen", dfShare: "Laffenanteil (Richtwert)",
+    dfCa: "Crank-Warnung über", dfMw: "Esslöffel: Laffe breiter als", dfMl: "Esslöffel: Laffe länger als", dfMd: "Esslöffel: Laffe tiefer als", dfFactory: "Auf Werkseinstellung", dfFactoryDone: "Werkseinstellung eingetragen. „Übernehmen“ speichert sie.", dfSaved: "Standardwerte übernommen."
   },
   nl: {
     title: "Lepelsjabloon", lede: "Kies het type lepel, pas de maten aan en sla het sjabloon op ware grootte op als PDF of SVG.",
@@ -440,7 +490,7 @@ const I18N = {
     darkMode: "Donkere weergave",
     design: "Ontwerp", dsgA: "Salie", dsgB: "Esdoorn", dsgC: "Papier & Terracotta", dsgD: "Ochtendhemel",
     hide: "Verbergen", show: "Tonen", view3d: "3D-weergave van de lepel, sleep om te draaien",
-    warn: "Crank boven 15°: bij recht gegroeid hout ontstaat bij de hals en de punt van de kom korte vezel. Gebruik liever een gebogen tak waarvan de groei de knik volgt.",
+    warn: n => `Crank boven ${n}°: bij recht gegroeid hout ontstaat bij de hals en de punt van de kom korte vezel. Gebruik liever een gebogen tak waarvan de groei de knik volgt.`,
     pdf: "PDF opslaan", svg: "SVG opslaan", copy: "SVG-code kopiëren",
     note: "Kies bij het afdrukken ‘Werkelijke grootte’ of 100 % en meet de balk van 50 mm na. Het bovenaanzicht toont de uitgeslagen omtrek, het zijaanzicht de echte buiging. De kniklijn verbindt beide aanzichten; bij de steel staan ze op dezelfde hoogte. De vezel van het werkstuk moet in de lengte van de steel lopen.",
     blankMin: "Werkstuk minimaal", drop: "Drop", paper: "Papierformaat", portrait: "staand",
@@ -474,14 +524,14 @@ const I18N = {
     specs: ["Totale lengte", "Steellengte", "Breedte kom", "Lengte kom", "Crankhoek", "Drop", "Steeldikte"],
     check: "50 mm · nameten", printAt: f => `Afdrukken op 100 % op ${f}`, units: "Maten in mm", grain: "Vezel in de lengte van de steel",
     glue: n => `Rand van pagina ${n} hier aanleggen`, pageNo: (i, n) => `Pagina ${i}/${n}`, tooWide: " (te breed voor A4)",
-    blank: "Werkstuk", warn1: "Crank boven 15°:", warn2: "gebogen tak gebruiken", bend: "Knik", facets: "Facetten", fcOn: "Aan", fcOff: "Uit", fsL: "Licht", fsA: "Achthoekig", frH: "Hals", frS: "Hele steel", saw: "Zaagsnede ca. 10 mm",
+    blank: "Werkstuk", warn1: n => `Crank boven ${n}°:`, warn2: "gebogen tak gebruiken", bend: "Knik", facets: "Facetten", fcOn: "Aan", fcOff: "Uit", fsL: "Licht", fsA: "Achthoekig", frH: "Hals", frS: "Hele steel", saw: "Zaagsnede ca. 10 mm",
     caMax: x => `Bij deze knikpositie is hoogstens ${x}° mogelijk, anders klapt de punt van de kom om. Leg de knik dichter bij de hals.`, caMaxS: x => `Crank max. ${x}° bij deze knikpositie`,
     saved: (f, x) => `${f} opgeslagen${x}.`, handed: "Bestand doorgegeven.", declined: "Opslaan geannuleerd.",
     busy: "Er is al een opslagvenster open.", failed: "Opslaan is niet gelukt. Probeer het opnieuw.", pdfLib: "PDF kon niet worden gemaakt – de PDF-functie wordt van internet geladen. Laad de pagina opnieuw met internetverbinding of sla op als SVG.",
     noSave: "Opslaan is in deze weergave niet beschikbaar. Je kunt de SVG-code kopiëren.",
     own: "eigen vorm", upload: "Eigen vorm uploaden", remove: "Eigen vorm verwijderen", upHintBowl: "SVG of afbeelding: donkere omtreklijn of gevulde vorm op een lichte of transparante achtergrond, punt boven, hals onder. Het formaat maakt niet uit, alleen de verhoudingen tellen.", upHintEnd: "SVG of afbeelding: einde van de greep boven, aansluiting op de steel onder, onderaan mag de lijn open zijn. De breedte onderaan wordt aan de steel aangepast.", uploaded: c => `Vorm ${c} toegevoegd.`, uploadFail: "Het bestand kon niet als vorm worden gelezen. Gebruik één donkere omtreklijn op een lichte achtergrond.", shapesLbl: "Vormen",
     hdR: "Rechtshandig", hdL: "Linkshandig", random: "Willekeurig ontwerp", share: "Aandeel kom", guide: "richtwaarde",
-    warnMouth: "Kom groter dan ca. 45 × 65 mm: voor een eetlepel te groot voor de mond.", warnDepth: "Kom dieper dan 8 mm: de bovenlip bereikt de bodem van de holte niet, de lepel is moeilijk leeg te eten.",
+    warnMouth: (w, l) => `Kom groter dan ca. ${w} × ${l} mm: voor een eetlepel te groot voor de mond.`, warnDepth: n => `Kom dieper dan ${n} mm: de bovenlip bereikt de bodem van de holte niet, de lepel is moeilijk leeg te eten.`,
     copied: "SVG-code gekopieerd.", copyFail: "Kopiëren is niet mogelijk.",
     zoomHint: "Muiswiel: zoomen · Slepen: verschuiven · Dubbelklik: hele blad", zoomReset: "Hele blad",
     edit: "Vorm bewerken", edTitle: c => `Vorm bewerken · ${c}`, edSym: "Symmetrisch", edAsym: "Asymmetrisch", edUndo: "Ongedaan maken", edReset: "Terug naar voorbeeld",
@@ -492,7 +542,9 @@ const I18N = {
     edEnd: "Einde van de greep", edJoint: "Aansluiting", edWarnOver: "De omtrek loopt terug (overhang). Er wordt een vereenvoudigde vorm overgenomen.",
     edWarnWaist: "Een vernauwing is smaller dan 20 % van de grootste breedte.", edWarnLong: "De kom is meer dan 2,5 keer zo lang als breed.",
     edWarnWide: "De kom is breder dan 1,7 keer de lengte.", edMin: "Minstens 4 punten per helft.", edMax: "Hoogstens 16 punten per helft.",
-    edSaved: c => `Vorm ${c} toegepast.`, edFile: "vorm", edImgFail: "De afbeelding kon niet worden geladen."
+    edSaved: c => `Vorm ${c} toegepast.`, edFile: "vorm", edImgFail: "De afbeelding kon niet worden geladen.",
+    dfTitle: "Standaardwaarden", dfHelp: "Startwaarden gelden vanaf de volgende klik op een lepelsoort, richtwaarden en waarschuwingsgrenzen direct. Gewijzigde waarden zijn gemarkeerd. Alleen in deze browser opgeslagen.", dfStart: "Startwaarden per lepelsoort", dfLimits: "Richtwaarden en waarschuwingsgrenzen", dfShare: "Aandeel kom (richtwaarde)",
+    dfCa: "Crank-waarschuwing boven", dfMw: "Eetlepel: kom breder dan", dfMl: "Eetlepel: kom langer dan", dfMd: "Eetlepel: kom dieper dan", dfFactory: "Fabrieksinstellingen", dfFactoryDone: "Fabrieksinstellingen ingevuld. ‘Toepassen’ slaat ze op.", dfSaved: "Standaardwaarden toegepast."
   },
   en: {
     title: "Spoon Template", lede: "Choose a spoon type, adjust the measurements and save the template at full size as PDF or SVG.",
@@ -500,7 +552,7 @@ const I18N = {
     darkMode: "Dark mode",
     design: "Design", dsgA: "Sage", dsgB: "Maple", dsgC: "Paper & Terracotta", dsgD: "Morning sky",
     hide: "Hide", show: "Show", view3d: "3D view of the spoon, drag to rotate",
-    warn: "Crank above 15°: in straight-grained wood this creates short grain at the neck and the bowl tip. Better use a bent branch whose growth follows the crank.",
+    warn: n => `Crank above ${n}°: in straight-grained wood this creates short grain at the neck and the bowl tip. Better use a bent branch whose growth follows the crank.`,
     pdf: "Save PDF", svg: "Save SVG", copy: "Copy SVG code",
     note: "When printing, choose “Actual size” or 100 % and measure the 50 mm bar. The top view shows the flattened outline, the side view the real bend. The crank line links both views; along the handle they line up. The grain of the blank should run along the handle.",
     blankMin: "Minimum blank", drop: "Drop", paper: "Paper size", portrait: "portrait",
@@ -534,14 +586,14 @@ const I18N = {
     specs: ["Overall length", "Handle length", "Bowl width", "Bowl length", "Crank angle", "Drop", "Handle thickness"],
     check: "50 mm · check", printAt: f => `Print at 100 % on ${f}`, units: "Dimensions in mm", grain: "Grain along the handle",
     glue: n => `Place edge of page ${n} here`, pageNo: (i, n) => `Page ${i}/${n}`, tooWide: " (too wide for A4)",
-    blank: "Blank", warn1: "Crank above 15°:", warn2: "use a bent branch", bend: "Bend", facets: "Facets", fcOn: "On", fcOff: "Off", fsL: "Light", fsA: "Octagonal", frH: "Neck", frS: "Whole handle", saw: "Saw cut approx. 10 mm",
+    blank: "Blank", warn1: n => `Crank above ${n}°:`, warn2: "use a bent branch", bend: "Bend", facets: "Facets", fcOn: "On", fcOff: "Off", fsL: "Light", fsA: "Octagonal", frH: "Neck", frS: "Whole handle", saw: "Saw cut approx. 10 mm",
     caMax: x => `At this bend position at most ${x}° is possible, otherwise the bowl tip folds over. Move the bend closer to the neck.`, caMaxS: x => `Crank max. ${x}° at this bend position`,
     saved: (f, x) => `${f} saved${x}.`, handed: "File handed over.", declined: "Saving cancelled.",
     busy: "A save dialog is already open.", failed: "Saving didn't work. Please try again.", pdfLib: "Couldn't create the PDF – the PDF feature loads from the internet. Reload with an internet connection or save as SVG.",
     noSave: "Saving isn't available in this view. You can copy the SVG code.",
     own: "own shape", upload: "Upload your own shape", remove: "Remove own shape", upHintBowl: "SVG or image: dark outline or filled shape on a light or transparent background, tip at the top, neck at the bottom. Size doesn't matter, only the proportions count.", upHintEnd: "SVG or image: handle end at the top, joint with the handle at the bottom, the line may be open there. The bottom width is matched to the handle.", uploaded: c => `Shape ${c} added.`, uploadFail: "The file couldn't be read as a shape. Please use a single dark outline on a light background.", shapesLbl: "Shapes",
     hdR: "Right-handed", hdL: "Left-handed", random: "Random design", share: "Bowl share", guide: "guide",
-    warnMouth: "Bowl larger than about 45 × 65 mm: too big for the mouth on an eating spoon.", warnDepth: "Bowl deeper than 8 mm: the upper lip can't reach the bottom of the hollow, so the spoon is hard to empty.",
+    warnMouth: (w, l) => `Bowl larger than about ${w} × ${l} mm: too big for the mouth on an eating spoon.`, warnDepth: n => `Bowl deeper than ${n} mm: the upper lip can't reach the bottom of the hollow, so the spoon is hard to empty.`,
     copied: "SVG code copied.", copyFail: "Copying isn't possible.",
     zoomHint: "Mouse wheel: zoom · Drag: pan · Double-click: whole sheet", zoomReset: "Whole sheet",
     edit: "Edit shape", edTitle: c => `Edit shape · ${c}`, edSym: "Symmetric", edAsym: "Asymmetric", edUndo: "Undo", edReset: "Reset to original", edCancel: "Cancel",
@@ -551,7 +603,9 @@ const I18N = {
     edEnd: "Handle end", edJoint: "Joint", edWarnOver: "The outline turns back on itself (overhang). A simplified shape will be applied.",
     edWarnWaist: "A narrow point is less than 20 % of the greatest width.", edWarnLong: "The bowl is more than 2.5 times as long as it is wide.",
     edWarnWide: "The bowl is wider than 1.7 times its length.", edMin: "At least 4 points per half.", edMax: "At most 16 points per half.",
-    edSaved: c => `Shape ${c} applied.`, edFile: "shape", edImgFail: "The image could not be loaded."
+    edSaved: c => `Shape ${c} applied.`, edFile: "shape", edImgFail: "The image could not be loaded.",
+    dfTitle: "Default values", dfHelp: "Start values apply from the next click on a spoon type, guide values and warning limits right away. Changed values are marked. Stored in this browser only.", dfStart: "Start values per spoon type", dfLimits: "Guide values and warning limits", dfShare: "Bowl share (guide)",
+    dfCa: "Crank warning above", dfMw: "Eating spoon: bowl wider than", dfMl: "Eating spoon: bowl longer than", dfMd: "Eating spoon: bowl deeper than", dfFactory: "Factory settings", dfFactoryDone: "Factory settings filled in. “Apply” saves them.", dfSaved: "Default values applied."
   },
   fr: {
     title: "Gabarit de cuillère", lede: "Choisissez le type de cuillère, ajustez les dimensions et enregistrez le gabarit en taille réelle au format PDF ou SVG.",
@@ -559,7 +613,7 @@ const I18N = {
     darkMode: "Affichage sombre",
     design: "Style", dsgA: "Sauge", dsgB: "Érable", dsgC: "Papier & Terre cuite", dsgD: "Ciel du matin",
     hide: "Masquer", show: "Afficher", view3d: "Vue 3D de la cuillère, faites glisser pour la tourner",
-    warn: "Crank au-delà de 15° : dans un bois à fil droit, le fil devient court au col et à la pointe du cuilleron. Mieux vaut une branche courbe dont la croissance suit la cassure.",
+    warn: n => `Crank au-delà de ${n}° : dans un bois à fil droit, le fil devient court au col et à la pointe du cuilleron. Mieux vaut une branche courbe dont la croissance suit la cassure.`,
     pdf: "Enregistrer en PDF", svg: "Enregistrer en SVG", copy: "Copier le code SVG",
     note: "À l'impression, choisissez « Taille réelle » ou 100 % et mesurez la barre de 50 mm. La vue de dessus montre le contour déplié, la vue de côté la courbure réelle. La ligne de cassure relie les deux vues ; le long du manche, elles sont alignées. Le fil de l'ébauche doit suivre le manche.",
     blankMin: "Ébauche minimale", drop: "Drop", paper: "Format du papier", portrait: "portrait",
@@ -593,14 +647,14 @@ const I18N = {
     specs: ["Longueur totale", "Longueur du manche", "Largeur cuilleron", "Longueur cuilleron", "Angle de crank", "Drop", "Épaisseur manche"],
     check: "50 mm · à vérifier", printAt: f => `Imprimer à 100 % sur ${f}`, units: "Cotes en mm", grain: "Fil le long du manche",
     glue: n => `Placer ici le bord de la page ${n}`, pageNo: (i, n) => `Page ${i}/${n}`, tooWide: " (trop large pour A4)",
-    blank: "Ébauche", warn1: "Crank au-delà de 15° :", warn2: "utiliser une branche courbe", bend: "Cassure", facets: "Facettes", fcOn: "Oui", fcOff: "Non", fsL: "Légères", fsA: "Octogonales", frH: "Col", frS: "Tout le manche", saw: "Trait de scie env. 10 mm",
+    blank: "Ébauche", warn1: n => `Crank au-delà de ${n}° :`, warn2: "utiliser une branche courbe", bend: "Cassure", facets: "Facettes", fcOn: "Oui", fcOff: "Non", fsL: "Légères", fsA: "Octogonales", frH: "Col", frS: "Tout le manche", saw: "Trait de scie env. 10 mm",
     caMax: x => `À cette position de cassure, ${x}° au maximum sont possibles, sinon la pointe du cuilleron se replie. Rapprochez la cassure du col.`, caMaxS: x => `Crank max. ${x}° à cette position de cassure`,
     saved: (f, x) => `${f} enregistré${x}.`, handed: "Fichier transmis.", declined: "Enregistrement annulé.",
     busy: "Une fenêtre d'enregistrement est déjà ouverte.", failed: "L'enregistrement a échoué. Veuillez réessayer.", pdfLib: "Impossible de créer le PDF – la fonction PDF est chargée depuis Internet. Rechargez avec une connexion Internet ou enregistrez en SVG.",
     noSave: "L'enregistrement n'est pas disponible dans cette vue. Vous pouvez copier le code SVG.",
     own: "forme perso", upload: "Importer une forme", remove: "Supprimer la forme", upHintBowl: "SVG ou image : contour foncé ou forme pleine sur fond clair ou transparent, pointe en haut, col en bas. La taille n'a pas d'importance, seules les proportions comptent.", upHintEnd: "SVG ou image : bout du manche en haut, jonction avec le manche en bas, la ligne peut y rester ouverte. La largeur du bas est adaptée au manche.", uploaded: c => `Forme ${c} ajoutée.`, uploadFail: "Le fichier n'a pas pu être lu comme une forme. Utilisez un seul contour foncé sur fond clair.", shapesLbl: "Formes",
     hdR: "Droitier", hdL: "Gaucher", random: "Design aléatoire", share: "Part du cuilleron", guide: "repère",
-    warnMouth: "Cuilleron de plus d'environ 45 × 65 mm : trop grand pour la bouche pour une cuillère à soupe.", warnDepth: "Cuilleron de plus de 8 mm de profondeur : la lèvre supérieure n'atteint pas le fond du creux, la cuillère se vide mal.",
+    warnMouth: (w, l) => `Cuilleron de plus d'environ ${w} × ${l} mm : trop grand pour la bouche pour une cuillère à soupe.`, warnDepth: n => `Cuilleron de plus de ${n} mm de profondeur : la lèvre supérieure n'atteint pas le fond du creux, la cuillère se vide mal.`,
     copied: "Code SVG copié.", copyFail: "Impossible de copier.",
     zoomHint: "Molette : zoomer · Glisser : déplacer · Double-clic : page entière", zoomReset: "Page entière",
     edit: "Modifier la forme", edTitle: c => `Modifier la forme · ${c}`, edSym: "Symétrique", edAsym: "Asymétrique", edUndo: "Annuler la dernière action",
@@ -611,7 +665,9 @@ const I18N = {
     edNeck: "Col", edEnd: "Bout du manche", edJoint: "Jonction", edWarnOver: "Le contour revient en arrière (surplomb). Une forme simplifiée sera appliquée.",
     edWarnWaist: "Un rétrécissement fait moins de 20 % de la plus grande largeur.", edWarnLong: "Le cuilleron est plus de 2,5 fois plus long que large.",
     edWarnWide: "Le cuilleron est plus large que 1,7 fois sa longueur.", edMin: "Au moins 4 points par moitié.", edMax: "Au plus 16 points par moitié.",
-    edSaved: c => `Forme ${c} appliquée.`, edFile: "forme", edImgFail: "Impossible de charger l'image."
+    edSaved: c => `Forme ${c} appliquée.`, edFile: "forme", edImgFail: "Impossible de charger l'image.",
+    dfTitle: "Valeurs par défaut", dfHelp: "Les valeurs de départ s'appliquent au prochain clic sur un type de cuillère, les repères et seuils d'alerte immédiatement. Les valeurs modifiées sont signalées. Enregistré uniquement dans ce navigateur.", dfStart: "Valeurs de départ par type de cuillère", dfLimits: "Repères et seuils d'alerte", dfShare: "Part du cuilleron (repère)",
+    dfCa: "Alerte crank au-delà de", dfMw: "Cuillère à soupe : cuilleron plus large que", dfMl: "Cuillère à soupe : cuilleron plus long que", dfMd: "Cuillère à soupe : cuilleron plus profond que", dfFactory: "Réglages d'usine", dfFactoryDone: "Réglages d'usine saisis. « Appliquer » les enregistre.", dfSaved: "Valeurs par défaut appliquées."
   },
   sv: {
     title: "Skedmall", lede: "Välj skedtyp, anpassa måtten och spara mallen i full storlek som PDF eller SVG.",
@@ -619,7 +675,7 @@ const I18N = {
     darkMode: "Mörkt läge",
     design: "Utseende", dsgA: "Salvia", dsgB: "Lönn", dsgC: "Papper & Terrakotta", dsgD: "Morgonhimmel",
     hide: "Dölj", show: "Visa", view3d: "3D-vy av skeden, dra för att vrida",
-    warn: "Crank över 15°: i rakvuxet virke blir fibrerna korta vid halsen och skålens spets. Använd hellre en krokvuxen gren vars växt följer knäcken.",
+    warn: n => `Crank över ${n}°: i rakvuxet virke blir fibrerna korta vid halsen och skålens spets. Använd hellre en krokvuxen gren vars växt följer knäcken.`,
     pdf: "Spara PDF", svg: "Spara SVG", copy: "Kopiera SVG-kod",
     note: "Välj ”Faktisk storlek” eller 100 % vid utskrift och mät 50 mm-stapeln. Ovanvyn visar den utvikta konturen, sidovyn den verkliga böjen. Knäcklinjen förbinder båda vyerna; längs skaftet ligger de i höjd med varandra. Ämnets fibrer ska löpa längs skaftet.",
     blankMin: "Minsta ämne", drop: "Drop", paper: "Pappersformat", portrait: "stående",
@@ -653,14 +709,14 @@ const I18N = {
     specs: ["Total längd", "Skaftlängd", "Skålbredd", "Skållängd", "Crankvinkel", "Drop", "Skafttjocklek"],
     check: "50 mm · kontrollmät", printAt: f => `Skriv ut i 100 % på ${f}`, units: "Mått i mm", grain: "Fibrer längs skaftet",
     glue: n => `Lägg kanten på sida ${n} här`, pageNo: (i, n) => `Sida ${i}/${n}`, tooWide: " (för bred för A4)",
-    blank: "Ämne", warn1: "Crank över 15°:", warn2: "använd krokvuxen gren", bend: "Knäck", facets: "Fasetter", fcOn: "På", fcOff: "Av", fsL: "Lätta", fsA: "Åttkantiga", frH: "Hals", frS: "Hela skaftet", saw: "Sågsnitt ca 10 mm",
+    blank: "Ämne", warn1: n => `Crank över ${n}°:`, warn2: "använd krokvuxen gren", bend: "Knäck", facets: "Fasetter", fcOn: "På", fcOff: "Av", fsL: "Lätta", fsA: "Åttkantiga", frH: "Hals", frS: "Hela skaftet", saw: "Sågsnitt ca 10 mm",
     caMax: x => `Vid detta knäckläge är högst ${x}° möjligt, annars viks skålens spets bakåt. Flytta knäcken närmare halsen.`, caMaxS: x => `Crank max. ${x}° vid detta knäckläge`,
     saved: (f, x) => `${f} sparad${x}.`, handed: "Filen har lämnats över.", declined: "Sparandet avbröts.",
     busy: "Ett spara-fönster är redan öppet.", failed: "Det gick inte att spara. Försök igen.", pdfLib: "PDF:en kunde inte skapas – PDF-funktionen laddas från internet. Ladda om med internetanslutning eller spara som SVG.",
     noSave: "Det går inte att spara i den här vyn. Du kan kopiera SVG-koden.",
     own: "egen form", upload: "Ladda upp egen form", remove: "Ta bort egen form", upHintBowl: "SVG eller bild: mörk kontur eller fylld form på ljus eller transparent bakgrund, spetsen uppåt, halsen nedåt. Storleken spelar ingen roll, bara proportionerna räknas.", upHintEnd: "SVG eller bild: skaftänden uppåt, anslutningen till skaftet nedåt, linjen får vara öppen där. Bredden nedtill anpassas till skaftet.", uploaded: c => `Form ${c} har lagts till.`, uploadFail: "Filen kunde inte läsas som form. Använd en enda mörk kontur på ljus bakgrund.", shapesLbl: "Former",
     hdR: "Högerhänt", hdL: "Vänsterhänt", random: "Slumpad design", share: "Skålens andel", guide: "riktvärde",
-    warnMouth: "Skålen större än ca 45 × 65 mm: för stor för munnen på en matsked.", warnDepth: "Skålen djupare än 8 mm: överläppen når inte botten av urholkningen, skeden blir svår att tömma.",
+    warnMouth: (w, l) => `Skålen större än ca ${w} × ${l} mm: för stor för munnen på en matsked.`, warnDepth: n => `Skålen djupare än ${n} mm: överläppen når inte botten av urholkningen, skeden blir svår att tömma.`,
     copied: "SVG-koden har kopierats.", copyFail: "Det gick inte att kopiera.",
     zoomHint: "Mushjul: zooma · Dra: flytta · Dubbelklick: hela arket", zoomReset: "Hela arket",
     edit: "Redigera form", edTitle: c => `Redigera form · ${c}`, edSym: "Symmetrisk", edAsym: "Asymmetrisk", edUndo: "Ångra", edReset: "Återställ till förlagan",
@@ -669,7 +725,9 @@ const I18N = {
     edCanvas: "Rityta: formens kontur, dra punkterna för att forma", edPreview: "Vy ovanifrån av hela skeden", edTip: "Spets", edNeck: "Hals", edEnd: "Skaftände",
     edJoint: "Anslutning", edWarnOver: "Konturen går bakåt (överhäng). En förenklad form används.", edWarnWaist: "En midja är smalare än 20 % av den största bredden.",
     edWarnLong: "Skålen är mer än 2,5 gånger så lång som bred.", edWarnWide: "Skålen är bredare än 1,7 gånger sin längd.", edMin: "Minst 4 punkter per halva.",
-    edMax: "Högst 16 punkter per halva.", edSaved: c => `Formen ${c} används.`, edFile: "form", edImgFail: "Bilden kunde inte laddas."
+    edMax: "Högst 16 punkter per halva.", edSaved: c => `Formen ${c} används.`, edFile: "form", edImgFail: "Bilden kunde inte laddas.",
+    dfTitle: "Standardvärden", dfHelp: "Startvärden gäller från nästa klick på en skedtyp, riktvärden och varningsgränser direkt. Ändrade värden är markerade. Sparas bara i den här webbläsaren.", dfStart: "Startvärden per skedtyp", dfLimits: "Riktvärden och varningsgränser", dfShare: "Skålens andel (riktvärde)",
+    dfCa: "Crank-varning över", dfMw: "Matsked: skål bredare än", dfMl: "Matsked: skål längre än", dfMd: "Matsked: skål djupare än", dfFactory: "Fabriksinställningar", dfFactoryDone: "Fabriksinställningar ifyllda. ”Använd” sparar dem.", dfSaved: "Standardvärden använda."
   },
   es: {
     title: "Plantilla de cuchara", lede: "Elige el tipo de cuchara, ajusta las medidas y guarda la plantilla a tamaño real en PDF o SVG.",
@@ -677,7 +735,7 @@ const I18N = {
     darkMode: "Modo oscuro",
     design: "Diseño", dsgA: "Salvia", dsgB: "Arce", dsgC: "Papel y Terracota", dsgD: "Cielo de la mañana",
     hide: "Ocultar", show: "Mostrar", view3d: "Vista 3D de la cuchara, arrastra para girarla",
-    warn: "Crank superior a 15°: en madera de fibra recta se forma fibra corta en el cuello y en la punta del cazo. Mejor usar una rama curva cuyo crecimiento siga el quiebre.",
+    warn: n => `Crank superior a ${n}°: en madera de fibra recta se forma fibra corta en el cuello y en la punta del cazo. Mejor usar una rama curva cuyo crecimiento siga el quiebre.`,
     pdf: "Guardar PDF", svg: "Guardar SVG", copy: "Copiar código SVG",
     note: "Al imprimir, elige «Tamaño real» o 100 % y mide la barra de 50 mm. La vista superior muestra el contorno desplegado; la lateral, la curvatura real. La línea de quiebre une ambas vistas; a lo largo del mango quedan a la misma altura. La fibra del taco debe ir a lo largo del mango.",
     blankMin: "Taco mínimo", drop: "Drop", paper: "Tamaño de papel", portrait: "vertical",
@@ -711,14 +769,14 @@ const I18N = {
     specs: ["Longitud total", "Longitud del mango", "Anchura del cazo", "Longitud del cazo", "Ángulo de crank", "Drop", "Grosor del mango"],
     check: "50 mm · comprobar", printAt: f => `Imprimir al 100 % en ${f}`, units: "Medidas en mm", grain: "Fibra a lo largo del mango",
     glue: n => `Colocar aquí el borde de la página ${n}`, pageNo: (i, n) => `Página ${i}/${n}`, tooWide: " (demasiado ancha para A4)",
-    blank: "Taco", warn1: "Crank superior a 15°:", warn2: "usar una rama curva", bend: "Quiebre", facets: "Facetas", fcOn: "Sí", fcOff: "No", fsL: "Ligeras", fsA: "Octogonales", frH: "Cuello", frS: "Todo el mango", saw: "Corte de sierra aprox. 10 mm",
+    blank: "Taco", warn1: n => `Crank superior a ${n}°:`, warn2: "usar una rama curva", bend: "Quiebre", facets: "Facetas", fcOn: "Sí", fcOff: "No", fsL: "Ligeras", fsA: "Octogonales", frH: "Cuello", frS: "Todo el mango", saw: "Corte de sierra aprox. 10 mm",
     caMax: x => `En esta posición del quiebre solo son posibles ${x}° como máximo; si no, la punta del cazo se dobla hacia atrás. Acerca el quiebre al cuello.`, caMaxS: x => `Crank máx. ${x}° en esta posición del quiebre`,
     saved: (f, x) => `${f} guardado${x}.`, handed: "Archivo entregado.", declined: "Guardado cancelado.",
     busy: "Ya hay una ventana de guardado abierta.", failed: "No se pudo guardar. Inténtalo de nuevo.", pdfLib: "No se pudo crear el PDF: la función PDF se carga desde internet. Recarga con conexión a internet o guarda como SVG.",
     noSave: "No se puede guardar en esta vista. Puedes copiar el código SVG.",
     own: "forma propia", upload: "Subir forma propia", remove: "Quitar forma propia", upHintBowl: "SVG o imagen: contorno oscuro o forma rellena sobre fondo claro o transparente, punta arriba, cuello abajo. El tamaño da igual, solo cuentan las proporciones.", upHintEnd: "SVG o imagen: remate del mango arriba, unión con el mango abajo; ahí la línea puede quedar abierta. La anchura inferior se ajusta al mango.", uploaded: c => `Forma ${c} añadida.`, uploadFail: "El archivo no se pudo leer como forma. Usa un único contorno oscuro sobre fondo claro.", shapesLbl: "Formas",
     hdR: "Diestro", hdL: "Zurdo", random: "Diseño aleatorio", share: "Proporción del cazo", guide: "referencia",
-    warnMouth: "Cazo mayor de unos 45 × 65 mm: demasiado grande para la boca en una cuchara de mesa.", warnDepth: "Cazo de más de 8 mm de profundidad: el labio superior no llega al fondo del hueco y cuesta vaciar la cuchara.",
+    warnMouth: (w, l) => `Cazo mayor de unos ${w} × ${l} mm: demasiado grande para la boca en una cuchara de mesa.`, warnDepth: n => `Cazo de más de ${n} mm de profundidad: el labio superior no llega al fondo del hueco y cuesta vaciar la cuchara.`,
     copied: "Código SVG copiado.", copyFail: "No se puede copiar.",
     zoomHint: "Rueda del ratón: zoom · Arrastrar: mover · Doble clic: hoja completa", zoomReset: "Hoja completa",
     edit: "Editar forma", edTitle: c => `Editar forma · ${c}`, edSym: "Simétrica", edAsym: "Asimétrica", edUndo: "Deshacer", edReset: "Volver al modelo",
@@ -728,7 +786,9 @@ const I18N = {
     edNeck: "Cuello", edEnd: "Remate del mango", edJoint: "Unión", edWarnOver: "El contorno retrocede (voladizo). Se aplicará una forma simplificada.",
     edWarnWaist: "Un estrechamiento mide menos del 20 % de la anchura máxima.", edWarnLong: "El cazo es más de 2,5 veces más largo que ancho.",
     edWarnWide: "El cazo es más ancho que 1,7 veces su longitud.", edMin: "Al menos 4 puntos por mitad.", edMax: "Como máximo 16 puntos por mitad.",
-    edSaved: c => `Forma ${c} aplicada.`, edFile: "forma", edImgFail: "No se pudo cargar la imagen."
+    edSaved: c => `Forma ${c} aplicada.`, edFile: "forma", edImgFail: "No se pudo cargar la imagen.",
+    dfTitle: "Valores predeterminados", dfHelp: "Los valores iniciales se aplican desde el próximo clic en un tipo de cuchara; las referencias y los límites de aviso, de inmediato. Los valores cambiados están marcados. Solo se guarda en este navegador.", dfStart: "Valores iniciales por tipo de cuchara", dfLimits: "Referencias y límites de aviso", dfShare: "Proporción del cazo (referencia)",
+    dfCa: "Aviso de crank por encima de", dfMw: "Cuchara de mesa: cazo más ancho que", dfMl: "Cuchara de mesa: cazo más largo que", dfMd: "Cuchara de mesa: cazo más profundo que", dfFactory: "Valores de fábrica", dfFactoryDone: "Valores de fábrica introducidos. «Aplicar» los guarda.", dfSaved: "Valores predeterminados aplicados."
   },
   it: {
     title: "Dima per cucchiai", lede: "Scegli il tipo di cucchiaio, regola le misure e salva la dima a grandezza reale in PDF o SVG.",
@@ -736,7 +796,7 @@ const I18N = {
     darkMode: "Modalità scura",
     design: "Aspetto", dsgA: "Salvia", dsgB: "Acero", dsgC: "Carta e Terracotta", dsgD: "Cielo del mattino",
     hide: "Nascondi", show: "Mostra", view3d: "Vista 3D del cucchiaio, trascina per ruotarlo",
-    warn: "Crank oltre 15°: nel legno a fibra dritta si crea fibra corta al collo e sulla punta della coppa. Meglio usare un ramo curvo la cui crescita segua la piega.",
+    warn: n => `Crank oltre ${n}°: nel legno a fibra dritta si crea fibra corta al collo e sulla punta della coppa. Meglio usare un ramo curvo la cui crescita segua la piega.`,
     pdf: "Salva PDF", svg: "Salva SVG", copy: "Copia codice SVG",
     note: "In stampa scegli «Dimensioni effettive» o 100 % e misura la barra da 50 mm. La vista dall'alto mostra il contorno sviluppato, quella laterale la curvatura reale. La linea di piega collega le due viste; lungo il manico sono alla stessa altezza. La fibra del pezzo deve correre lungo il manico.",
     blankMin: "Pezzo minimo", drop: "Drop", paper: "Formato carta", portrait: "verticale",
@@ -770,14 +830,14 @@ const I18N = {
     specs: ["Lunghezza totale", "Lunghezza manico", "Larghezza coppa", "Lunghezza coppa", "Angolo di crank", "Drop", "Spessore manico"],
     check: "50 mm · verificare", printAt: f => `Stampare al 100 % su ${f}`, units: "Misure in mm", grain: "Fibra lungo il manico",
     glue: n => `Appoggiare qui il bordo della pagina ${n}`, pageNo: (i, n) => `Pagina ${i}/${n}`, tooWide: " (troppo larga per A4)",
-    blank: "Pezzo", warn1: "Crank oltre 15°:", warn2: "usare un ramo curvo", bend: "Piega", facets: "Sfaccettature", fcOn: "Sì", fcOff: "No", fsL: "Leggere", fsA: "Ottagonali", frH: "Collo", frS: "Tutto il manico", saw: "Taglio di sega ca. 10 mm",
+    blank: "Pezzo", warn1: n => `Crank oltre ${n}°:`, warn2: "usare un ramo curvo", bend: "Piega", facets: "Sfaccettature", fcOn: "Sì", fcOff: "No", fsL: "Leggere", fsA: "Ottagonali", frH: "Collo", frS: "Tutto il manico", saw: "Taglio di sega ca. 10 mm",
     caMax: x => `In questa posizione della piega sono possibili al massimo ${x}°, altrimenti la punta della coppa si ripiega. Avvicina la piega al collo.`, caMaxS: x => `Crank max. ${x}° in questa posizione della piega`,
     saved: (f, x) => `${f} salvato${x}.`, handed: "File consegnato.", declined: "Salvataggio annullato.",
     busy: "C'è già una finestra di salvataggio aperta.", failed: "Salvataggio non riuscito. Riprova.", pdfLib: "Impossibile creare il PDF: la funzione PDF viene caricata da internet. Ricarica con una connessione internet o salva come SVG.",
     noSave: "Il salvataggio non è disponibile in questa vista. Puoi copiare il codice SVG.",
     own: "forma propria", upload: "Carica forma propria", remove: "Rimuovi forma propria", upHintBowl: "SVG o immagine: contorno scuro o forma piena su sfondo chiaro o trasparente, punta in alto, collo in basso. Le dimensioni non contano, contano solo le proporzioni.", upHintEnd: "SVG o immagine: estremità del manico in alto, attacco al manico in basso, lì la linea può restare aperta. La larghezza in basso viene adattata al manico.", uploaded: c => `Forma ${c} aggiunta.`, uploadFail: "Il file non è stato letto come forma. Usa un unico contorno scuro su sfondo chiaro.", shapesLbl: "Forme",
     hdR: "Destrorso", hdL: "Mancino", random: "Design casuale", share: "Quota della coppa", guide: "riferimento",
-    warnMouth: "Coppa più grande di circa 45 × 65 mm: troppo grande per la bocca in un cucchiaio da tavola.", warnDepth: "Coppa più profonda di 8 mm: il labbro superiore non raggiunge il fondo dell'incavo e il cucchiaio si svuota male.",
+    warnMouth: (w, l) => `Coppa più grande di circa ${w} × ${l} mm: troppo grande per la bocca in un cucchiaio da tavola.`, warnDepth: n => `Coppa più profonda di ${n} mm: il labbro superiore non raggiunge il fondo dell'incavo e il cucchiaio si svuota male.`,
     copied: "Codice SVG copiato.", copyFail: "Impossibile copiare.",
     zoomHint: "Rotella del mouse: zoom · Trascina: sposta · Doppio clic: foglio intero", zoomReset: "Foglio intero",
     edit: "Modifica forma", edTitle: c => `Modifica forma · ${c}`, edSym: "Simmetrica", edAsym: "Asimmetrica", edUndo: "Annulla", edReset: "Ripristina il modello",
@@ -788,7 +848,9 @@ const I18N = {
     edNeck: "Collo", edEnd: "Estremità del manico", edJoint: "Attacco", edWarnOver: "Il contorno torna indietro (sottosquadro). Verrà applicata una forma semplificata.",
     edWarnWaist: "Una strozzatura è più stretta del 20 % della larghezza massima.", edWarnLong: "La coppa è più di 2,5 volte lunga quanto larga.",
     edWarnWide: "La coppa è più larga di 1,7 volte la sua lunghezza.", edMin: "Almeno 4 punti per metà.", edMax: "Al massimo 16 punti per metà.",
-    edSaved: c => `Forma ${c} applicata.`, edFile: "forma", edImgFail: "Impossibile caricare l'immagine."
+    edSaved: c => `Forma ${c} applicata.`, edFile: "forma", edImgFail: "Impossibile caricare l'immagine.",
+    dfTitle: "Valori predefiniti", dfHelp: "I valori iniziali valgono dal prossimo clic su un tipo di cucchiaio, i riferimenti e i limiti di avviso subito. I valori modificati sono evidenziati. Salvato solo in questo browser.", dfStart: "Valori iniziali per tipo di cucchiaio", dfLimits: "Riferimenti e limiti di avviso", dfShare: "Quota della coppa (riferimento)",
+    dfCa: "Avviso crank oltre", dfMw: "Cucchiaio da tavola: coppa più larga di", dfMl: "Cucchiaio da tavola: coppa più lunga di", dfMd: "Cucchiaio da tavola: coppa più profonda di", dfFactory: "Impostazioni di fabbrica", dfFactoryDone: "Impostazioni di fabbrica inserite. «Applica» le salva.", dfSaved: "Valori predefiniti applicati."
   },
   nb: {
     title: "Skjemal", lede: "Velg skjetype, juster målene og lagre malen i full størrelse som PDF eller SVG.",
@@ -796,7 +858,7 @@ const I18N = {
     darkMode: "Mørk modus",
     design: "Utseende", dsgA: "Salvie", dsgB: "Lønn", dsgC: "Papir & terrakotta", dsgD: "Morgenhimmel",
     hide: "Skjul", show: "Vis", view3d: "3D-visning av skjeen, dra for å rotere",
-    warn: "Crank over 15°: I rettvokst ved blir fibrene korte ved halsen og bladets spiss. Bruk heller en krokvokst grein der veksten følger knekken.",
+    warn: n => `Crank over ${n}°: I rettvokst ved blir fibrene korte ved halsen og bladets spiss. Bruk heller en krokvokst grein der veksten følger knekken.`,
     pdf: "Lagre PDF", svg: "Lagre SVG", copy: "Kopier SVG-kode",
     note: "Velg «Faktisk størrelse» eller 100 % ved utskrift, og mål 50 mm-streken. Visningen ovenfra viser det utbrettede omrisset, sidevisningen den faktiske bøyen. Knekklinjen forbinder begge visningene; langs skaftet ligger de i samme høyde. Fibrene i emnet bør gå langs skaftet.",
     blankMin: "Minste emne", drop: "Drop", paper: "Papirformat", portrait: "stående",
@@ -830,14 +892,14 @@ const I18N = {
     specs: ["Total lengde", "Skaftlengde", "Bladbredde", "Bladlengde", "Crankvinkel", "Drop", "Skafttykkelse"],
     check: "50 mm · kontrollmål", printAt: f => `Skriv ut i 100 % på ${f}`, units: "Mål i mm", grain: "Fiber langs skaftet",
     glue: n => `Legg kanten av side ${n} her`, pageNo: (i, n) => `Side ${i}/${n}`, tooWide: " (for bred for A4)",
-    blank: "Emne", warn1: "Crank over 15°:", warn2: "bruk krokvokst grein", bend: "Knekk", facets: "Fasetter", fcOn: "På", fcOff: "Av", fsL: "Lett", fsA: "Åttekantet", frH: "Hals", frS: "Hele skaftet", saw: "Sagsnitt ca. 10 mm",
+    blank: "Emne", warn1: n => `Crank over ${n}°:`, warn2: "bruk krokvokst grein", bend: "Knekk", facets: "Fasetter", fcOn: "På", fcOff: "Av", fsL: "Lett", fsA: "Åttekantet", frH: "Hals", frS: "Hele skaftet", saw: "Sagsnitt ca. 10 mm",
     caMax: x => `Med denne knekkposisjonen er høyst ${x}° mulig, ellers bretter bladspissen seg over. Flytt knekken nærmere halsen.`, caMaxS: x => `Crank maks. ${x}° ved denne knekkposisjonen`,
     saved: (f, x) => `${f} lagret${x}.`, handed: "Filen er overlevert.", declined: "Lagringen ble avbrutt.",
     busy: "Et lagringsvindu er allerede åpent.", failed: "Lagringen mislyktes. Prøv igjen.", pdfLib: "PDF-en kunne ikke lages – PDF-funksjonen lastes fra internett. Last inn på nytt med internettforbindelse eller lagre som SVG.",
     noSave: "Lagring er ikke tilgjengelig i denne visningen. Du kan kopiere SVG-koden.",
     own: "egen form", upload: "Last opp egen form", remove: "Fjern egen form", upHintBowl: "SVG eller bilde: mørk omrisslinje eller fylt form på lys eller gjennomsiktig bakgrunn, spissen opp, halsen ned. Størrelsen spiller ingen rolle, bare proporsjonene teller.", upHintEnd: "SVG eller bilde: skaftenden opp, overgangen til skaftet ned, linjen kan være åpen der. Bredden nederst tilpasses skaftet.", uploaded: c => `Form ${c} lagt til.`, uploadFail: "Filen kunne ikke leses som form. Bruk én enkelt mørk omrisslinje på lys bakgrunn.", shapesLbl: "Former",
     hdR: "Høyrehendt", hdL: "Venstrehendt", random: "Tilfeldig design", share: "Bladandel", guide: "veiledende",
-    warnMouth: "Bladet større enn ca. 45 × 65 mm: for stort for munnen på en spiseskje.", warnDepth: "Bladet dypere enn 8 mm: overleppen når ikke bunnen av hulningen, så skjeen er vanskelig å tømme.",
+    warnMouth: (w, l) => `Bladet større enn ca. ${w} × ${l} mm: for stort for munnen på en spiseskje.`, warnDepth: n => `Bladet dypere enn ${n} mm: overleppen når ikke bunnen av hulningen, så skjeen er vanskelig å tømme.`,
     copied: "SVG-koden er kopiert.", copyFail: "Kopiering er ikke mulig.",
     zoomHint: "Musehjul: zoom · Dra: flytt · Dobbeltklikk: hele arket", zoomReset: "Hele arket",
     edit: "Rediger form", edTitle: c => `Rediger form · ${c}`, edSym: "Symmetrisk", edAsym: "Asymmetrisk", edUndo: "Angre", edReset: "Tilbakestill til forlaget",
@@ -847,7 +909,9 @@ const I18N = {
     edJoint: "Overgang", edWarnOver: "Omrisset går bakover (overheng). En forenklet form blir brukt.",
     edWarnWaist: "En innsnevring er smalere enn 20 % av den største bredden.", edWarnLong: "Bladet er mer enn 2,5 ganger så langt som det er bredt.",
     edWarnWide: "Bladet er bredere enn 1,7 ganger lengden.", edMin: "Minst 4 punkter per halvdel.", edMax: "Høyst 16 punkter per halvdel.",
-    edSaved: c => `Formen ${c} er brukt.`, edFile: "form", edImgFail: "Bildet kunne ikke lastes."
+    edSaved: c => `Formen ${c} er brukt.`, edFile: "form", edImgFail: "Bildet kunne ikke lastes.",
+    dfTitle: "Standardverdier", dfHelp: "Startverdier gjelder fra neste klikk på en skjetype, veiledende verdier og varselgrenser med en gang. Endrede verdier er merket. Lagres bare i denne nettleseren.", dfStart: "Startverdier per skjetype", dfLimits: "Veiledende verdier og varselgrenser", dfShare: "Bladandel (veiledende)",
+    dfCa: "Crank-varsel over", dfMw: "Spiseskje: blad bredere enn", dfMl: "Spiseskje: blad lengre enn", dfMd: "Spiseskje: blad dypere enn", dfFactory: "Fabrikkinnstillinger", dfFactoryDone: "Fabrikkinnstillinger fylt inn. «Bruk» lagrer dem.", dfSaved: "Standardverdier brukt."
   },
   da: {
     title: "Skeskabelon", lede: "Vælg sketype, tilpas målene og gem skabelonen i fuld størrelse som PDF eller SVG.",
@@ -855,7 +919,7 @@ const I18N = {
     darkMode: "Mørk tilstand",
     design: "Udseende", dsgA: "Salvie", dsgB: "Ahorn", dsgC: "Papir & terrakotta", dsgD: "Morgenhimmel",
     hide: "Skjul", show: "Vis", view3d: "3D-visning af skeen, træk for at dreje",
-    warn: "Crank over 15°: I ligefibret træ opstår der korte fibre ved halsen og skålens spids. Brug hellere en krum gren, hvis vækst følger knækket.",
+    warn: n => `Crank over ${n}°: I ligefibret træ opstår der korte fibre ved halsen og skålens spids. Brug hellere en krum gren, hvis vækst følger knækket.`,
     pdf: "Gem PDF", svg: "Gem SVG", copy: "Kopiér SVG-kode",
     note: "Vælg „Faktisk størrelse“ eller 100 % ved udskrivning, og mål 50 mm-bjælken efter. Visningen ovenfra viser det udfoldede omrids, sidevisningen den faktiske bøjning. Knæklinjen forbinder de to visninger; langs skaftet ligger de i samme højde. Emnets fibre skal løbe langs skaftet.",
     blankMin: "Mindste emne", drop: "Drop", paper: "Papirformat", portrait: "stående",
@@ -889,14 +953,14 @@ const I18N = {
     specs: ["Samlet længde", "Skaftlængde", "Skålbredde", "Skållængde", "Crankvinkel", "Drop", "Skafttykkelse"],
     check: "50 mm · mål efter", printAt: f => `Udskriv i 100 % på ${f}`, units: "Mål i mm", grain: "Fibre langs skaftet",
     glue: n => `Læg kanten af side ${n} her`, pageNo: (i, n) => `Side ${i}/${n}`, tooWide: " (for bred til A4)",
-    blank: "Emne", warn1: "Crank over 15°:", warn2: "brug en krum gren", bend: "Knæk", facets: "Facetter", fcOn: "Til", fcOff: "Fra", fsL: "Let", fsA: "Ottekantet", frH: "Hals", frS: "Hele skaftet", saw: "Savsnit ca. 10 mm",
+    blank: "Emne", warn1: n => `Crank over ${n}°:`, warn2: "brug en krum gren", bend: "Knæk", facets: "Facetter", fcOn: "Til", fcOff: "Fra", fsL: "Let", fsA: "Ottekantet", frH: "Hals", frS: "Hele skaftet", saw: "Savsnit ca. 10 mm",
     caMax: x => `Ved denne knækplacering er højst ${x}° muligt, ellers folder skålens spids sig over. Flyt knækket tættere på halsen.`, caMaxS: x => `Crank maks. ${x}° ved denne knækplacering`,
     saved: (f, x) => `${f} gemt${x}.`, handed: "Filen er overdraget.", declined: "Gemning annulleret.",
     busy: "Der er allerede en gem-dialog åben.", failed: "Gemningen mislykkedes. Prøv igen.", pdfLib: "PDF'en kunne ikke oprettes – PDF-funktionen hentes fra internettet. Genindlæs med internetforbindelse, eller gem som SVG.",
     noSave: "Gemning er ikke tilgængelig i denne visning. Du kan kopiere SVG-koden.",
     own: "egen form", upload: "Upload egen form", remove: "Fjern egen form", upHintBowl: "SVG eller billede: mørk omridslinje eller udfyldt form på lys eller gennemsigtig baggrund, spidsen opad, halsen nedad. Størrelsen er ligegyldig, kun proportionerne tæller.", upHintEnd: "SVG eller billede: skaftenden opad, overgangen til skaftet nedad, linjen må være åben dér. Bredden forneden tilpasses skaftet.", uploaded: c => `Form ${c} tilføjet.`, uploadFail: "Filen kunne ikke læses som form. Brug en enkelt mørk omridslinje på lys baggrund.", shapesLbl: "Former",
     hdR: "Højrehåndet", hdL: "Venstrehåndet", random: "Tilfældigt design", share: "Skålandel", guide: "vejledende",
-    warnMouth: "Skål større end ca. 45 × 65 mm: for stor til munden på en spiseske.", warnDepth: "Skål dybere end 8 mm: overlæben når ikke bunden af fordybningen, så skeen er svær at tømme.",
+    warnMouth: (w, l) => `Skål større end ca. ${w} × ${l} mm: for stor til munden på en spiseske.`, warnDepth: n => `Skål dybere end ${n} mm: overlæben når ikke bunden af fordybningen, så skeen er svær at tømme.`,
     copied: "SVG-koden er kopieret.", copyFail: "Kopiering er ikke mulig.",
     zoomHint: "Musehjul: zoom · Træk: flyt · Dobbeltklik: hele arket", zoomReset: "Hele arket",
     edit: "Rediger form", edTitle: c => `Rediger form · ${c}`, edSym: "Symmetrisk", edAsym: "Asymmetrisk", edUndo: "Fortryd", edReset: "Nulstil til forlægget",
@@ -906,7 +970,9 @@ const I18N = {
     edJoint: "Overgang", edWarnOver: "Omridset løber baglæns (overhæng). En forenklet form bliver anvendt.",
     edWarnWaist: "En indsnævring er smallere end 20 % af den største bredde.", edWarnLong: "Skålen er mere end 2,5 gange så lang som bred.",
     edWarnWide: "Skålen er bredere end 1,7 gange sin længde.", edMin: "Mindst 4 punkter pr. halvdel.", edMax: "Højst 16 punkter pr. halvdel.",
-    edSaved: c => `Formen ${c} er anvendt.`, edFile: "form", edImgFail: "Billedet kunne ikke indlæses."
+    edSaved: c => `Formen ${c} er anvendt.`, edFile: "form", edImgFail: "Billedet kunne ikke indlæses.",
+    dfTitle: "Standardværdier", dfHelp: "Startværdier gælder fra næste klik på en sketype, vejledende værdier og advarselsgrænser med det samme. Ændrede værdier er markeret. Gemmes kun i denne browser.", dfStart: "Startværdier pr. sketype", dfLimits: "Vejledende værdier og advarselsgrænser", dfShare: "Skålandel (vejledende)",
+    dfCa: "Crank-advarsel over", dfMw: "Spiseske: skål bredere end", dfMl: "Spiseske: skål længere end", dfMd: "Spiseske: skål dybere end", dfFactory: "Fabriksindstillinger", dfFactoryDone: "Fabriksindstillinger udfyldt. »Anvend« gemmer dem.", dfSaved: "Standardværdier anvendt."
   },
   pl: {
     title: "Szablon łyżki", lede: "Wybierz rodzaj łyżki, dopasuj wymiary i zapisz szablon w rzeczywistym rozmiarze jako PDF lub SVG.",
@@ -914,7 +980,7 @@ const I18N = {
     darkMode: "Tryb ciemny",
     design: "Wygląd", dsgA: "Szałwia", dsgB: "Klon", dsgC: "Papier i terakota", dsgD: "Poranne niebo",
     hide: "Ukryj", show: "Pokaż", view3d: "Widok 3D łyżki, przeciągnij, aby obrócić",
-    warn: "Crank powyżej 15°: w drewnie o prostych włóknach przy szyjce i czubku czerpaka powstają krótkie włókna. Lepiej użyć wygiętej gałęzi, której przyrost podąża za wygięciem.",
+    warn: n => `Crank powyżej ${n}°: w drewnie o prostych włóknach przy szyjce i czubku czerpaka powstają krótkie włókna. Lepiej użyć wygiętej gałęzi, której przyrost podąża za wygięciem.`,
     pdf: "Zapisz PDF", svg: "Zapisz SVG", copy: "Kopiuj kod SVG",
     note: "Przy drukowaniu wybierz „Rzeczywisty rozmiar” lub 100 % i zmierz pasek 50 mm. Widok z góry pokazuje rozwinięty obrys, widok z boku rzeczywiste wygięcie. Linia załamania łączy oba widoki; wzdłuż trzonka leżą na tej samej wysokości. Włókna półfabrykatu powinny biec wzdłuż trzonka.",
     blankMin: "Półfabrykat co najmniej", drop: "Drop", paper: "Format papieru", portrait: "pionowo",
@@ -948,14 +1014,14 @@ const I18N = {
     specs: ["Długość całkowita", "Długość trzonka", "Szerokość czerpaka", "Długość czerpaka", "Kąt cranku", "Drop", "Grubość trzonka"],
     check: "50 mm · sprawdź", printAt: f => `Drukuj w skali 100 % na ${f}`, units: "Wymiary w mm", grain: "Włókna wzdłuż trzonka",
     glue: n => `Tu przyłóż krawędź strony ${n}`, pageNo: (i, n) => `Strona ${i}/${n}`, tooWide: " (za szeroki na A4)",
-    blank: "Półfabrykat", warn1: "Crank powyżej 15°:", warn2: "użyj wygiętej gałęzi", bend: "Załamanie", facets: "Fasety", fcOn: "Wł.", fcOff: "Wył.", fsL: "Lekkie", fsA: "Ośmiokątne", frH: "Szyjka", frS: "Cały trzonek", saw: "Cięcie piłą ok. 10 mm",
+    blank: "Półfabrykat", warn1: n => `Crank powyżej ${n}°:`, warn2: "użyj wygiętej gałęzi", bend: "Załamanie", facets: "Fasety", fcOn: "Wł.", fcOff: "Wył.", fsL: "Lekkie", fsA: "Ośmiokątne", frH: "Szyjka", frS: "Cały trzonek", saw: "Cięcie piłą ok. 10 mm",
     caMax: x => `Przy tym położeniu załamania możliwe jest najwyżej ${x}°, inaczej czubek czerpaka się zawinie. Przesuń załamanie bliżej szyjki.`, caMaxS: x => `Crank maks. ${x}° przy tym położeniu załamania`,
     saved: (f, x) => `Zapisano plik ${f}${x}.`, handed: "Plik przekazany.", declined: "Zapisywanie anulowane.",
     busy: "Okno zapisywania jest już otwarte.", failed: "Zapisywanie nie powiodło się. Spróbuj ponownie.", pdfLib: "Nie udało się utworzyć pliku PDF – funkcja PDF jest ładowana z internetu. Załaduj stronę ponownie z połączeniem z internetem lub zapisz jako SVG.",
     noSave: "W tym widoku zapisywanie nie jest dostępne. Możesz skopiować kod SVG.",
     own: "własny kształt", upload: "Prześlij własny kształt", remove: "Usuń własny kształt", upHintBowl: "SVG lub obraz: ciemny obrys lub wypełniony kształt na jasnym lub przezroczystym tle, czubek u góry, szyjka u dołu. Rozmiar nie ma znaczenia, liczą się tylko proporcje.", upHintEnd: "SVG lub obraz: koniec trzonka u góry, połączenie z trzonkiem u dołu, tam linia może być otwarta. Szerokość u dołu zostanie dopasowana do trzonka.", uploaded: c => `Dodano kształt ${c}.`, uploadFail: "Nie udało się odczytać pliku jako kształtu. Użyj jednego ciemnego obrysu na jasnym tle.", shapesLbl: "Kształty",
     hdR: "Praworęczny", hdL: "Leworęczny", random: "Losowy projekt", share: "Udział czerpaka", guide: "wartość orientacyjna",
-    warnMouth: "Czerpak większy niż ok. 45 × 65 mm: za duży do ust w łyżce stołowej.", warnDepth: "Czerpak głębszy niż 8 mm: górna warga nie sięga dna wgłębienia, więc łyżkę trudno opróżnić.",
+    warnMouth: (w, l) => `Czerpak większy niż ok. ${w} × ${l} mm: za duży do ust w łyżce stołowej.`, warnDepth: n => `Czerpak głębszy niż ${n} mm: górna warga nie sięga dna wgłębienia, więc łyżkę trudno opróżnić.`,
     copied: "Skopiowano kod SVG.", copyFail: "Nie można skopiować.",
     zoomHint: "Kółko myszy: powiększenie · Przeciąganie: przesuwanie · Dwuklik: cały arkusz", zoomReset: "Cały arkusz",
     edit: "Edytuj kształt", edTitle: c => `Edytuj kształt · ${c}`, edSym: "Symetryczny", edAsym: "Asymetryczny", edUndo: "Cofnij", edReset: "Przywróć wzór",
@@ -965,7 +1031,9 @@ const I18N = {
     edEnd: "Koniec trzonka", edJoint: "Połączenie", edWarnOver: "Obrys cofa się (podcięcie). Zostanie zastosowany uproszczony kształt.",
     edWarnWaist: "Przewężenie jest węższe niż 20 % największej szerokości.", edWarnLong: "Czerpak jest ponad 2,5 raza dłuższy niż szerszy.",
     edWarnWide: "Czerpak jest szerszy niż 1,7 jego długości.", edMin: "Co najmniej 4 punkty na połowę.", edMax: "Najwyżej 16 punktów na połowę.",
-    edSaved: c => `Zastosowano kształt ${c}.`, edFile: "ksztalt", edImgFail: "Nie udało się wczytać obrazu."
+    edSaved: c => `Zastosowano kształt ${c}.`, edFile: "ksztalt", edImgFail: "Nie udało się wczytać obrazu.",
+    dfTitle: "Wartości domyślne", dfHelp: "Wartości początkowe obowiązują od następnego kliknięcia rodzaju łyżki, wartości orientacyjne i progi ostrzeżeń od razu. Zmienione wartości są oznaczone. Zapisywane tylko w tej przeglądarce.", dfStart: "Wartości początkowe dla rodzaju łyżki", dfLimits: "Wartości orientacyjne i progi ostrzeżeń", dfShare: "Udział czerpaka (orientacyjnie)",
+    dfCa: "Ostrzeżenie o crank powyżej", dfMw: "Łyżka stołowa: czerpak szerszy niż", dfMl: "Łyżka stołowa: czerpak dłuższy niż", dfMd: "Łyżka stołowa: czerpak głębszy niż", dfFactory: "Ustawienia fabryczne", dfFactoryDone: "Wpisano ustawienia fabryczne. „Zastosuj” je zapisuje.", dfSaved: "Zastosowano wartości domyślne."
   }
 };
 let lang = "de";
@@ -985,8 +1053,10 @@ const PRESETS = {
   tee:   { L: 135, bl: 40, bw: 28, bd: 6,  p: 44, nw: 7,  ew: 17, th: 7,  ca: 15, kp: 30, kr: 15, hc: -3, bs: "ei",       he: "rund", fc: "an", fs: "leicht", fr: "hals", pp: "a3", hd: "r", wt: 2.5, te: 50, nv: 25, wp: 78, fe: 0, fv: 1.2, kh: 0 },
   kelle: { L: 330, bl: 95, bw: 85, bd: 40, p: 50, nw: 18, ew: 28, th: 16, ca: 60, kp: 5,  kr: 35, hc: 6,  bs: "rund",     he: "gerade", fc: "an", fs: "leicht", fr: "hals", pp: "a3", hd: "r", wt: 2.5, te: 50, nv: 25, wp: 78, fe: 0, fv: 1.2, kh: 0 }
 };
-// Richtwerte für den Laffenanteil (Laffenlänge / Gesamtlänge) je Löffelart
-const SHARE = { ess: "≈ 33 %", koch: "≈ 25 %", tee: "≈ 30 %", kelle: "≤ 25 %" };
+// Richtwerte für den Laffenanteil (Laffenlänge / Gesamtlänge) in % je Löffelart
+const SHARE = { ess: ["≈", 33], koch: ["≈", 25], tee: ["≈", 30], kelle: ["≤", 25] };
+// Warngrenzen: Crank über ca (°, auch auf der Schablone); Esslöffel-Laffe breiter als mw, länger als ml, tiefer als md (mm)
+const LIMITS = { ca: 15, mw: 45, ml: 65, md: 8 };
 const GROUPS = [
   { id: "gesamt", fields: [
     { k: "L", min: 100, max: 350 },
@@ -1030,6 +1100,29 @@ const GROUPS = [
 
 // Crank-Bereich (°) für das Zufallsdesign je Löffelart
 const CA_RANGE = { ess: [12, 20], koch: [0, 12], tee: [10, 20], kelle: [45, 75] };
+
+/* ---------- Eigene Standardwerte ---------- */
+// Werkseinstellung = die Werte oben. Eigene Standardwerte (Dialog „Standardwerte“, defaults.js) liegen als Abweichungen
+// davon im Browser („loeffel-defaults“) und werden beim Laden in PRESETS, SHARE und LIMITS übernommen.
+const FACTORY = JSON.parse(JSON.stringify({ PRESETS, SHARE, LIMITS }));
+const NUM_FIELDS = GROUPS.flatMap(g => g.fields).filter(fd => fd.min !== undefined);
+const SHARE_RANGE = [10, 60];
+const LIMIT_RANGE = { ca: [0, 90], mw: [18, 110], ml: [25, 130], md: [2, 45] };
+// Zahl auf Bereich und Schrittweite bringen; ungültig = null
+const fitNum = (v, min, max, step = 1) => typeof v !== "number" || !isFinite(v) ? null : Number((Math.round(Math.min(max, Math.max(min, v)) / step) * step).toFixed(2));
+// d = { P: { ess: { L: … } }, share: { ess: 33 }, lim: { ca: 15 } }; fehlende oder ungültige Werte bleiben auf Werkseinstellung
+function applyDefaults(d) {
+  d = d || {};
+  for (const t in PRESETS) {
+    const o = (d.P && d.P[t]) || {};
+    Object.assign(PRESETS[t], FACTORY.PRESETS[t]);
+    NUM_FIELDS.forEach(fd => { const v = fitNum(o[fd.k], fd.min, fd.max, fd.step); if (v !== null) PRESETS[t][fd.k] = v; });
+    const v = fitNum(d.share && d.share[t], ...SHARE_RANGE);
+    SHARE[t][1] = v === null ? FACTORY.SHARE[t][1] : v;
+  }
+  for (const k in LIMITS) { const v = fitNum(d.lim && d.lim[k], ...LIMIT_RANGE[k]); LIMITS[k] = v === null ? FACTORY.LIMITS[k] : v; }
+}
+try { applyDefaults(JSON.parse(localStorage.getItem("loeffel-defaults") || "null")); } catch (e) {}
 /* ---------- Formen ---------- */
 /* Laffenformen 1–34 aus „Bowldesign.pdf“, 35–42 aus dem Formenblatt: halbe Breite (links/rechts bzw. beidseitig) in 101 Schritten von der Spitze zum Hals, Gesamtbreite = 1000.
    Lücken in den Nummern: sehr ähnliche Formen sind zusammengefasst (BOWL_MERGED); Nummern werden nie wiederverwendet. */
@@ -1263,7 +1356,7 @@ function buildScene(P, name) {
   const S = TS("specs"), cw = [34, 20, 30, 22], tw = 106, rh = 4.6, trh = 7.4;
   const rows = [[S[0], L, S[4], caAct + "°"], [S[1], Math.round(L - bl), S[5], drop], [S[3], Math.round(bl), S[6], th], [S[2], bw, TS("shapesLbl"), `${bowlCode(P.bs)} · ${endCode(P.he)}`]];
   const notes = [];
-  if (P.ca > 15) notes.push(`${TS("warn1")} ${TS("warn2")}`);
+  if (P.ca > LIMITS.ca) notes.push(`${TS("warn1")(LIMITS.ca)} ${TS("warn2")}`);
   if (caMax !== null) notes.push(TS("caMaxS")(caMax));
   const tx0 = W - m - tw, tx1 = W - m, tyB = H - 10, tyT = tyB - trh - (rows.length + 1 + notes.length) * rh;
   const ca = tx0 + cw[0], cb = ca + cw[1], cc = cb + cw[2], yD = tyT + trh, yR = yD + rows.length * rh, yN = yR + rh;
@@ -1669,12 +1762,12 @@ function update() {
     `<div><dt>${T("blankMin")}</dt><dd>${b.l} × ${b.w} × ${b.h} mm</dd></div>` +
     `<div><dt>${T("drop")}</dt><dd>${scene.drop} mm</dd></div>` +
     `<div><dt>${T("paper")}</dt><dd>${scene.page.label}</dd></div>` +
-    `<div><dt>${T("share")}</dt><dd>${Math.round(Math.min(state.P.bl, state.P.L * 0.6) / state.P.L * 100)} % · ${T("guide")} ${SHARE[state.type]}</dd></div>`;
-  $("warn").hidden = state.P.ca <= 15;
-  // Mundgröße beim Esslöffel: Laffe höchstens ca. 45 × 65 mm und 8 mm tief
+    `<div><dt>${T("share")}</dt><dd>${Math.round(Math.min(state.P.bl, state.P.L * 0.6) / state.P.L * 100)} % · ${T("guide")} ${SHARE[state.type][0]} ${SHARE[state.type][1]} %</dd></div>`;
+  $("warn").hidden = state.P.ca <= LIMITS.ca; $("warn").textContent = T("warn")(LIMITS.ca);
+  // Mundgröße beim Esslöffel: Laffe höchstens ca. 45 × 65 mm und 8 mm tief (Grenzen in LIMITS)
   const ess = state.type === "ess";
-  $("warnMouth").hidden = !(ess && (state.P.bw > 45 || Math.min(state.P.bl, state.P.L * 0.6) > 65));
-  $("warnDepth").hidden = !(ess && state.P.bd > 8);
+  $("warnMouth").hidden = !(ess && (state.P.bw > LIMITS.mw || Math.min(state.P.bl, state.P.L * 0.6) > LIMITS.ml)); $("warnMouth").textContent = T("warnMouth")(LIMITS.mw, LIMITS.ml);
+  $("warnDepth").hidden = !(ess && state.P.bd > LIMITS.md); $("warnDepth").textContent = T("warnDepth")(LIMITS.md);
   $("warnMax").hidden = scene.caMax === null; $("warnMax").textContent = scene.caMax === null ? "" : T("caMax")(scene.caMax);
   try { localStorage.setItem("loeffel-state", JSON.stringify(state)); } catch (e) {}
 }
@@ -1896,6 +1989,7 @@ function applyLang() {
   document.querySelectorAll("[data-i]").forEach(el => { el.textContent = T(el.dataset.i); });
   document.querySelectorAll("[data-ia]").forEach(el => el.setAttribute("aria-label", T(el.dataset.ia)));
   $("themeBtn").title = T("darkMode");
+  $("dfBtn").title = T("dfTitle");
   $("sheet").title = T("zoomHint");
   $("langSel").value = lang;
   if (V3.mesh) $("v3dToggle").textContent = V3.on ? T("hide") : T("show");
@@ -2286,6 +2380,76 @@ async function edExport() {
 $("edExport").addEventListener("click", edExport);
 downloadsP.then(dl => { if (!dl && inClaude) $("edExport").hidden = true; });
 window.addEventListener("resize", () => { if (ED.open) { edDraw(); edPreviewSoon(); } });
+/* ---------- Standardwerte (Dialog #df) ---------- */
+// Startwerte je Löffelart, Richtwert Laffenanteil und Warngrenzen. Gespeichert werden nur die Abweichungen von der
+// Werkseinstellung (FACTORY, presets.js). Startwerte gelten ab dem nächsten Klick auf eine Löffelart, der Entwurf bleibt.
+const DF_LIM = [["ca", "°", "dfCa"], ["mw", "mm", "dfMw"], ["ml", "mm", "dfMl"], ["md", "mm", "dfMd"]];
+// Eingabefeld; data-df = Bereich (P, share, lim), data-t = Löffelart, data-k = Wert
+function dfInput(df, t, k, min, max, step, val) {
+  return `<input type="number" inputmode="decimal" data-df="${df}" data-t="${t}" data-k="${k}" min="${min}" max="${max}" step="${step}" value="${val}" aria-label="${k}">`;
+}
+const dfFactoryVal = el => el.dataset.df === "P" ? FACTORY.PRESETS[el.dataset.t][el.dataset.k] : el.dataset.df === "share" ? FACTORY.SHARE[el.dataset.t][1] : FACTORY.LIMITS[el.dataset.k];
+function dfMark() {
+  $("dfBody").querySelectorAll("input").forEach(el => el.classList.toggle("chg", el.value !== "" && Number(el.value) !== dfFactoryVal(el)));
+}
+function dfRender() {
+  const types = Object.keys(PRESETS), unit = fd => fd.unit === "" ? "" : fd.unit || "mm";
+  const head = `<thead><tr><th></th>${types.map(t => `<th scope="col">${T("types")[t]}</th>`).join("")}</tr></thead>`;
+  const sub = s => `<tr class="df-sub"><th colspan="${types.length + 1}" scope="colgroup">${s}</th></tr>`;
+  let rows = "";
+  GROUPS.forEach(g => {
+    const gn = T("groups")[g.id];
+    if (!g.fields[0].sub) rows += sub(gn);
+    g.fields.forEach(fd => {
+      if (fd.fold) { rows += sub(`${gn} · ${T(fd.fold)}`); return; }
+      if (fd.sub) { rows += sub(`${gn} · ${T("groups")[fd.sub] || T(fd.sub)}`); return; }
+      if (fd.min === undefined) return;
+      rows += `<tr><th scope="row">${T("fields")[fd.k][0]} <small>${unit(fd)}</small></th>` +
+        types.map(t => `<td>${dfInput("P", t, fd.k, fd.min, fd.max, fd.step || 1, PRESETS[t][fd.k])}</td>`).join("") + "</tr>";
+    });
+  });
+  $("dfBody").innerHTML = `<p class="hint">${T("dfHelp")}</p>
+    <h3>${T("dfStart")}</h3><table class="df-tab">${head}<tbody>${rows}</tbody></table>
+    <h3>${T("dfLimits")}</h3><table class="df-tab">${head}<tbody>
+      <tr><th scope="row">${T("dfShare")} <small>%</small></th>${types.map(t => `<td>${dfInput("share", t, "share", ...SHARE_RANGE, 1, SHARE[t][1])}</td>`).join("")}</tr>
+      ${DF_LIM.map(([k, u, lbl]) => `<tr><th scope="row">${T(lbl)} <small>${u}</small></th><td>${dfInput("lim", "", k, ...LIMIT_RANGE[k], 1, LIMITS[k])}</td></tr>`).join("")}
+    </tbody></table>`;
+  // Beschriftung der Felder für Bildschirmleser: Zeile · Spalte
+  $("dfBody").querySelectorAll("tbody tr:not(.df-sub)").forEach(tr => tr.querySelectorAll("input").forEach((el, i) => {
+    el.setAttribute("aria-label", tr.querySelector("th").textContent.trim() + (el.dataset.t ? " · " + T("types")[el.dataset.t] : ""));
+  }));
+  dfMark();
+}
+// Abweichungen von der Werkseinstellung aus den Feldern lesen; leere oder ungültige Felder = Werkseinstellung
+function dfRead() {
+  const d = { P: {}, share: {}, lim: {} };
+  $("dfBody").querySelectorAll("input").forEach(el => {
+    const { df, t, k } = el.dataset, f = dfFactoryVal(el);
+    const fd = df === "P" && NUM_FIELDS.find(x => x.k === k);
+    const r = fd ? [fd.min, fd.max, fd.step] : df === "share" ? SHARE_RANGE : LIMIT_RANGE[k];
+    const v = el.value === "" ? null : fitNum(Number(el.value), ...r);
+    if (v === null || v === f) return;
+    if (df === "P") (d.P[t] = d.P[t] || {})[k] = v; else if (df === "share") d.share[t] = v; else d.lim[k] = v;
+  });
+  return d;
+}
+function dfApply() {
+  const d = dfRead();
+  applyDefaults(d);
+  const empty = !Object.keys(d.P).length && !Object.keys(d.share).length && !Object.keys(d.lim).length;
+  try { if (empty) localStorage.removeItem("loeffel-defaults"); else localStorage.setItem("loeffel-defaults", JSON.stringify(d)); } catch (e) {}
+  $("df").close();
+  renderTypes(); update();
+  status(T("dfSaved"));
+}
+$("dfBtn").addEventListener("click", () => { dfRender(); $("dfStatus").textContent = ""; $("df").showModal(); });
+$("dfBody").addEventListener("input", dfMark);
+$("dfFactory").addEventListener("click", () => {
+  $("dfBody").querySelectorAll("input").forEach(el => { el.value = dfFactoryVal(el); });
+  dfMark(); $("dfStatus").textContent = T("dfFactoryDone");
+});
+$("dfCancel").addEventListener("click", () => $("df").close());
+$("dfApply").addEventListener("click", dfApply);
 </script>
 </body>
 </html>
