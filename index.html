@@ -46,6 +46,7 @@ header { display: flex; flex-wrap: wrap; align-items: center; justify-content: s
 .brandcol { display: grid; gap: 2px; min-width: 0; }
 .brand { display: flex; align-items: baseline; gap: 8px; }
 .ver { font: 500 12px var(--font-mono); color: var(--muted); }
+.draft { font: 600 11px var(--font-mono); color: var(--fg); background: var(--tint); border: 1px solid var(--accent); border-radius: 999px; padding: 1px 8px; white-space: nowrap; cursor: help; }
 h1 { font-family: var(--font-display); font-weight: 700; font-size: 34px; line-height: 1.1; letter-spacing: -.01em; margin: 0; text-wrap: balance; }
 .lede { color: var(--muted); margin: 0; max-width: 60ch; }
 .hbar { display: flex; align-items: center; gap: 8px; position: relative; }
@@ -393,7 +394,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
 <div class="wrap">
   <header>
     <div class="brandcol">
-      <div class="brand"><h1 data-i="title">Löffelschablone</h1><span class="ver" id="ver">v30</span></div>
+      <div class="brand"><h1 data-i="title">Löffelschablone</h1><span class="ver" id="ver">v31</span><span class="draft" id="draft" data-i="draft" data-ia="draftHint">Entwurf</span></div>
       <p class="lede" data-i="lede">Löffelart wählen, Maße anpassen, Schablone in Originalgröße als PDF oder SVG speichern.</p>
     </div>
     <div class="hbar">
@@ -508,7 +509,7 @@ const I18N = {
   de: {
     title: "Löffelschablone", lede: "Löffelart wählen, Maße anpassen, Schablone in Originalgröße als PDF oder SVG speichern.",
     settings: "Einstellungen", spoonType: "Löffelart", preview: "Vorschau der Schablone", lang: "Sprache", langName: "Deutsch",
-    darkMode: "Dunkle Darstellung", tips: "Drucktipps",
+    darkMode: "Dunkle Darstellung", tips: "Drucktipps", draft: "Entwurf", draftHint: "Entwurf: Nutzung ohne Gewähr, Maße und Funktionen können sich noch ändern.",
     design: "Design", dsgA: "Salbei", dsgB: "Ahorn", dsgC: "Papier & Terrakotta", dsgD: "Morgenhimmel",
     hide: "Ausblenden", show: "Einblenden", view3d: "3D-Ansicht des Löffels, zum Drehen ziehen",
     warn: n => `Crank über ${n}°: Bei geradfaserigem Holz entsteht an Hals und Laffenspitze Kurzfaser. Besser einen gebogenen Ast verwenden, dessen Wuchs der Kröpfung folgt.`,
@@ -570,7 +571,7 @@ const I18N = {
   nl: {
     title: "Lepelsjabloon", lede: "Kies het type lepel, pas de maten aan en sla het sjabloon op ware grootte op als PDF of SVG.",
     settings: "Instellingen", spoonType: "Type lepel", preview: "Voorbeeld van het sjabloon", lang: "Taal", langName: "Nederlands",
-    darkMode: "Donkere weergave", tips: "Printtips",
+    darkMode: "Donkere weergave", tips: "Printtips", draft: "Concept", draftHint: "Concept: gebruik op eigen risico, maten en functies kunnen nog veranderen.",
     design: "Ontwerp", dsgA: "Salie", dsgB: "Esdoorn", dsgC: "Papier & Terracotta", dsgD: "Ochtendhemel",
     hide: "Verbergen", show: "Tonen", view3d: "3D-weergave van de lepel, sleep om te draaien",
     warn: n => `Crank boven ${n}°: bij recht gegroeid hout ontstaat bij de hals en de punt van de kom korte vezel. Gebruik liever een gebogen tak waarvan de groei de knik volgt.`,
@@ -632,7 +633,7 @@ const I18N = {
   en: {
     title: "Spoon Template", lede: "Choose a spoon type, adjust the measurements and save the template at full size as PDF or SVG.",
     settings: "Settings", spoonType: "Spoon type", preview: "Template preview", lang: "Language", langName: "English",
-    darkMode: "Dark mode", tips: "Printing tips",
+    darkMode: "Dark mode", tips: "Printing tips", draft: "Draft", draftHint: "Draft: use at your own risk, dimensions and features may still change.",
     design: "Design", dsgA: "Sage", dsgB: "Maple", dsgC: "Paper & Terracotta", dsgD: "Morning sky",
     hide: "Hide", show: "Show", view3d: "3D view of the spoon, drag to rotate",
     warn: n => `Crank above ${n}°: in straight-grained wood this creates short grain at the neck and the bowl tip. Better use a bent branch whose growth follows the crank.`,
@@ -693,7 +694,7 @@ const I18N = {
   fr: {
     title: "Gabarit de cuillère", lede: "Choisissez le type de cuillère, ajustez les dimensions et enregistrez le gabarit en taille réelle au format PDF ou SVG.",
     settings: "Réglages", spoonType: "Type de cuillère", preview: "Aperçu du gabarit", lang: "Langue", langName: "Français",
-    darkMode: "Affichage sombre", tips: "Conseils d'impression",
+    darkMode: "Affichage sombre", tips: "Conseils d'impression", draft: "Brouillon", draftHint: "Brouillon : utilisation sans garantie, les dimensions et les fonctions peuvent encore changer.",
     design: "Style", dsgA: "Sauge", dsgB: "Érable", dsgC: "Papier & Terre cuite", dsgD: "Ciel du matin",
     hide: "Masquer", show: "Afficher", view3d: "Vue 3D de la cuillère, faites glisser pour la tourner",
     warn: n => `Crank au-delà de ${n}° : dans un bois à fil droit, le fil devient court au col et à la pointe du cuilleron. Mieux vaut une branche courbe dont la croissance suit la cassure.`,
@@ -755,7 +756,7 @@ const I18N = {
   sv: {
     title: "Skedmall", lede: "Välj skedtyp, anpassa måtten och spara mallen i full storlek som PDF eller SVG.",
     settings: "Inställningar", spoonType: "Skedtyp", preview: "Förhandsvisning av mallen", lang: "Språk", langName: "Svenska",
-    darkMode: "Mörkt läge", tips: "Utskriftstips",
+    darkMode: "Mörkt läge", tips: "Utskriftstips", draft: "Utkast", draftHint: "Utkast: användning på egen risk, mått och funktioner kan fortfarande ändras.",
     design: "Utseende", dsgA: "Salvia", dsgB: "Lönn", dsgC: "Papper & Terrakotta", dsgD: "Morgonhimmel",
     hide: "Dölj", show: "Visa", view3d: "3D-vy av skeden, dra för att vrida",
     warn: n => `Crank över ${n}°: i rakvuxet virke blir fibrerna korta vid halsen och skålens spets. Använd hellre en krokvuxen gren vars växt följer knäcken.`,
@@ -815,7 +816,7 @@ const I18N = {
   es: {
     title: "Plantilla de cuchara", lede: "Elige el tipo de cuchara, ajusta las medidas y guarda la plantilla a tamaño real en PDF o SVG.",
     settings: "Ajustes", spoonType: "Tipo de cuchara", preview: "Vista previa de la plantilla", lang: "Idioma", langName: "Español",
-    darkMode: "Modo oscuro", tips: "Consejos de impresión",
+    darkMode: "Modo oscuro", tips: "Consejos de impresión", draft: "Borrador", draftHint: "Borrador: uso sin garantía, las medidas y las funciones aún pueden cambiar.",
     design: "Diseño", dsgA: "Salvia", dsgB: "Arce", dsgC: "Papel y Terracota", dsgD: "Cielo de la mañana",
     hide: "Ocultar", show: "Mostrar", view3d: "Vista 3D de la cuchara, arrastra para girarla",
     warn: n => `Crank superior a ${n}°: en madera de fibra recta se forma fibra corta en el cuello y en la punta del cazo. Mejor usar una rama curva cuyo crecimiento siga el quiebre.`,
@@ -876,7 +877,7 @@ const I18N = {
   it: {
     title: "Dima per cucchiai", lede: "Scegli il tipo di cucchiaio, regola le misure e salva la dima a grandezza reale in PDF o SVG.",
     settings: "Impostazioni", spoonType: "Tipo di cucchiaio", preview: "Anteprima della dima", lang: "Lingua", langName: "Italiano",
-    darkMode: "Modalità scura", tips: "Consigli di stampa",
+    darkMode: "Modalità scura", tips: "Consigli di stampa", draft: "Bozza", draftHint: "Bozza: uso senza garanzia, misure e funzioni possono ancora cambiare.",
     design: "Aspetto", dsgA: "Salvia", dsgB: "Acero", dsgC: "Carta e Terracotta", dsgD: "Cielo del mattino",
     hide: "Nascondi", show: "Mostra", view3d: "Vista 3D del cucchiaio, trascina per ruotarlo",
     warn: n => `Crank oltre ${n}°: nel legno a fibra dritta si crea fibra corta al collo e sulla punta della coppa. Meglio usare un ramo curvo la cui crescita segua la piega.`,
@@ -938,7 +939,7 @@ const I18N = {
   nb: {
     title: "Skjemal", lede: "Velg skjetype, juster målene og lagre malen i full størrelse som PDF eller SVG.",
     settings: "Innstillinger", spoonType: "Skjetype", preview: "Forhåndsvisning av malen", lang: "Språk", langName: "Norsk",
-    darkMode: "Mørk modus", tips: "Utskriftstips",
+    darkMode: "Mørk modus", tips: "Utskriftstips", draft: "Utkast", draftHint: "Utkast: bruk på eget ansvar, mål og funksjoner kan fortsatt endres.",
     design: "Utseende", dsgA: "Salvie", dsgB: "Lønn", dsgC: "Papir & terrakotta", dsgD: "Morgenhimmel",
     hide: "Skjul", show: "Vis", view3d: "3D-visning av skjeen, dra for å rotere",
     warn: n => `Crank over ${n}°: I rettvokst ved blir fibrene korte ved halsen og bladets spiss. Bruk heller en krokvokst grein der veksten følger knekken.`,
@@ -999,7 +1000,7 @@ const I18N = {
   da: {
     title: "Skeskabelon", lede: "Vælg sketype, tilpas målene og gem skabelonen i fuld størrelse som PDF eller SVG.",
     settings: "Indstillinger", spoonType: "Sketype", preview: "Forhåndsvisning af skabelonen", lang: "Sprog", langName: "Dansk",
-    darkMode: "Mørk tilstand", tips: "Udskrivningstips",
+    darkMode: "Mørk tilstand", tips: "Udskrivningstips", draft: "Udkast", draftHint: "Udkast: brug på eget ansvar, mål og funktioner kan stadig ændre sig.",
     design: "Udseende", dsgA: "Salvie", dsgB: "Ahorn", dsgC: "Papir & terrakotta", dsgD: "Morgenhimmel",
     hide: "Skjul", show: "Vis", view3d: "3D-visning af skeen, træk for at dreje",
     warn: n => `Crank over ${n}°: I ligefibret træ opstår der korte fibre ved halsen og skålens spids. Brug hellere en krum gren, hvis vækst følger knækket.`,
@@ -1060,7 +1061,7 @@ const I18N = {
   pl: {
     title: "Szablon łyżki", lede: "Wybierz rodzaj łyżki, dopasuj wymiary i zapisz szablon w rzeczywistym rozmiarze jako PDF lub SVG.",
     settings: "Ustawienia", spoonType: "Rodzaj łyżki", preview: "Podgląd szablonu", lang: "Język", langName: "Polski",
-    darkMode: "Tryb ciemny", tips: "Wskazówki drukowania",
+    darkMode: "Tryb ciemny", tips: "Wskazówki drukowania", draft: "Wersja robocza", draftHint: "Wersja robocza: użycie bez gwarancji, wymiary i funkcje mogą się jeszcze zmienić.",
     design: "Wygląd", dsgA: "Szałwia", dsgB: "Klon", dsgC: "Papier i terakota", dsgD: "Poranne niebo",
     hide: "Ukryj", show: "Pokaż", view3d: "Widok 3D łyżki, przeciągnij, aby obrócić",
     warn: n => `Crank powyżej ${n}°: w drewnie o prostych włóknach przy szyjce i czubku czerpaka powstają krótkie włókna. Lepiej użyć wygiętej gałęzi, której przyrost podąża za wygięciem.`,
@@ -2092,6 +2093,7 @@ function applyLang() {
   document.querySelectorAll("[data-i]").forEach(el => { el.textContent = T(el.dataset.i); });
   document.querySelectorAll("[data-ia]").forEach(el => el.setAttribute("aria-label", T(el.dataset.ia)));
   $("dfBtn").title = T("dfTitle");
+  if ($("draft")) $("draft").title = T("draftHint");
   $("sheet").title = T("zoomHint");
   $("langSel").value = lang;
   if (V3.mesh) $("v3dToggle").textContent = V3.on ? T("hide") : T("show");
