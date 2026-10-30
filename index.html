@@ -119,9 +119,8 @@ select.ctl { appearance: none; padding-right: 30px; background-repeat: no-repeat
 input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
 
 /* Galerie: gewählte Form mit Kennung und Klapper „Formen“; offen darunter Raster, Hochladen, Hinweis */
-.flabel-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-.edit { border: 0; background: transparent; color: var(--accent); font: 600 13px var(--font-body); cursor: pointer; padding: 0; white-space: nowrap; }
-.edit:hover { text-decoration: underline; }
+.flabel-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.flabel-row .edit { flex: none; }
 .galrow { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 10px; padding: 6px 6px 6px 8px; margin-top: 4px; }
 .bigshape { flex: none; color: var(--fg); }
 .bigshape svg { display: block; width: 44px; height: 38px; }
@@ -149,6 +148,15 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
 .v3d-head { display: flex; justify-content: space-between; align-items: center; padding: 5px 6px 5px 10px; color: var(--ov-fg); font: 600 11px var(--font-body); letter-spacing: .09em; }
 .v3d-head button { font: 500 11px var(--font-body); color: var(--ov-fg); background: transparent; border: 1px solid var(--ov-line); border-radius: 6px; padding: 2px 8px; cursor: pointer; }
 .v3d-head button:focus-visible { outline-offset: 1px; }
+.v3d-btns { display: flex; gap: 4px; }
+.v3d-head .v3d-swap { display: inline-flex; align-items: center; padding: 2px 6px; }
+.v3d-swap svg.i { width: 14px; height: 14px; }
+.v3d-swap[aria-pressed="true"] { background: var(--ov-line); }
+/* Ausblenden: im kleinen 3D-Fenster als Augensymbol, damit drei Knöpfe in den Kopf passen; groß (getauscht) als Text */
+#v3dToggle svg.i { display: none; width: 14px; height: 14px; }
+.mat:not(.swap) #v3dToggle { display: inline-flex; align-items: center; padding: 2px 6px; }
+.mat:not(.swap) #v3dToggle svg.i { display: block; }
+.mat:not(.swap) #v3dToggle span { display: none; }
 #c3d { display: block; width: 100%; aspect-ratio: 1; cursor: grab; touch-action: none; }
 #c3d:active { cursor: grabbing; }
 .sheet { width: min(100%, 560px); background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25), 0 8px 24px rgba(0,0,0,.25); }
@@ -198,6 +206,15 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
   .sheet { --s: min(100cqw, 560px, calc((100vh - 330px) / 1.415)); width: var(--s); justify-self: start; margin-left: max(0px, min((100cqw - var(--s)) / 2, 100cqw - var(--s) - var(--v3w) - 24px + var(--mp))); }
   .sheet.tall { --s: min(100cqw, 560px, calc((100vh - 330px) / 2.87)); }
 }
+/* Ansichten getauscht (.mat.swap, Knopf im Kopf der 3D-Ansicht): 3D groß, die Zeichnung klein oben rechts unter dem Kopf */
+@media (min-width: 761px) {
+  .mat.swap { --v3w: clamp(150px, 12vw, 200px); }
+  .mat.swap .v3d { position: static; z-index: auto; width: min(100cqw, 560px, calc(100vh - 300px)); }
+  .mat.swap #c3d { aspect-ratio: 1 / 1.2; }
+  .mat.swap .sheet { position: absolute; z-index: 20; top: calc(var(--mp) + 40px); right: calc(var(--mp) + 8px); margin: 0; width: var(--v3w); }
+  .mat.swap .sheet.tall { width: calc(var(--v3w) / 2); }
+  .mat.swap .zbadge { top: calc(var(--mp) + 40px); left: calc(var(--mp) + 8px); }
+}
 @media (min-width: 761px) and (max-width: 960px) { .app { grid-template-columns: 290px minmax(0, 1fr); } }
 /* ---------- Breite Fenster: Vorschau füllt die Fensterhöhe, rechts Angaben-Karte, Warnungen, Drucktipps ---------- */
 @media (min-width: 1100px) {
@@ -206,6 +223,8 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
   .mat { container-type: size; min-height: 0; --mp: 12px; align-content: center; }
   .sheet { --s: min(100cqw, 100cqh / 1.415); }
   .sheet.tall { --s: min(100cqw, 100cqh / 2.867); }
+  .mat.swap .v3d { display: flex; flex-direction: column; width: 100cqw; height: 100cqh; }
+  .mat.swap #c3d { flex: 1 1 0; height: 0; min-height: 0; aspect-ratio: auto; }
   /* reicht die Höhe nicht, scrollt die Spalte */
   .side { align-self: stretch; overflow-y: auto; }
 }
@@ -226,6 +245,16 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
   .sheet { width: auto; height: min(36vh, 320px); min-width: 0; max-width: calc(100vw - 56px - min(32vw, 120px)); }
   .sheet svg { height: 100%; width: auto; max-width: 100%; }
   .v3d { position: static; flex: 0 0 auto; width: min(32vw, 120px); }
+  /* kleine 3D-Ansicht (120 px): ohne Beschriftung „3D“, damit alle drei Knöpfe in den Kopf passen */
+  .mat:not(.swap) .v3d-head { justify-content: flex-end; padding: 5px 4px; }
+  .mat:not(.swap) .v3d-head > span:first-child { display: none; }
+  .v3d-head button { padding: 2px 6px; }
+  /* getauscht: 3D steht links und groß, die Zeichnung klein daneben */
+  .mat.swap .v3d { order: -1; width: min(36vh, 320px, calc(100vw - 56px - min(32vw, 120px))); }
+  .mat.swap #c3d { aspect-ratio: 1; }
+  .mat.swap .sheet { width: min(32vw, 120px); height: auto; max-height: min(36vh, 320px); }
+  .mat.swap .sheet svg { width: 100%; height: auto; max-height: min(36vh, 320px); }
+  .ctl.edit { min-height: 44px; }
   .panel { order: 1; padding: 14px; }
   .side { display: contents; }
   .factcard, .warn, .tips { order: 2; }
@@ -246,6 +275,16 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
   .gallery button { min-height: 52px; }
   .grp-h { padding: 14px 0; }
   .v3d-head button { min-height: 36px; }
+  .ctl.edit { min-height: 44px; }
+  /* der Kopf der 3D-Ansicht ist hier höher: Zeichnung und Zoom-Anzeige rücken darunter */
+  .mat.swap :is(.sheet, .zbadge) { top: calc(var(--mp) + 56px); }
+}
+/* schmale Handys: Design-Knopf nur mit Symbol (Name bleibt für Bildschirmleser), damit „Meine Löffel“ in die Zeile passt */
+@media (max-width: 480px) {
+  #palBtn > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  #palBtn, #mlBtn { padding: 0 8px; }
+  .hbar { min-width: 0; gap: 6px; }
+  .hbar > :not(.langsel) { flex: none; }
 }
 @media (max-width: 360px) {
   .types { grid-template-columns: 1fr 1fr; }
@@ -272,7 +311,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
 /* Honig ist als Linie oder Schrift auf hellem Feld zu blass: Regler, Fokusrahmen, Symbole und Textknöpfe dunkler */
 :root[data-design="b"]:not([data-theme="dark"]) input[type=range] { accent-color: #a8701c; }
 :root[data-design="b"]:not([data-theme="dark"]) :focus-visible { outline-color: #a8701c !important; }
-:root[data-design="b"]:not([data-theme="dark"]) :is(.grp-h[aria-expanded="false"] .ico, .edit, .tips-h > svg.i:first-child, .palmenu .ck) { color: #95621a; }
+:root[data-design="b"]:not([data-theme="dark"]) :is(.grp-h[aria-expanded="false"] .ico, .tips-h > svg.i:first-child, .palmenu .ck) { color: #95621a; }
 
 /* c Papier & Terrakotta: flach, kleine Rundungen, feine Linien */
 :root[data-design="c"] :is(.panel, .card) { border-radius: 6px; border-color: transparent; box-shadow: 0 1px 0 var(--line); }
@@ -352,9 +391,24 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
 .df-tab { table-layout: fixed; }
 .df-tab th[scope="row"], .df-tab thead th:first-child { width: 32%; }
 .df-sub th { padding-top: 10px; font: 600 12px var(--font-body); color: var(--fg); border-bottom: 1px dashed var(--line); }
-.df input { width: 100%; min-width: 52px; font: 500 13px var(--font-mono); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 5px 6px; text-align: right; }
-.df input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
-.df input.chg { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); font-weight: 600; }
+.df :is(input, select) { width: 100%; min-width: 52px; font: 500 13px var(--font-mono); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 5px 6px; text-align: right; }
+.df select { min-width: 0; padding: 5px 4px; text-align-last: right; }
+.df :is(input, select):focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.df :is(input, select).chg { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); font-weight: 600; padding-left: 26px; }
+.df input::placeholder { font-weight: 500; font-style: italic; }
+/* ↺ setzt nur dieses Feld auf Werkseinstellung (nur bei geändertem Feld sichtbar) */
+.df-c { position: relative; display: block; }
+.df-rs { position: absolute; left: 4px; top: 50%; transform: translateY(-50%); width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--accent); font: 600 15px/1 var(--font-body); cursor: pointer; }
+.df-rs:hover { background: var(--tint); }
+.df-rs[hidden], .df-tab tr[hidden] { display: none; }
+.df-rs:focus-visible, .df-fh:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+/* Klapper für Erweitert und Facetten wie im Bedienfeld */
+.df-fold th { padding: 6px 0 0; border-bottom: 1px solid var(--line); }
+.df-fh { width: 100%; display: flex; align-items: center; gap: 6px; padding: 6px 2px; border: 0; background: transparent; cursor: pointer; text-align: left; color: var(--fg); font: 600 13px var(--font-body); }
+.df-fh > svg.chev { margin-left: auto; color: var(--muted); }
+.df-dot { color: var(--accent); font-size: 10px; }
+.df-dot[hidden] { display: none; }
+.df-one th[scope="row"] { width: 60%; }
 .df .ed-foot { align-items: center; }
 @media (max-width: 760px) {
   .df { width: 100vw; max-height: 100dvh; }
@@ -363,14 +417,68 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
   .df-tab, .df-tab thead, .df-tab tbody { display: block; }
   .df-tab thead { top: -8px; }
   .df-tab tr { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 4px; }
-  .df-tab th[scope="row"], .df-sub th { grid-column: 1 / -1; }
+  .df-tab th[scope="row"], .df-sub th, .df-fold th { grid-column: 1 / -1; }
   .df-tab th[scope="row"] { width: auto; padding: 6px 2px 0; font-size: 12px; }
   .df-tab thead th { font-size: 11px; line-height: 1.25; padding: 4px 0; }
   .df-tab thead th:first-child { display: none; }
   .df-tab td { padding: 2px 0; }
+  /* Gemeinsamer Abschnitt: Beschriftung links, Feld rechts */
+  .df-one tr:not(.df-sub):not(.df-fold) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
+  .df-one th[scope="row"] { grid-column: auto; padding: 2px 2px; font-size: 13px; }
   .df .ed-foot #dfFactory { grid-column: 1 / -1; }
   .df .ed-foot .status { grid-column: 1 / -1; order: 3; font-size: 12px; }
   .df .ed-foot .status:empty { display: none; }
+}
+
+/* Meine Löffel (Dialog #ml): Liste der Einträge mit Vorschaubild; Rückfrage #mlAsk klein über dem Dialog */
+.ml { width: min(720px, calc(100vw - 32px)); height: fit-content; max-height: calc(100dvh - 32px); }
+.ml-body { min-height: 0; overflow-y: auto; padding: 12px 18px 16px; display: grid; gap: 10px; align-content: start; }
+.ml .hint { font-size: 12px; color: var(--muted); margin: 0; }
+.ml-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.ml-item { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; padding: 10px; border: 1px solid var(--line); border-radius: 12px; }
+.ml-item.cur { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
+.ml-empty { padding: 18px 4px; color: var(--muted); font-size: 14px; }
+.ml-pic { width: 96px; height: 96px; border-radius: 8px; overflow: hidden; background: var(--tint); color: var(--accent); display: grid; place-items: center; }
+.ml-pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ml-pic svg.i { width: 40px; height: 40px; }
+.ml-main { display: grid; gap: 6px; align-content: start; min-width: 0; }
+.ml-name { font: 600 15px var(--font-display); display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; overflow-wrap: anywhere; }
+.ml-cur { font: 600 11px var(--font-body); color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 0 7px; }
+.ml-meta { font: 400 12px var(--font-mono); color: var(--muted); }
+.ml-note { margin: 0; font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.ml-lbl { display: grid; gap: 2px; font: 600 12px var(--font-body); color: var(--muted); }
+.ml-lbl :is(input, textarea) { font: 400 14px var(--font-body); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; resize: vertical; }
+.ml-lbl :is(input, textarea):focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.ml-photos { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.ml-ph { position: relative; width: 48px; height: 48px; }
+.ml-ph img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; display: block; }
+.ml-ph button { position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; padding: 0; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); color: var(--fg); font: 600 14px/1 var(--font-body); cursor: pointer; }
+.ml-add small { font: 400 11px var(--font-mono); color: var(--muted); }
+.ml-acts { display: flex; flex-wrap: wrap; gap: 6px; }
+.ml-acts .btn { padding: 6px 12px; font-size: 13px; }
+.ml-file { position: relative; display: inline-flex; align-items: center; }
+.ml-file input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.ml-file:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ml-file:has(input:disabled) { opacity: .5; cursor: default; }
+.ml .ed-foot { align-items: center; }
+.ml-ask { width: min(540px, calc(100vw - 32px)); padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); color: var(--fg); }
+.ml-ask::backdrop { background: rgba(0,0,0,.35); }
+.ml-ask p { margin: 0 0 14px; font-size: 15px; }
+.ml-ask-btns { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+@media (max-width: 760px) {
+  .ml { width: 100vw; height: 100dvh; max-height: 100dvh; }
+  .ml .ed-head .btn { width: 100%; min-height: 44px; }
+  .ml-body { padding: 8px 10px 12px; }
+  .ml-item { grid-template-columns: 64px minmax(0, 1fr); gap: 10px; padding: 8px; }
+  .ml-pic { width: 64px; height: 64px; }
+  .ml-acts .btn, .ml-add { min-height: 44px; }
+  .ml-ph { width: 56px; height: 56px; }
+  .ml-ph button { width: 28px; height: 28px; }
+  .ml .ed-foot .status { grid-column: 1 / -1; order: 3; font-size: 12px; }
+  .ml .ed-foot .status:empty { display: none; }
+  .ml .ed-foot :is(.btn, .ml-file) { min-height: 44px; justify-content: center; text-align: center; font-size: 13px; padding: 8px 6px; }
+  .ml-ask-btns { display: grid; }
+  .ml-ask-btns .btn { min-height: 44px; }
 }
 </style>
 </head>
@@ -389,17 +497,25 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
   <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
   <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></symbol>
   <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></symbol>
+  <symbol id="i-swap" viewBox="0 0 24 24"><path d="M4 8h14M14 4l4 4-4 4M20 16H6M10 12l-4 4 4 4"/></symbol>
+  <symbol id="i-holz" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z" fill="currentColor" fill-opacity=".35"/></symbol>
+  <symbol id="i-technisch" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/></symbol>
+  <symbol id="i-gitter" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9M8 5.25l8 4.5v9M16 5.25l-8 4.5v9M4 12l8 4.5 8-4.5" stroke-width="1"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/></symbol>
+  <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/><path d="M4 4l16 16"/></symbol>
+  <symbol id="i-ml" viewBox="0 0 24 24"><path d="M6.5 3.5h11v17l-5.5-4-5.5 4z"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></symbol>
 </svg>
 <div class="wrap">
   <header>
     <div class="brandcol">
-      <div class="brand"><h1 data-i="title">Löffelschablone</h1><span class="ver" id="ver">v31</span><span class="draft" id="draft" data-i="draft" data-ia="draftHint">Entwurf</span></div>
+      <div class="brand"><h1 data-i="title">Löffelschablone</h1><span class="ver" id="ver">v32</span><span class="draft" id="draft" data-i="draft" data-ia="draftHint">Entwurf</span></div>
       <p class="lede" data-i="lede">Löffelart wählen, Maße anpassen, Schablone in Originalgröße als PDF oder SVG speichern.</p>
     </div>
     <div class="hbar">
       <select class="ctl langsel" id="langSel" data-ia="lang"></select>
       <button type="button" class="ctl" id="palBtn" aria-haspopup="menu" aria-expanded="false" aria-controls="palMenu"><svg class="i" aria-hidden="true"><use href="#i-palette"/></svg><span data-i="design">Design</span><svg class="i chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
+      <button type="button" class="ctl" id="mlBtn" aria-haspopup="dialog"><svg class="i" aria-hidden="true"><use href="#i-ml"/></svg><span data-i="ml">Meine Löffel</span></button>
       <button type="button" class="ctl icon" id="dfBtn" data-ia="dfTitle" aria-haspopup="dialog" aria-label="Standardwerte" title="Standardwerte"><svg class="i" aria-hidden="true"><use href="#i-gear"/></svg></button>
       <!-- Paletten-Menü: vier Designs (Farbkreis = Akzent und Matte des hellen Designs), dazu Dunkle Darstellung -->
       <div class="palmenu" id="palMenu" role="menu" data-ia="design" aria-label="Design" hidden>
@@ -432,7 +548,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
           <button type="button" id="zreset" data-i="zoomReset">Ganzes Blatt</button>
         </div>
         <div class="v3d" id="v3d">
-          <div class="v3d-head"><span>3D</span><button type="button" id="v3dToggle" aria-expanded="true" aria-controls="c3d" data-i="hide">Ausblenden</button></div>
+          <div class="v3d-head"><span>3D</span><span class="v3d-btns"><button type="button" id="v3dLook" class="v3d-swap" aria-label="3D-Darstellung: Holz (wechseln)" title="3D-Darstellung: Holz (wechseln)"><svg class="i" aria-hidden="true"><use href="#i-holz"/></svg></button><button type="button" id="v3dSwap" class="v3d-swap" aria-pressed="false" data-ia="swap" aria-label="Ansichten tauschen" title="Ansichten tauschen"><svg class="i" aria-hidden="true"><use href="#i-swap"/></svg></button><button type="button" id="v3dToggle" aria-expanded="true" aria-controls="c3d" data-ia="hide" aria-label="Ausblenden"><svg class="i" aria-hidden="true"><use href="#i-eye-off"/></svg><span data-i="hide">Ausblenden</span></button></span></div>
           <canvas id="c3d" data-ia="view3d" aria-label="3D-Ansicht des Löffels, zum Drehen ziehen"></canvas>
         </div>
       </div>
@@ -501,6 +617,26 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 2px 0 0; }
   </div>
 </dialog>
 
+<!-- Meine Löffel: Liste der Einträge, darunter Sicherung; #mlAsk = Rückfragen beim Laden und Löschen -->
+<dialog class="ed ml" id="ml" aria-labelledby="mlHead">
+  <div class="ed-head"><h2 id="mlHead" data-i="ml">Meine Löffel</h2><button type="button" class="btn primary" id="mlSave" data-i="mlSave">Aktuellen Stand speichern</button></div>
+  <div class="ml-body">
+    <p class="hint" data-i="mlHelp"></p>
+    <ul class="ml-list" id="mlList"></ul>
+  </div>
+  <div class="ed-foot">
+    <button type="button" class="btn secondary" id="mlExport" data-i="mlExport">Sicherung speichern</button>
+    <label class="btn secondary ml-file"><input type="file" accept=".json,application/json" id="mlImport"><span data-i="mlImport">Sicherung laden</span></label>
+    <span class="status" id="mlStatus" role="status"></span>
+    <span class="ed-gap"></span>
+    <button type="button" class="btn secondary" id="mlClose" data-i="mlClose">Schließen</button>
+  </div>
+</dialog>
+<dialog class="ml-ask" id="mlAsk" aria-describedby="mlAskText">
+  <p id="mlAskText"></p>
+  <div class="ml-ask-btns" id="mlAskBtns"></div>
+</dialog>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -511,7 +647,8 @@ const I18N = {
     settings: "Einstellungen", spoonType: "Löffelart", preview: "Vorschau der Schablone", lang: "Sprache", langName: "Deutsch",
     darkMode: "Dunkle Darstellung", tips: "Drucktipps", draft: "Entwurf", draftHint: "Entwurf: Nutzung ohne Gewähr, Maße und Funktionen können sich noch ändern.",
     design: "Design", dsgA: "Salbei", dsgB: "Ahorn", dsgC: "Papier & Terrakotta", dsgD: "Morgenhimmel",
-    hide: "Ausblenden", show: "Einblenden", view3d: "3D-Ansicht des Löffels, zum Drehen ziehen",
+    hide: "Ausblenden", show: "Einblenden", swap: "Ansichten tauschen", view3d: "3D-Ansicht des Löffels, zum Drehen ziehen",
+    look3d: n => `3D-Darstellung: ${n} (wechseln)`, looks: ["Holz", "Technisch", "Drahtgitter"],
     warn: n => `Crank über ${n}°: Bei geradfaserigem Holz entsteht an Hals und Laffenspitze Kurzfaser. Besser einen gebogenen Ast verwenden, dessen Wuchs der Kröpfung folgt.`,
     pdf: "PDF speichern", svg: "SVG speichern", copy: "SVG-Code kopieren",
     note: "Beim Drucken „Tatsächliche Größe“ bzw. 100 % wählen und den 50‑mm‑Balken nachmessen. Die Draufsicht zeigt den abgewickelten Umriss, die Seitenansicht die echte Biegung. Die Knicklinie verbindet beide Ansichten; im Stiel stehen sie auf gleicher Höhe. Die Faser des Rohlings sollte entlang des Stiels laufen.",
@@ -566,14 +703,23 @@ const I18N = {
     edWarnWide: "Die Laffe ist breiter als 1,7-mal ihre Länge.", edMin: "Mindestens 4 Punkte je Hälfte.", edMax: "Höchstens 16 Punkte je Hälfte.",
     edSaved: c => `Form ${c} übernommen.`, edFile: "form", edImgFail: "Das Bild ließ sich nicht laden.",
     dfTitle: "Standardwerte", dfHelp: "Startwerte gelten ab dem nächsten Klick auf eine Löffelart, Richtwerte und Warngrenzen sofort. Geänderte Werte sind markiert. Gespeichert wird nur in diesem Browser.", dfStart: "Startwerte je Löffelart", dfLimits: "Richtwerte und Warngrenzen", dfShare: "Laffenanteil (Richtwert)",
-    dfCa: "Crank-Warnung über", dfMw: "Esslöffel: Laffe breiter als", dfMl: "Esslöffel: Laffe länger als", dfMd: "Esslöffel: Laffe tiefer als", dfFactory: "Auf Werkseinstellung", dfFactoryDone: "Werkseinstellung eingetragen. „Übernehmen“ speichert sie.", dfSaved: "Standardwerte übernommen."
+    dfCa: "Crank-Warnung über", dfMw: "Esslöffel: Laffe breiter als", dfMl: "Esslöffel: Laffe länger als", dfMd: "Esslöffel: Laffe tiefer als", dfFactory: "Auf Werkseinstellung", dfFactoryDone: "Werkseinstellung eingetragen. „Übernehmen“ speichert sie.", dfSaved: "Standardwerte übernommen.",
+    dfAll: "Für alle Löffelarten", dfMixed: "verschieden", dfReset: "Auf Werkseinstellung (nur dieses Feld)",
+    ml: "Meine Löffel", mlSave: "Aktuellen Stand speichern", mlHelp: "Entwürfe mit Maßen, Notiz und bis zu 3 Fotos des fertigen Löffels. Gespeichert wird nur in diesem Browser; Fotos kommen nie auf die Schablone. Eine Sicherung schützt vor Datenverlust.",
+    mlEmpty: "Noch keine Einträge. „Aktuellen Stand speichern“ legt den ersten an, Fotos lassen sich später hinzufügen.", mlNoDb: "Speichern im Browser ist hier nicht möglich, zum Beispiel in einem privaten Fenster.", mlFail: "Das hat nicht geklappt. Bitte erneut versuchen.",
+    mlLoad: "Laden", mlEdit: "Bearbeiten", mlDel: "Löschen", mlOk: "Speichern", mlCancel: "Abbrechen", mlName: "Name", mlNote: "Notiz", mlNotePh: "z. B. Holzart, Werkzeug, Erfahrungen", mlCurrent: "aktueller Stand",
+    mlPhotos: "Fotos", mlPhotoN: n => `Foto ${n}`, mlPhotoAdd: "Foto hinzufügen", mlPhotoDel: "Foto entfernen", mlPhotoOk: "Foto gespeichert.", mlPhotoFail: "Das Foto ließ sich nicht lesen.", mlMax: n => `Höchstens ${n} Fotos je Eintrag.`,
+    mlExport: "Sicherung speichern", mlImport: "Sicherung laden", mlClose: "Schließen", mlSaved: "Stand gespeichert. Name und Notiz sind freiwillig.", mlLoaded: n => `„${n}“ geladen.`, mlDeleted: "Eintrag gelöscht.",
+    mlAskLoad: "Der aktuelle Stand ist in keinem Eintrag gespeichert. Vorher speichern?", mlSaveLoad: "Speichern und laden", mlLoadOnly: "Ohne Speichern laden", mlAskDel: n => `Eintrag „${n}“ mit allen Fotos löschen?`, mlAskPhotoDel: "Dieses Foto löschen?",
+    mlImported: (a, s) => `Hinzugefügt: ${a}, übersprungen (schon vorhanden): ${s}.`, mlImportFail: "Die Datei ist keine Sicherung von „Meine Löffel“."
   },
   nl: {
     title: "Lepelsjabloon", lede: "Kies het type lepel, pas de maten aan en sla het sjabloon op ware grootte op als PDF of SVG.",
     settings: "Instellingen", spoonType: "Type lepel", preview: "Voorbeeld van het sjabloon", lang: "Taal", langName: "Nederlands",
     darkMode: "Donkere weergave", tips: "Printtips", draft: "Concept", draftHint: "Concept: gebruik op eigen risico, maten en functies kunnen nog veranderen.",
     design: "Ontwerp", dsgA: "Salie", dsgB: "Esdoorn", dsgC: "Papier & Terracotta", dsgD: "Ochtendhemel",
-    hide: "Verbergen", show: "Tonen", view3d: "3D-weergave van de lepel, sleep om te draaien",
+    hide: "Verbergen", show: "Tonen", swap: "Weergaven wisselen", view3d: "3D-weergave van de lepel, sleep om te draaien",
+    look3d: n => `3D-weergave: ${n} (wisselen)`, looks: ["Hout", "Technisch", "Draadmodel"],
     warn: n => `Crank boven ${n}°: bij recht gegroeid hout ontstaat bij de hals en de punt van de kom korte vezel. Gebruik liever een gebogen tak waarvan de groei de knik volgt.`,
     pdf: "PDF opslaan", svg: "SVG opslaan", copy: "SVG-code kopiëren",
     note: "Kies bij het afdrukken ‘Werkelijke grootte’ of 100 % en meet de balk van 50 mm na. Het bovenaanzicht toont de uitgeslagen omtrek, het zijaanzicht de echte buiging. De kniklijn verbindt beide aanzichten; bij de steel staan ze op dezelfde hoogte. De vezel van het werkstuk moet in de lengte van de steel lopen.",
@@ -628,14 +774,23 @@ const I18N = {
     edWarnWide: "De kom is breder dan 1,7 keer de lengte.", edMin: "Minstens 4 punten per helft.", edMax: "Hoogstens 16 punten per helft.",
     edSaved: c => `Vorm ${c} toegepast.`, edFile: "vorm", edImgFail: "De afbeelding kon niet worden geladen.",
     dfTitle: "Standaardwaarden", dfHelp: "Startwaarden gelden vanaf de volgende klik op een lepelsoort, richtwaarden en waarschuwingsgrenzen direct. Gewijzigde waarden zijn gemarkeerd. Alleen in deze browser opgeslagen.", dfStart: "Startwaarden per lepelsoort", dfLimits: "Richtwaarden en waarschuwingsgrenzen", dfShare: "Aandeel kom (richtwaarde)",
-    dfCa: "Crank-waarschuwing boven", dfMw: "Eetlepel: kom breder dan", dfMl: "Eetlepel: kom langer dan", dfMd: "Eetlepel: kom dieper dan", dfFactory: "Fabrieksinstellingen", dfFactoryDone: "Fabrieksinstellingen ingevuld. ‘Toepassen’ slaat ze op.", dfSaved: "Standaardwaarden toegepast."
+    dfCa: "Crank-waarschuwing boven", dfMw: "Eetlepel: kom breder dan", dfMl: "Eetlepel: kom langer dan", dfMd: "Eetlepel: kom dieper dan", dfFactory: "Fabrieksinstellingen", dfFactoryDone: "Fabrieksinstellingen ingevuld. ‘Toepassen’ slaat ze op.", dfSaved: "Standaardwaarden toegepast.",
+    dfAll: "Voor alle lepelsoorten", dfMixed: "verschillend", dfReset: "Naar fabrieksinstelling (alleen dit veld)",
+    ml: "Mijn lepels", mlSave: "Huidige stand opslaan", mlHelp: "Ontwerpen met maten, notitie en maximaal 3 foto's van de afgewerkte lepel. Alleen in deze browser opgeslagen; foto's komen nooit op het sjabloon. Een back-up beschermt tegen gegevensverlies.",
+    mlEmpty: "Nog geen items. ‘Huidige stand opslaan’ maakt het eerste aan; foto's kun je later toevoegen.", mlNoDb: "Opslaan in de browser is hier niet mogelijk, bijvoorbeeld in een privévenster.", mlFail: "Dat is niet gelukt. Probeer het opnieuw.",
+    mlLoad: "Laden", mlEdit: "Bewerken", mlDel: "Verwijderen", mlOk: "Opslaan", mlCancel: "Annuleren", mlName: "Naam", mlNote: "Notitie", mlNotePh: "bijv. houtsoort, gereedschap, ervaringen", mlCurrent: "huidige stand",
+    mlPhotos: "Foto's", mlPhotoN: n => `Foto ${n}`, mlPhotoAdd: "Foto toevoegen", mlPhotoDel: "Foto verwijderen", mlPhotoOk: "Foto opgeslagen.", mlPhotoFail: "De foto kon niet worden gelezen.", mlMax: n => `Maximaal ${n} foto's per item.`,
+    mlExport: "Back-up opslaan", mlImport: "Back-up laden", mlClose: "Sluiten", mlSaved: "Stand opgeslagen. Naam en notitie zijn optioneel.", mlLoaded: n => `‘${n}’ geladen.`, mlDeleted: "Item verwijderd.",
+    mlAskLoad: "De huidige stand is in geen enkel item opgeslagen. Eerst opslaan?", mlSaveLoad: "Opslaan en laden", mlLoadOnly: "Laden zonder opslaan", mlAskDel: n => `Item ‘${n}’ met alle foto's verwijderen?`, mlAskPhotoDel: "Deze foto verwijderen?",
+    mlImported: (a, s) => `Toegevoegd: ${a}, overgeslagen (al aanwezig): ${s}.`, mlImportFail: "Dit bestand is geen back-up van ‘Mijn lepels’."
   },
   en: {
     title: "Spoon Template", lede: "Choose a spoon type, adjust the measurements and save the template at full size as PDF or SVG.",
     settings: "Settings", spoonType: "Spoon type", preview: "Template preview", lang: "Language", langName: "English",
     darkMode: "Dark mode", tips: "Printing tips", draft: "Draft", draftHint: "Draft: use at your own risk, dimensions and features may still change.",
     design: "Design", dsgA: "Sage", dsgB: "Maple", dsgC: "Paper & Terracotta", dsgD: "Morning sky",
-    hide: "Hide", show: "Show", view3d: "3D view of the spoon, drag to rotate",
+    hide: "Hide", show: "Show", swap: "Swap views", view3d: "3D view of the spoon, drag to rotate",
+    look3d: n => `3D style: ${n} (change)`, looks: ["Wood", "Technical", "Wireframe"],
     warn: n => `Crank above ${n}°: in straight-grained wood this creates short grain at the neck and the bowl tip. Better use a bent branch whose growth follows the crank.`,
     pdf: "Save PDF", svg: "Save SVG", copy: "Copy SVG code",
     note: "When printing, choose “Actual size” or 100 % and measure the 50 mm bar. The top view shows the flattened outline, the side view the real bend. The crank line links both views; along the handle they line up. The grain of the blank should run along the handle.",
@@ -689,14 +844,23 @@ const I18N = {
     edWarnWide: "The bowl is wider than 1.7 times its length.", edMin: "At least 4 points per half.", edMax: "At most 16 points per half.",
     edSaved: c => `Shape ${c} applied.`, edFile: "shape", edImgFail: "The image could not be loaded.",
     dfTitle: "Default values", dfHelp: "Start values apply from the next click on a spoon type, guide values and warning limits right away. Changed values are marked. Stored in this browser only.", dfStart: "Start values per spoon type", dfLimits: "Guide values and warning limits", dfShare: "Bowl share (guide)",
-    dfCa: "Crank warning above", dfMw: "Eating spoon: bowl wider than", dfMl: "Eating spoon: bowl longer than", dfMd: "Eating spoon: bowl deeper than", dfFactory: "Factory settings", dfFactoryDone: "Factory settings filled in. “Apply” saves them.", dfSaved: "Default values applied."
+    dfCa: "Crank warning above", dfMw: "Eating spoon: bowl wider than", dfMl: "Eating spoon: bowl longer than", dfMd: "Eating spoon: bowl deeper than", dfFactory: "Factory settings", dfFactoryDone: "Factory settings filled in. “Apply” saves them.", dfSaved: "Default values applied.",
+    dfAll: "For all spoon types", dfMixed: "differs", dfReset: "Reset to factory setting (this field only)",
+    ml: "My spoons", mlSave: "Save current design", mlHelp: "Designs with dimensions, a note and up to 3 photos of the finished spoon. Stored in this browser only; photos never appear on the template. A backup protects against data loss.",
+    mlEmpty: "No entries yet. “Save current design” creates the first one; photos can be added later.", mlNoDb: "Saving in the browser is not possible here, for example in a private window.", mlFail: "That didn't work. Please try again.",
+    mlLoad: "Load", mlEdit: "Edit", mlDel: "Delete", mlOk: "Save", mlCancel: "Cancel", mlName: "Name", mlNote: "Note", mlNotePh: "e.g. wood, tools, experience", mlCurrent: "current design",
+    mlPhotos: "Photos", mlPhotoN: n => `Photo ${n}`, mlPhotoAdd: "Add photo", mlPhotoDel: "Remove photo", mlPhotoOk: "Photo saved.", mlPhotoFail: "The photo could not be read.", mlMax: n => `At most ${n} photos per entry.`,
+    mlExport: "Save backup", mlImport: "Load backup", mlClose: "Close", mlSaved: "Design saved. Name and note are optional.", mlLoaded: n => `“${n}” loaded.`, mlDeleted: "Entry deleted.",
+    mlAskLoad: "The current design is not saved in any entry. Save it first?", mlSaveLoad: "Save and load", mlLoadOnly: "Load without saving", mlAskDel: n => `Delete entry “${n}” with all its photos?`, mlAskPhotoDel: "Delete this photo?",
+    mlImported: (a, s) => `Added: ${a}, skipped (already there): ${s}.`, mlImportFail: "This file is not a “My spoons” backup."
   },
   fr: {
     title: "Gabarit de cuillère", lede: "Choisissez le type de cuillère, ajustez les dimensions et enregistrez le gabarit en taille réelle au format PDF ou SVG.",
     settings: "Réglages", spoonType: "Type de cuillère", preview: "Aperçu du gabarit", lang: "Langue", langName: "Français",
     darkMode: "Affichage sombre", tips: "Conseils d'impression", draft: "Brouillon", draftHint: "Brouillon : utilisation sans garantie, les dimensions et les fonctions peuvent encore changer.",
     design: "Style", dsgA: "Sauge", dsgB: "Érable", dsgC: "Papier & Terre cuite", dsgD: "Ciel du matin",
-    hide: "Masquer", show: "Afficher", view3d: "Vue 3D de la cuillère, faites glisser pour la tourner",
+    hide: "Masquer", show: "Afficher", swap: "Échanger les vues", view3d: "Vue 3D de la cuillère, faites glisser pour la tourner",
+    look3d: n => `Rendu 3D : ${n} (changer)`, looks: ["Bois", "Technique", "Fil de fer"],
     warn: n => `Crank au-delà de ${n}° : dans un bois à fil droit, le fil devient court au col et à la pointe du cuilleron. Mieux vaut une branche courbe dont la croissance suit la cassure.`,
     pdf: "Enregistrer en PDF", svg: "Enregistrer en SVG", copy: "Copier le code SVG",
     note: "À l'impression, choisissez « Taille réelle » ou 100 % et mesurez la barre de 50 mm. La vue de dessus montre le contour déplié, la vue de côté la courbure réelle. La ligne de cassure relie les deux vues ; le long du manche, elles sont alignées. Le fil de l'ébauche doit suivre le manche.",
@@ -751,14 +915,23 @@ const I18N = {
     edWarnWide: "Le cuilleron est plus large que 1,7 fois sa longueur.", edMin: "Au moins 4 points par moitié.", edMax: "Au plus 16 points par moitié.",
     edSaved: c => `Forme ${c} appliquée.`, edFile: "forme", edImgFail: "Impossible de charger l'image.",
     dfTitle: "Valeurs par défaut", dfHelp: "Les valeurs de départ s'appliquent au prochain clic sur un type de cuillère, les repères et seuils d'alerte immédiatement. Les valeurs modifiées sont signalées. Enregistré uniquement dans ce navigateur.", dfStart: "Valeurs de départ par type de cuillère", dfLimits: "Repères et seuils d'alerte", dfShare: "Part du cuilleron (repère)",
-    dfCa: "Alerte crank au-delà de", dfMw: "Cuillère à soupe : cuilleron plus large que", dfMl: "Cuillère à soupe : cuilleron plus long que", dfMd: "Cuillère à soupe : cuilleron plus profond que", dfFactory: "Réglages d'usine", dfFactoryDone: "Réglages d'usine saisis. « Appliquer » les enregistre.", dfSaved: "Valeurs par défaut appliquées."
+    dfCa: "Alerte crank au-delà de", dfMw: "Cuillère à soupe : cuilleron plus large que", dfMl: "Cuillère à soupe : cuilleron plus long que", dfMd: "Cuillère à soupe : cuilleron plus profond que", dfFactory: "Réglages d'usine", dfFactoryDone: "Réglages d'usine saisis. « Appliquer » les enregistre.", dfSaved: "Valeurs par défaut appliquées.",
+    dfAll: "Pour tous les types de cuillère", dfMixed: "différent", dfReset: "Réglage d'usine (ce champ uniquement)",
+    ml: "Mes cuillères", mlSave: "Enregistrer l'état actuel", mlHelp: "Projets avec dimensions, note et jusqu'à 3 photos de la cuillère terminée. Enregistré uniquement dans ce navigateur ; les photos n'apparaissent jamais sur le gabarit. Une sauvegarde protège contre la perte de données.",
+    mlEmpty: "Aucune entrée pour l'instant. « Enregistrer l'état actuel » crée la première ; les photos peuvent être ajoutées plus tard.", mlNoDb: "L'enregistrement dans le navigateur n'est pas possible ici, par exemple dans une fenêtre privée.", mlFail: "Cela n'a pas fonctionné. Veuillez réessayer.",
+    mlLoad: "Charger", mlEdit: "Modifier", mlDel: "Supprimer", mlOk: "Enregistrer", mlCancel: "Annuler", mlName: "Nom", mlNote: "Note", mlNotePh: "p. ex. essence de bois, outils, expérience", mlCurrent: "état actuel",
+    mlPhotos: "Photos", mlPhotoN: n => `Photo ${n}`, mlPhotoAdd: "Ajouter une photo", mlPhotoDel: "Retirer la photo", mlPhotoOk: "Photo enregistrée.", mlPhotoFail: "Impossible de lire la photo.", mlMax: n => `${n} photos au maximum par entrée.`,
+    mlExport: "Enregistrer une sauvegarde", mlImport: "Charger une sauvegarde", mlClose: "Fermer", mlSaved: "État enregistré. Le nom et la note sont facultatifs.", mlLoaded: n => `« ${n} » chargé.`, mlDeleted: "Entrée supprimée.",
+    mlAskLoad: "L'état actuel n'est enregistré dans aucune entrée. L'enregistrer d'abord ?", mlSaveLoad: "Enregistrer et charger", mlLoadOnly: "Charger sans enregistrer", mlAskDel: n => `Supprimer l'entrée « ${n} » avec toutes ses photos ?`, mlAskPhotoDel: "Supprimer cette photo ?",
+    mlImported: (a, s) => `Ajoutées : ${a}, ignorées (déjà présentes) : ${s}.`, mlImportFail: "Ce fichier n'est pas une sauvegarde de « Mes cuillères »."
   },
   sv: {
     title: "Skedmall", lede: "Välj skedtyp, anpassa måtten och spara mallen i full storlek som PDF eller SVG.",
     settings: "Inställningar", spoonType: "Skedtyp", preview: "Förhandsvisning av mallen", lang: "Språk", langName: "Svenska",
     darkMode: "Mörkt läge", tips: "Utskriftstips", draft: "Utkast", draftHint: "Utkast: användning på egen risk, mått och funktioner kan fortfarande ändras.",
     design: "Utseende", dsgA: "Salvia", dsgB: "Lönn", dsgC: "Papper & Terrakotta", dsgD: "Morgonhimmel",
-    hide: "Dölj", show: "Visa", view3d: "3D-vy av skeden, dra för att vrida",
+    hide: "Dölj", show: "Visa", swap: "Byt vyer", view3d: "3D-vy av skeden, dra för att vrida",
+    look3d: n => `3D-visning: ${n} (byt)`, looks: ["Trä", "Teknisk", "Trådmodell"],
     warn: n => `Crank över ${n}°: i rakvuxet virke blir fibrerna korta vid halsen och skålens spets. Använd hellre en krokvuxen gren vars växt följer knäcken.`,
     pdf: "Spara PDF", svg: "Spara SVG", copy: "Kopiera SVG-kod",
     note: "Välj ”Faktisk storlek” eller 100 % vid utskrift och mät 50 mm-stapeln. Ovanvyn visar den utvikta konturen, sidovyn den verkliga böjen. Knäcklinjen förbinder båda vyerna; längs skaftet ligger de i höjd med varandra. Ämnets fibrer ska löpa längs skaftet.",
@@ -811,14 +984,23 @@ const I18N = {
     edWarnLong: "Skålen är mer än 2,5 gånger så lång som bred.", edWarnWide: "Skålen är bredare än 1,7 gånger sin längd.", edMin: "Minst 4 punkter per halva.",
     edMax: "Högst 16 punkter per halva.", edSaved: c => `Formen ${c} används.`, edFile: "form", edImgFail: "Bilden kunde inte laddas.",
     dfTitle: "Standardvärden", dfHelp: "Startvärden gäller från nästa klick på en skedtyp, riktvärden och varningsgränser direkt. Ändrade värden är markerade. Sparas bara i den här webbläsaren.", dfStart: "Startvärden per skedtyp", dfLimits: "Riktvärden och varningsgränser", dfShare: "Skålens andel (riktvärde)",
-    dfCa: "Crank-varning över", dfMw: "Matsked: skål bredare än", dfMl: "Matsked: skål längre än", dfMd: "Matsked: skål djupare än", dfFactory: "Fabriksinställningar", dfFactoryDone: "Fabriksinställningar ifyllda. ”Använd” sparar dem.", dfSaved: "Standardvärden använda."
+    dfCa: "Crank-varning över", dfMw: "Matsked: skål bredare än", dfMl: "Matsked: skål längre än", dfMd: "Matsked: skål djupare än", dfFactory: "Fabriksinställningar", dfFactoryDone: "Fabriksinställningar ifyllda. ”Använd” sparar dem.", dfSaved: "Standardvärden använda.",
+    dfAll: "För alla skedtyper", dfMixed: "olika", dfReset: "Fabriksinställning (bara detta fält)",
+    ml: "Mina skedar", mlSave: "Spara nuvarande läge", mlHelp: "Utkast med mått, anteckning och upp till 3 foton av den färdiga skeden. Sparas bara i den här webbläsaren; foton hamnar aldrig på mallen. En säkerhetskopia skyddar mot dataförlust.",
+    mlEmpty: "Inga poster än. ”Spara nuvarande läge” skapar den första; foton kan läggas till senare.", mlNoDb: "Det går inte att spara i webbläsaren här, till exempel i ett privat fönster.", mlFail: "Det fungerade inte. Försök igen.",
+    mlLoad: "Ladda", mlEdit: "Redigera", mlDel: "Ta bort", mlOk: "Spara", mlCancel: "Avbryt", mlName: "Namn", mlNote: "Anteckning", mlNotePh: "t.ex. träslag, verktyg, erfarenheter", mlCurrent: "nuvarande läge",
+    mlPhotos: "Foton", mlPhotoN: n => `Foto ${n}`, mlPhotoAdd: "Lägg till foto", mlPhotoDel: "Ta bort foto", mlPhotoOk: "Fotot sparat.", mlPhotoFail: "Fotot kunde inte läsas.", mlMax: n => `Högst ${n} foton per post.`,
+    mlExport: "Spara säkerhetskopia", mlImport: "Läs in säkerhetskopia", mlClose: "Stäng", mlSaved: "Läget sparat. Namn och anteckning är frivilliga.", mlLoaded: n => `”${n}” laddad.`, mlDeleted: "Posten borttagen.",
+    mlAskLoad: "Det nuvarande läget är inte sparat i någon post. Spara först?", mlSaveLoad: "Spara och ladda", mlLoadOnly: "Ladda utan att spara", mlAskDel: n => `Ta bort posten ”${n}” med alla foton?`, mlAskPhotoDel: "Ta bort det här fotot?",
+    mlImported: (a, s) => `Tillagda: ${a}, överhoppade (finns redan): ${s}.`, mlImportFail: "Filen är ingen säkerhetskopia av ”Mina skedar”."
   },
   es: {
     title: "Plantilla de cuchara", lede: "Elige el tipo de cuchara, ajusta las medidas y guarda la plantilla a tamaño real en PDF o SVG.",
     settings: "Ajustes", spoonType: "Tipo de cuchara", preview: "Vista previa de la plantilla", lang: "Idioma", langName: "Español",
     darkMode: "Modo oscuro", tips: "Consejos de impresión", draft: "Borrador", draftHint: "Borrador: uso sin garantía, las medidas y las funciones aún pueden cambiar.",
     design: "Diseño", dsgA: "Salvia", dsgB: "Arce", dsgC: "Papel y Terracota", dsgD: "Cielo de la mañana",
-    hide: "Ocultar", show: "Mostrar", view3d: "Vista 3D de la cuchara, arrastra para girarla",
+    hide: "Ocultar", show: "Mostrar", swap: "Intercambiar vistas", view3d: "Vista 3D de la cuchara, arrastra para girarla",
+    look3d: n => `Estilo 3D: ${n} (cambiar)`, looks: ["Madera", "Técnico", "Malla"],
     warn: n => `Crank superior a ${n}°: en madera de fibra recta se forma fibra corta en el cuello y en la punta del cazo. Mejor usar una rama curva cuyo crecimiento siga el quiebre.`,
     pdf: "Guardar PDF", svg: "Guardar SVG", copy: "Copiar código SVG",
     note: "Al imprimir, elige «Tamaño real» o 100 % y mide la barra de 50 mm. La vista superior muestra el contorno desplegado; la lateral, la curvatura real. La línea de quiebre une ambas vistas; a lo largo del mango quedan a la misma altura. La fibra del taco debe ir a lo largo del mango.",
@@ -872,14 +1054,23 @@ const I18N = {
     edWarnWide: "El cazo es más ancho que 1,7 veces su longitud.", edMin: "Al menos 4 puntos por mitad.", edMax: "Como máximo 16 puntos por mitad.",
     edSaved: c => `Forma ${c} aplicada.`, edFile: "forma", edImgFail: "No se pudo cargar la imagen.",
     dfTitle: "Valores predeterminados", dfHelp: "Los valores iniciales se aplican desde el próximo clic en un tipo de cuchara; las referencias y los límites de aviso, de inmediato. Los valores cambiados están marcados. Solo se guarda en este navegador.", dfStart: "Valores iniciales por tipo de cuchara", dfLimits: "Referencias y límites de aviso", dfShare: "Proporción del cazo (referencia)",
-    dfCa: "Aviso de crank por encima de", dfMw: "Cuchara de mesa: cazo más ancho que", dfMl: "Cuchara de mesa: cazo más largo que", dfMd: "Cuchara de mesa: cazo más profundo que", dfFactory: "Valores de fábrica", dfFactoryDone: "Valores de fábrica introducidos. «Aplicar» los guarda.", dfSaved: "Valores predeterminados aplicados."
+    dfCa: "Aviso de crank por encima de", dfMw: "Cuchara de mesa: cazo más ancho que", dfMl: "Cuchara de mesa: cazo más largo que", dfMd: "Cuchara de mesa: cazo más profundo que", dfFactory: "Valores de fábrica", dfFactoryDone: "Valores de fábrica introducidos. «Aplicar» los guarda.", dfSaved: "Valores predeterminados aplicados.",
+    dfAll: "Para todos los tipos de cuchara", dfMixed: "distinto", dfReset: "Valor de fábrica (solo este campo)",
+    ml: "Mis cucharas", mlSave: "Guardar el estado actual", mlHelp: "Diseños con medidas, nota y hasta 3 fotos de la cuchara terminada. Solo se guarda en este navegador; las fotos nunca aparecen en la plantilla. Una copia de seguridad protege contra la pérdida de datos.",
+    mlEmpty: "Aún no hay entradas. «Guardar el estado actual» crea la primera; las fotos se pueden añadir después.", mlNoDb: "Aquí no se puede guardar en el navegador, por ejemplo en una ventana privada.", mlFail: "No ha funcionado. Inténtalo de nuevo.",
+    mlLoad: "Cargar", mlEdit: "Editar", mlDel: "Eliminar", mlOk: "Guardar", mlCancel: "Cancelar", mlName: "Nombre", mlNote: "Nota", mlNotePh: "p. ej. madera, herramientas, experiencias", mlCurrent: "estado actual",
+    mlPhotos: "Fotos", mlPhotoN: n => `Foto ${n}`, mlPhotoAdd: "Añadir foto", mlPhotoDel: "Quitar foto", mlPhotoOk: "Foto guardada.", mlPhotoFail: "No se pudo leer la foto.", mlMax: n => `Como máximo ${n} fotos por entrada.`,
+    mlExport: "Guardar copia de seguridad", mlImport: "Cargar copia de seguridad", mlClose: "Cerrar", mlSaved: "Estado guardado. El nombre y la nota son opcionales.", mlLoaded: n => `«${n}» cargado.`, mlDeleted: "Entrada eliminada.",
+    mlAskLoad: "El estado actual no está guardado en ninguna entrada. ¿Guardarlo antes?", mlSaveLoad: "Guardar y cargar", mlLoadOnly: "Cargar sin guardar", mlAskDel: n => `¿Eliminar la entrada «${n}» con todas sus fotos?`, mlAskPhotoDel: "¿Eliminar esta foto?",
+    mlImported: (a, s) => `Añadidas: ${a}, omitidas (ya existen): ${s}.`, mlImportFail: "Este archivo no es una copia de seguridad de «Mis cucharas»."
   },
   it: {
     title: "Dima per cucchiai", lede: "Scegli il tipo di cucchiaio, regola le misure e salva la dima a grandezza reale in PDF o SVG.",
     settings: "Impostazioni", spoonType: "Tipo di cucchiaio", preview: "Anteprima della dima", lang: "Lingua", langName: "Italiano",
     darkMode: "Modalità scura", tips: "Consigli di stampa", draft: "Bozza", draftHint: "Bozza: uso senza garanzia, misure e funzioni possono ancora cambiare.",
     design: "Aspetto", dsgA: "Salvia", dsgB: "Acero", dsgC: "Carta e Terracotta", dsgD: "Cielo del mattino",
-    hide: "Nascondi", show: "Mostra", view3d: "Vista 3D del cucchiaio, trascina per ruotarlo",
+    hide: "Nascondi", show: "Mostra", swap: "Scambia le viste", view3d: "Vista 3D del cucchiaio, trascina per ruotarlo",
+    look3d: n => `Resa 3D: ${n} (cambia)`, looks: ["Legno", "Tecnico", "Reticolo"],
     warn: n => `Crank oltre ${n}°: nel legno a fibra dritta si crea fibra corta al collo e sulla punta della coppa. Meglio usare un ramo curvo la cui crescita segua la piega.`,
     pdf: "Salva PDF", svg: "Salva SVG", copy: "Copia codice SVG",
     note: "In stampa scegli «Dimensioni effettive» o 100 % e misura la barra da 50 mm. La vista dall'alto mostra il contorno sviluppato, quella laterale la curvatura reale. La linea di piega collega le due viste; lungo il manico sono alla stessa altezza. La fibra del pezzo deve correre lungo il manico.",
@@ -934,14 +1125,23 @@ const I18N = {
     edWarnWide: "La coppa è più larga di 1,7 volte la sua lunghezza.", edMin: "Almeno 4 punti per metà.", edMax: "Al massimo 16 punti per metà.",
     edSaved: c => `Forma ${c} applicata.`, edFile: "forma", edImgFail: "Impossibile caricare l'immagine.",
     dfTitle: "Valori predefiniti", dfHelp: "I valori iniziali valgono dal prossimo clic su un tipo di cucchiaio, i riferimenti e i limiti di avviso subito. I valori modificati sono evidenziati. Salvato solo in questo browser.", dfStart: "Valori iniziali per tipo di cucchiaio", dfLimits: "Riferimenti e limiti di avviso", dfShare: "Quota della coppa (riferimento)",
-    dfCa: "Avviso crank oltre", dfMw: "Cucchiaio da tavola: coppa più larga di", dfMl: "Cucchiaio da tavola: coppa più lunga di", dfMd: "Cucchiaio da tavola: coppa più profonda di", dfFactory: "Impostazioni di fabbrica", dfFactoryDone: "Impostazioni di fabbrica inserite. «Applica» le salva.", dfSaved: "Valori predefiniti applicati."
+    dfCa: "Avviso crank oltre", dfMw: "Cucchiaio da tavola: coppa più larga di", dfMl: "Cucchiaio da tavola: coppa più lunga di", dfMd: "Cucchiaio da tavola: coppa più profonda di", dfFactory: "Impostazioni di fabbrica", dfFactoryDone: "Impostazioni di fabbrica inserite. «Applica» le salva.", dfSaved: "Valori predefiniti applicati.",
+    dfAll: "Per tutti i tipi di cucchiaio", dfMixed: "diverso", dfReset: "Impostazione di fabbrica (solo questo campo)",
+    ml: "I miei cucchiai", mlSave: "Salva lo stato attuale", mlHelp: "Progetti con misure, nota e fino a 3 foto del cucchiaio finito. Salvato solo in questo browser; le foto non compaiono mai sulla dima. Un backup protegge dalla perdita di dati.",
+    mlEmpty: "Ancora nessuna voce. «Salva lo stato attuale» crea la prima; le foto si possono aggiungere più tardi.", mlNoDb: "Qui non è possibile salvare nel browser, per esempio in una finestra privata.", mlFail: "Non ha funzionato. Riprova.",
+    mlLoad: "Carica", mlEdit: "Modifica", mlDel: "Elimina", mlOk: "Salva", mlCancel: "Annulla", mlName: "Nome", mlNote: "Nota", mlNotePh: "ad es. legno, attrezzi, esperienze", mlCurrent: "stato attuale",
+    mlPhotos: "Foto", mlPhotoN: n => `Foto ${n}`, mlPhotoAdd: "Aggiungi foto", mlPhotoDel: "Rimuovi foto", mlPhotoOk: "Foto salvata.", mlPhotoFail: "Impossibile leggere la foto.", mlMax: n => `Al massimo ${n} foto per voce.`,
+    mlExport: "Salva backup", mlImport: "Carica backup", mlClose: "Chiudi", mlSaved: "Stato salvato. Nome e nota sono facoltativi.", mlLoaded: n => `«${n}» caricato.`, mlDeleted: "Voce eliminata.",
+    mlAskLoad: "Lo stato attuale non è salvato in nessuna voce. Salvarlo prima?", mlSaveLoad: "Salva e carica", mlLoadOnly: "Carica senza salvare", mlAskDel: n => `Eliminare la voce «${n}» con tutte le foto?`, mlAskPhotoDel: "Eliminare questa foto?",
+    mlImported: (a, s) => `Aggiunte: ${a}, saltate (già presenti): ${s}.`, mlImportFail: "Questo file non è un backup di «I miei cucchiai»."
   },
   nb: {
     title: "Skjemal", lede: "Velg skjetype, juster målene og lagre malen i full størrelse som PDF eller SVG.",
     settings: "Innstillinger", spoonType: "Skjetype", preview: "Forhåndsvisning av malen", lang: "Språk", langName: "Norsk",
     darkMode: "Mørk modus", tips: "Utskriftstips", draft: "Utkast", draftHint: "Utkast: bruk på eget ansvar, mål og funksjoner kan fortsatt endres.",
     design: "Utseende", dsgA: "Salvie", dsgB: "Lønn", dsgC: "Papir & terrakotta", dsgD: "Morgenhimmel",
-    hide: "Skjul", show: "Vis", view3d: "3D-visning av skjeen, dra for å rotere",
+    hide: "Skjul", show: "Vis", swap: "Bytt visninger", view3d: "3D-visning av skjeen, dra for å rotere",
+    look3d: n => `3D-visning: ${n} (bytt)`, looks: ["Tre", "Teknisk", "Trådmodell"],
     warn: n => `Crank over ${n}°: I rettvokst ved blir fibrene korte ved halsen og bladets spiss. Bruk heller en krokvokst grein der veksten følger knekken.`,
     pdf: "Lagre PDF", svg: "Lagre SVG", copy: "Kopier SVG-kode",
     note: "Velg «Faktisk størrelse» eller 100 % ved utskrift, og mål 50 mm-streken. Visningen ovenfra viser det utbrettede omrisset, sidevisningen den faktiske bøyen. Knekklinjen forbinder begge visningene; langs skaftet ligger de i samme høyde. Fibrene i emnet bør gå langs skaftet.",
@@ -995,14 +1195,23 @@ const I18N = {
     edWarnWide: "Bladet er bredere enn 1,7 ganger lengden.", edMin: "Minst 4 punkter per halvdel.", edMax: "Høyst 16 punkter per halvdel.",
     edSaved: c => `Formen ${c} er brukt.`, edFile: "form", edImgFail: "Bildet kunne ikke lastes.",
     dfTitle: "Standardverdier", dfHelp: "Startverdier gjelder fra neste klikk på en skjetype, veiledende verdier og varselgrenser med en gang. Endrede verdier er merket. Lagres bare i denne nettleseren.", dfStart: "Startverdier per skjetype", dfLimits: "Veiledende verdier og varselgrenser", dfShare: "Bladandel (veiledende)",
-    dfCa: "Crank-varsel over", dfMw: "Spiseskje: blad bredere enn", dfMl: "Spiseskje: blad lengre enn", dfMd: "Spiseskje: blad dypere enn", dfFactory: "Fabrikkinnstillinger", dfFactoryDone: "Fabrikkinnstillinger fylt inn. «Bruk» lagrer dem.", dfSaved: "Standardverdier brukt."
+    dfCa: "Crank-varsel over", dfMw: "Spiseskje: blad bredere enn", dfMl: "Spiseskje: blad lengre enn", dfMd: "Spiseskje: blad dypere enn", dfFactory: "Fabrikkinnstillinger", dfFactoryDone: "Fabrikkinnstillinger fylt inn. «Bruk» lagrer dem.", dfSaved: "Standardverdier brukt.",
+    dfAll: "For alle skjetyper", dfMixed: "ulike", dfReset: "Fabrikkinnstilling (bare dette feltet)",
+    ml: "Mine skjeer", mlSave: "Lagre nåværende tilstand", mlHelp: "Utkast med mål, notat og opptil 3 bilder av den ferdige skjeen. Lagres bare i denne nettleseren; bildene kommer aldri på malen. En sikkerhetskopi beskytter mot tap av data.",
+    mlEmpty: "Ingen oppføringer ennå. «Lagre nåværende tilstand» lager den første; bilder kan legges til senere.", mlNoDb: "Lagring i nettleseren er ikke mulig her, for eksempel i et privat vindu.", mlFail: "Det gikk ikke. Prøv igjen.",
+    mlLoad: "Last inn", mlEdit: "Rediger", mlDel: "Slett", mlOk: "Lagre", mlCancel: "Avbryt", mlName: "Navn", mlNote: "Notat", mlNotePh: "f.eks. treslag, verktøy, erfaringer", mlCurrent: "nåværende tilstand",
+    mlPhotos: "Bilder", mlPhotoN: n => `Bilde ${n}`, mlPhotoAdd: "Legg til bilde", mlPhotoDel: "Fjern bilde", mlPhotoOk: "Bildet er lagret.", mlPhotoFail: "Bildet kunne ikke leses.", mlMax: n => `Høyst ${n} bilder per oppføring.`,
+    mlExport: "Lagre sikkerhetskopi", mlImport: "Last inn sikkerhetskopi", mlClose: "Lukk", mlSaved: "Tilstanden er lagret. Navn og notat er valgfritt.", mlLoaded: n => `«${n}» er lastet inn.`, mlDeleted: "Oppføringen er slettet.",
+    mlAskLoad: "Den nåværende tilstanden er ikke lagret i noen oppføring. Lagre først?", mlSaveLoad: "Lagre og last inn", mlLoadOnly: "Last inn uten å lagre", mlAskDel: n => `Slette oppføringen «${n}» med alle bilder?`, mlAskPhotoDel: "Slette dette bildet?",
+    mlImported: (a, s) => `Lagt til: ${a}, hoppet over (finnes allerede): ${s}.`, mlImportFail: "Filen er ikke en sikkerhetskopi av «Mine skjeer»."
   },
   da: {
     title: "Skeskabelon", lede: "Vælg sketype, tilpas målene og gem skabelonen i fuld størrelse som PDF eller SVG.",
     settings: "Indstillinger", spoonType: "Sketype", preview: "Forhåndsvisning af skabelonen", lang: "Sprog", langName: "Dansk",
     darkMode: "Mørk tilstand", tips: "Udskrivningstips", draft: "Udkast", draftHint: "Udkast: brug på eget ansvar, mål og funktioner kan stadig ændre sig.",
     design: "Udseende", dsgA: "Salvie", dsgB: "Ahorn", dsgC: "Papir & terrakotta", dsgD: "Morgenhimmel",
-    hide: "Skjul", show: "Vis", view3d: "3D-visning af skeen, træk for at dreje",
+    hide: "Skjul", show: "Vis", swap: "Skift visninger", view3d: "3D-visning af skeen, træk for at dreje",
+    look3d: n => `3D-visning: ${n} (skift)`, looks: ["Træ", "Teknisk", "Trådmodel"],
     warn: n => `Crank over ${n}°: I ligefibret træ opstår der korte fibre ved halsen og skålens spids. Brug hellere en krum gren, hvis vækst følger knækket.`,
     pdf: "Gem PDF", svg: "Gem SVG", copy: "Kopiér SVG-kode",
     note: "Vælg „Faktisk størrelse“ eller 100 % ved udskrivning, og mål 50 mm-bjælken efter. Visningen ovenfra viser det udfoldede omrids, sidevisningen den faktiske bøjning. Knæklinjen forbinder de to visninger; langs skaftet ligger de i samme højde. Emnets fibre skal løbe langs skaftet.",
@@ -1056,14 +1265,23 @@ const I18N = {
     edWarnWide: "Skålen er bredere end 1,7 gange sin længde.", edMin: "Mindst 4 punkter pr. halvdel.", edMax: "Højst 16 punkter pr. halvdel.",
     edSaved: c => `Formen ${c} er anvendt.`, edFile: "form", edImgFail: "Billedet kunne ikke indlæses.",
     dfTitle: "Standardværdier", dfHelp: "Startværdier gælder fra næste klik på en sketype, vejledende værdier og advarselsgrænser med det samme. Ændrede værdier er markeret. Gemmes kun i denne browser.", dfStart: "Startværdier pr. sketype", dfLimits: "Vejledende værdier og advarselsgrænser", dfShare: "Skålandel (vejledende)",
-    dfCa: "Crank-advarsel over", dfMw: "Spiseske: skål bredere end", dfMl: "Spiseske: skål længere end", dfMd: "Spiseske: skål dybere end", dfFactory: "Fabriksindstillinger", dfFactoryDone: "Fabriksindstillinger udfyldt. »Anvend« gemmer dem.", dfSaved: "Standardværdier anvendt."
+    dfCa: "Crank-advarsel over", dfMw: "Spiseske: skål bredere end", dfMl: "Spiseske: skål længere end", dfMd: "Spiseske: skål dybere end", dfFactory: "Fabriksindstillinger", dfFactoryDone: "Fabriksindstillinger udfyldt. »Anvend« gemmer dem.", dfSaved: "Standardværdier anvendt.",
+    dfAll: "For alle sketyper", dfMixed: "forskellige", dfReset: "Fabriksindstilling (kun dette felt)",
+    ml: "Mine skeer", mlSave: "Gem nuværende tilstand", mlHelp: "Udkast med mål, note og op til 3 billeder af den færdige ske. Gemmes kun i denne browser; billederne kommer aldrig på skabelonen. En sikkerhedskopi beskytter mod tab af data.",
+    mlEmpty: "Ingen poster endnu. »Gem nuværende tilstand« opretter den første; billeder kan tilføjes senere.", mlNoDb: "Det er ikke muligt at gemme i browseren her, for eksempel i et privat vindue.", mlFail: "Det lykkedes ikke. Prøv igen.",
+    mlLoad: "Indlæs", mlEdit: "Rediger", mlDel: "Slet", mlOk: "Gem", mlCancel: "Annuller", mlName: "Navn", mlNote: "Note", mlNotePh: "f.eks. træsort, værktøj, erfaringer", mlCurrent: "nuværende tilstand",
+    mlPhotos: "Billeder", mlPhotoN: n => `Billede ${n}`, mlPhotoAdd: "Tilføj billede", mlPhotoDel: "Fjern billede", mlPhotoOk: "Billedet er gemt.", mlPhotoFail: "Billedet kunne ikke læses.", mlMax: n => `Højst ${n} billeder pr. post.`,
+    mlExport: "Gem sikkerhedskopi", mlImport: "Indlæs sikkerhedskopi", mlClose: "Luk", mlSaved: "Tilstanden er gemt. Navn og note er valgfri.", mlLoaded: n => `»${n}« er indlæst.`, mlDeleted: "Posten er slettet.",
+    mlAskLoad: "Den nuværende tilstand er ikke gemt i nogen post. Gem først?", mlSaveLoad: "Gem og indlæs", mlLoadOnly: "Indlæs uden at gemme", mlAskDel: n => `Slet posten »${n}« med alle billeder?`, mlAskPhotoDel: "Slet dette billede?",
+    mlImported: (a, s) => `Tilføjet: ${a}, sprunget over (findes allerede): ${s}.`, mlImportFail: "Filen er ikke en sikkerhedskopi af »Mine skeer«."
   },
   pl: {
     title: "Szablon łyżki", lede: "Wybierz rodzaj łyżki, dopasuj wymiary i zapisz szablon w rzeczywistym rozmiarze jako PDF lub SVG.",
     settings: "Ustawienia", spoonType: "Rodzaj łyżki", preview: "Podgląd szablonu", lang: "Język", langName: "Polski",
     darkMode: "Tryb ciemny", tips: "Wskazówki drukowania", draft: "Wersja robocza", draftHint: "Wersja robocza: użycie bez gwarancji, wymiary i funkcje mogą się jeszcze zmienić.",
     design: "Wygląd", dsgA: "Szałwia", dsgB: "Klon", dsgC: "Papier i terakota", dsgD: "Poranne niebo",
-    hide: "Ukryj", show: "Pokaż", view3d: "Widok 3D łyżki, przeciągnij, aby obrócić",
+    hide: "Ukryj", show: "Pokaż", swap: "Zamień widoki", view3d: "Widok 3D łyżki, przeciągnij, aby obrócić",
+    look3d: n => `Widok 3D: ${n} (zmień)`, looks: ["Drewno", "Techniczny", "Siatka"],
     warn: n => `Crank powyżej ${n}°: w drewnie o prostych włóknach przy szyjce i czubku czerpaka powstają krótkie włókna. Lepiej użyć wygiętej gałęzi, której przyrost podąża za wygięciem.`,
     pdf: "Zapisz PDF", svg: "Zapisz SVG", copy: "Kopiuj kod SVG",
     note: "Przy drukowaniu wybierz „Rzeczywisty rozmiar” lub 100 % i zmierz pasek 50 mm. Widok z góry pokazuje rozwinięty obrys, widok z boku rzeczywiste wygięcie. Linia załamania łączy oba widoki; wzdłuż trzonka leżą na tej samej wysokości. Włókna półfabrykatu powinny biec wzdłuż trzonka.",
@@ -1117,7 +1335,15 @@ const I18N = {
     edWarnWide: "Czerpak jest szerszy niż 1,7 jego długości.", edMin: "Co najmniej 4 punkty na połowę.", edMax: "Najwyżej 16 punktów na połowę.",
     edSaved: c => `Zastosowano kształt ${c}.`, edFile: "ksztalt", edImgFail: "Nie udało się wczytać obrazu.",
     dfTitle: "Wartości domyślne", dfHelp: "Wartości początkowe obowiązują od następnego kliknięcia rodzaju łyżki, wartości orientacyjne i progi ostrzeżeń od razu. Zmienione wartości są oznaczone. Zapisywane tylko w tej przeglądarce.", dfStart: "Wartości początkowe dla rodzaju łyżki", dfLimits: "Wartości orientacyjne i progi ostrzeżeń", dfShare: "Udział czerpaka (orientacyjnie)",
-    dfCa: "Ostrzeżenie o crank powyżej", dfMw: "Łyżka stołowa: czerpak szerszy niż", dfMl: "Łyżka stołowa: czerpak dłuższy niż", dfMd: "Łyżka stołowa: czerpak głębszy niż", dfFactory: "Ustawienia fabryczne", dfFactoryDone: "Wpisano ustawienia fabryczne. „Zastosuj” je zapisuje.", dfSaved: "Zastosowano wartości domyślne."
+    dfCa: "Ostrzeżenie o crank powyżej", dfMw: "Łyżka stołowa: czerpak szerszy niż", dfMl: "Łyżka stołowa: czerpak dłuższy niż", dfMd: "Łyżka stołowa: czerpak głębszy niż", dfFactory: "Ustawienia fabryczne", dfFactoryDone: "Wpisano ustawienia fabryczne. „Zastosuj” je zapisuje.", dfSaved: "Zastosowano wartości domyślne.",
+    dfAll: "Dla wszystkich rodzajów łyżek", dfMixed: "różne", dfReset: "Ustawienie fabryczne (tylko to pole)",
+    ml: "Moje łyżki", mlSave: "Zapisz bieżący stan", mlHelp: "Projekty z wymiarami, notatką i maksymalnie 3 zdjęciami gotowej łyżki. Zapisywane tylko w tej przeglądarce; zdjęcia nigdy nie trafiają na szablon. Kopia zapasowa chroni przed utratą danych.",
+    mlEmpty: "Brak wpisów. „Zapisz bieżący stan” tworzy pierwszy; zdjęcia można dodać później.", mlNoDb: "Zapisywanie w przeglądarce nie jest tu możliwe, na przykład w oknie prywatnym.", mlFail: "Nie udało się. Spróbuj ponownie.",
+    mlLoad: "Wczytaj", mlEdit: "Edytuj", mlDel: "Usuń", mlOk: "Zapisz", mlCancel: "Anuluj", mlName: "Nazwa", mlNote: "Notatka", mlNotePh: "np. gatunek drewna, narzędzia, doświadczenia", mlCurrent: "bieżący stan",
+    mlPhotos: "Zdjęcia", mlPhotoN: n => `Zdjęcie ${n}`, mlPhotoAdd: "Dodaj zdjęcie", mlPhotoDel: "Usuń zdjęcie", mlPhotoOk: "Zdjęcie zapisane.", mlPhotoFail: "Nie udało się odczytać zdjęcia.", mlMax: n => `Najwyżej ${n} zdjęcia na wpis.`,
+    mlExport: "Zapisz kopię zapasową", mlImport: "Wczytaj kopię zapasową", mlClose: "Zamknij", mlSaved: "Stan zapisany. Nazwa i notatka są opcjonalne.", mlLoaded: n => `Wczytano „${n}”.`, mlDeleted: "Wpis usunięty.",
+    mlAskLoad: "Bieżący stan nie jest zapisany w żadnym wpisie. Najpierw zapisać?", mlSaveLoad: "Zapisz i wczytaj", mlLoadOnly: "Wczytaj bez zapisywania", mlAskDel: n => `Usunąć wpis „${n}” ze wszystkimi zdjęciami?`, mlAskPhotoDel: "Usunąć to zdjęcie?",
+    mlImported: (a, s) => `Dodano: ${a}, pominięto (już istnieją): ${s}.`, mlImportFail: "Ten plik nie jest kopią zapasową „Moje łyżki”."
   }
 };
 let lang = "de";
@@ -1191,6 +1417,11 @@ const FACTORY = JSON.parse(JSON.stringify({ PRESETS, SHARE, LIMITS }));
 const NUM_FIELDS = GROUPS.flatMap(g => g.fields).filter(fd => fd.min !== undefined);
 const SHARE_RANGE = [10, 60];
 const LIMIT_RANGE = { ca: [0, 90], mw: [18, 110], ml: [25, 130], md: [2, 45] };
+// Auswahlwerte, die als Standardwert gespeichert werden dürfen (Papier, Hand); Facetten-Auswahl bleibt fest
+const DEFAULT_CHOICES = ["pp", "hd"];
+const CHOICE_FIELDS = GROUPS.flatMap(g => g.fields).filter(fd => DEFAULT_CHOICES.includes(fd.k));
+// Felder, die in der Werkseinstellung für alle Löffelarten gleich sind (Zahlen) plus die Auswahlwerte aus DEFAULT_CHOICES
+const SHARED_KEYS = [...NUM_FIELDS.map(fd => fd.k).filter(k => Object.values(FACTORY.PRESETS).every(p => p[k] === FACTORY.PRESETS.ess[k])), ...DEFAULT_CHOICES];
 // Zahl auf Bereich und Schrittweite bringen; ungültig = null
 const fitNum = (v, min, max, step = 1) => typeof v !== "number" || !isFinite(v) ? null : Number((Math.round(Math.min(max, Math.max(min, v)) / step) * step).toFixed(2));
 // d = { P: { ess: { L: … } }, share: { ess: 33 }, lim: { ca: 15 } }; fehlende oder ungültige Werte bleiben auf Werkseinstellung
@@ -1200,6 +1431,7 @@ function applyDefaults(d) {
     const o = (d.P && d.P[t]) || {};
     Object.assign(PRESETS[t], FACTORY.PRESETS[t]);
     NUM_FIELDS.forEach(fd => { const v = fitNum(o[fd.k], fd.min, fd.max, fd.step); if (v !== null) PRESETS[t][fd.k] = v; });
+    CHOICE_FIELDS.forEach(fd => { if (fd.choice.some(c => c[0] === o[fd.k])) PRESETS[t][fd.k] = o[fd.k]; });
     const v = fitNum(d.share && d.share[t], ...SHARE_RANGE);
     SHARE[t][1] = v === null ? FACTORY.SHARE[t][1] : v;
   }
@@ -1648,6 +1880,8 @@ async function save(kind) {
 }
 /* ---------- 3D-Ansicht ---------- */
 const V3 = {};
+// Darstellungen reihum: Holz, Technisch (grau mit Linien an markanten Kanten), Drahtgitter (Netzlinien ohne verdeckte Linien); die Wahl liegt in loeffel-3d-stil
+const LOOKS = ["holz", "technisch", "gitter"];
 function init3D() {
   if (!window.THREE) { $("v3d").hidden = true; return; }
   const canvas = $("c3d");
@@ -1657,8 +1891,19 @@ function init3D() {
   V3.camera = new THREE.PerspectiveCamera(30, 1, 1, 5000);
   V3.scene.add(new THREE.HemisphereLight(0xfff8ee, 0x3a3326, 0.85));
   const sun = new THREE.DirectionalLight(0xffffff, 0.75); sun.position.set(1, 2, 1.2); V3.scene.add(sun);
-  V3.mesh = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshStandardMaterial({ color: 0xc89a68, roughness: 0.8, side: THREE.DoubleSide }));
-  V3.group = new THREE.Group(); V3.group.add(V3.mesh); V3.scene.add(V3.group);
+  // Technisch und Drahtgitter schieben die Fläche etwas nach hinten, damit die Linien darauf sauber liegen; im Drahtgitter schreibt sie nur Tiefe
+  const back = { side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 };
+  V3.mats = {
+    holz: new THREE.MeshStandardMaterial({ color: 0xc89a68, roughness: 0.8, side: THREE.DoubleSide }),
+    technisch: new THREE.MeshStandardMaterial({ color: 0x8a9096, roughness: 0.85, ...back }),
+    gitter: new THREE.MeshBasicMaterial({ colorWrite: false, ...back })
+  };
+  V3.mesh = new THREE.Mesh(new THREE.BufferGeometry(), V3.mats.holz);
+  V3.lines = new THREE.LineSegments(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ transparent: true }));
+  // Kontaktschatten: weichgezeichnete Draufsicht auf einer sonst unsichtbaren Bodenfläche unter dem tiefsten Punkt
+  V3.shadow = new THREE.Mesh(new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false }));
+  V3.shadow.renderOrder = -1;
+  V3.group = new THREE.Group(); V3.group.add(V3.shadow, V3.mesh, V3.lines); V3.scene.add(V3.group);
   V3.yaw = -0.6; V3.pitch = 0.55; V3.dist = 400; V3.on = true; V3.drag = null;
   V3.still = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   canvas.addEventListener("pointerdown", e => { V3.drag = { x: e.clientX, y: e.clientY }; canvas.setPointerCapture(e.pointerId); });
@@ -1670,20 +1915,39 @@ function init3D() {
   });
   const end = () => { V3.drag = null; };
   canvas.addEventListener("pointerup", end); canvas.addEventListener("pointercancel", end);
-  $("v3dToggle").addEventListener("click", () => {
-    V3.on = !V3.on; canvas.hidden = !V3.on;
-    $("v3dToggle").textContent = V3.on ? T("hide") : T("show");
-    $("v3dToggle").setAttribute("aria-expanded", V3.on);
-    try { localStorage.setItem("loeffel-3d", V3.on ? "1" : "0"); } catch (e) {}
-  });
-  try { if (localStorage.getItem("loeffel-3d") === "0") $("v3dToggle").click(); } catch (e) {}
+  const setOn = on => {
+    V3.on = on; canvas.hidden = !on;
+    toggleLabel3D();
+    $("v3dToggle").setAttribute("aria-expanded", on);
+    try { localStorage.setItem("loeffel-3d", on ? "1" : "0"); } catch (e) {}
+  };
+  // Hauptansicht: "zeichnung" (Standard) oder "3d"; .swap an der Matte tauscht die Größen, die Wahl liegt in loeffel-ansicht
+  const setMain = (m, save) => {
+    V3.main = m;
+    document.querySelector(".mat").classList.toggle("swap", m === "3d");
+    $("v3dSwap").setAttribute("aria-pressed", m === "3d");
+    if (save) try { localStorage.setItem("loeffel-ansicht", m); } catch (e) {}
+  };
+  $("v3dToggle").addEventListener("click", () => { setOn(!V3.on); if (!V3.on && V3.main === "3d") setMain("zeichnung", true); });
+  // Tauschen blendet eine ausgeblendete 3D-Ansicht wieder ein; sie ist dann die Hauptansicht
+  $("v3dSwap").addEventListener("click", () => { const was3d = V3.on && V3.main === "3d"; setOn(true); setMain(was3d ? "zeichnung" : "3d", true); });
+  $("v3dLook").addEventListener("click", () => setLook(LOOKS[(LOOKS.indexOf(V3.look) + 1) % LOOKS.length], true));
+  // Die Linien im Drahtgitter haben die Schriftfarbe des Designs und folgen dem Wechsel von Design und Hell/Dunkel
+  new MutationObserver(lookColors).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "data-design"] });
+  let saved = null, look = null;
+  try { if (localStorage.getItem("loeffel-3d") === "0") setOn(false); saved = localStorage.getItem("loeffel-ansicht"); look = localStorage.getItem("loeffel-3d-stil"); } catch (e) {}
+  setMain(V3.on && saved === "3d" ? "3d" : "zeichnung");
+  setLook(LOOKS.includes(look) ? look : "holz");
+  toggleLabel3D();
   V3.idle = 0;
   const loop = () => {
     requestAnimationFrame(loop);
     if (!V3.on) return;
     const w = canvas.clientWidth, h = canvas.clientHeight;
     if (!w || !h) return;
-    if (canvas.width !== Math.round(w * Math.min(2, devicePixelRatio)) ) { V3.renderer.setPixelRatio(Math.min(2, devicePixelRatio)); V3.renderer.setSize(w, h, false); V3.camera.aspect = w / h; V3.camera.updateProjectionMatrix(); }
+    // Größe und Pixeldichte nachführen (nach Tauschen der Ansichten, Ändern der Fenstergröße, Wechsel des Bildschirms), ohne Verzerrung
+    const pr = Math.min(2, devicePixelRatio);
+    if (V3.cw !== w || V3.ch !== h || V3.pr !== pr) { V3.cw = w; V3.ch = h; V3.pr = pr; V3.renderer.setPixelRatio(pr); V3.renderer.setSize(w, h, false); V3.camera.aspect = w / h; V3.camera.updateProjectionMatrix(); }
     if (!V3.drag && !V3.still && ++V3.idle > 90) V3.yaw += 0.004;
     const d = V3.dist;
     V3.camera.position.set(Math.sin(V3.yaw) * Math.cos(V3.pitch) * d, Math.sin(V3.pitch) * d, Math.cos(V3.yaw) * Math.cos(V3.pitch) * d);
@@ -1693,14 +1957,145 @@ function init3D() {
   loop();
 }
 
+// Beschriftung von Ausblenden/Einblenden: Text und Augensymbol (kleines Handy-Fenster), aria-label und Tooltip
+function toggleLabel3D() {
+  const b = $("v3dToggle"), t = V3.on ? T("hide") : T("show");
+  b.querySelector("span").textContent = t;
+  b.setAttribute("aria-label", t); b.title = t;
+  b.querySelector("use").setAttribute("href", V3.on ? "#i-eye-off" : "#i-eye");
+}
+
+function lookLabel3D() {
+  const t = T("look3d")(T("looks")[LOOKS.indexOf(V3.look)]);
+  $("v3dLook").setAttribute("aria-label", t); $("v3dLook").title = t;
+}
+
+function setLook(look, save) {
+  V3.look = look;
+  V3.mesh.material = V3.mats[look];
+  V3.shadow.visible = look !== "gitter";
+  $("v3dLook").querySelector("use").setAttribute("href", "#i-" + look);
+  lookLabel3D(); lookColors(); lookLines();
+  if (save) try { localStorage.setItem("loeffel-3d-stil", look); } catch (e) {}
+}
+
+function lookColors() {
+  const m = V3.lines.material;
+  if (V3.look === "technisch") { m.color.set(0x2a2e33); m.opacity = 0.9; }
+  else { m.color.set(getComputedStyle($("v3d")).color); m.opacity = 0.45; }
+}
+
+// Linien zur aktuellen Darstellung, nur bei Bedarf neu: markante Kanten (Technisch) oder alle Netzlinien (Drahtgitter)
+function lookLines() {
+  const geo = V3.mesh.geometry, key = V3.look === "holz" || !geo.getAttribute("position") ? "" : V3.look + geo.id;
+  V3.lines.visible = !!key;
+  if (!key || V3.linesKey === key) return;
+  V3.linesKey = key;
+  V3.lines.geometry.dispose();
+  V3.lines.geometry = V3.look === "technisch" ? edges3D(V3.secs) : wire3D(geo);
+}
+
+// Drahtgitter: die Querschnitte und die Längslinien des Netzes (ohne Dreiecksdiagonalen); die Punkte teilt es mit der Fläche,
+// aber in einem eigenen Attribut, damit das Freigeben der Linien den Puffer der Fläche nicht mitnimmt
+function wire3D(geo) {
+  const R = V3.R, n = (geo.getAttribute("position").count - 2) / R, idx = [];
+  for (let i = 0; i < n; i++)
+    for (let j = 0; j < R; j++) {
+      const a = i * R + j;
+      idx.push(a, i * R + (j + 1) % R);
+      if (i < n - 1) idx.push(a, a + R);
+    }
+  const w = new THREE.BufferGeometry();
+  w.setAttribute("position", new THREE.BufferAttribute(geo.getAttribute("position").array, 3));
+  w.setIndex(idx);
+  return w;
+}
+
+// Markante Kanten: Umriss (Mitte der Seitenwand bei u = ±1) und die Knicke der Querschnitte (Laffenrand, Facetten, Kiel).
+// Ober- und Unterseite jedes Querschnitts werden fein abgetastet; ein Knick ist die Stelle, an der die Kurve in einem
+// kurzen Stück um mindestens 12° abknickt. Knicke benachbarter Querschnitte auf derselben Seite werden verbunden,
+// wenn sie quer höchstens 2 mm auseinanderliegen. Das Netz selbst ist dafür zu grob: Seine Punkte liegen neben den Knicken.
+function edges3D(secs) {
+  const K = 64, MIN = 12 * Math.PI / 180, pos = [];
+  const turn = (a, b, c) => { let d = Math.atan2(c[2] - b[2], c[1] - b[1]) - Math.atan2(b[2] - a[2], b[1] - a[1]); d = Math.abs(d) % (2 * Math.PI); return Math.min(d, 2 * Math.PI - d); };
+  const kinks = secs.map(s => [s.up, s.dn].map(f => {
+    if (s.w < 1) return [];                                   // Spitze und Griffende: Querschnitt zu schmal
+    const p = [];
+    for (let k = 0; k <= 2 * K; k++) { const u = -1 + k / K, n = f(u); p.push([u, s.at(u, n)[2], n]); }
+    const t = p.map((q, k) => k > 0 && k < 2 * K ? turn(p[k - 1], q, p[k + 1]) : 0), out = [];
+    for (let k = 1; k < 2 * K; k++) {
+      if (Math.abs(p[k][0]) > 0.95) continue;                 // am Rand rundet die Seite in die Wand, dort liegt der Umriss
+      let top = true, sum = 0;
+      for (let d = -3; d <= 3; d++) {
+        const v = t[k + d] || 0;
+        if (v > t[k] || (v === t[k] && d < 0)) top = false;
+        if (Math.abs(d) <= 2) sum += v;
+      }
+      if (top && sum >= MIN) out.push(p[k]);
+    }
+    return out;
+  }));
+  const seg = (a, b) => pos.push(...a, ...b);
+  const rim = (s, u) => s.at(u, (s.up(u) + s.dn(u)) / 2);
+  for (let i = 0; i < secs.length - 1; i++) {
+    const s = secs[i], n = secs[i + 1];
+    [-1, 1].forEach(u => seg(rim(s, u), rim(n, u)));
+    [0, 1].forEach(c => kinks[i][c].forEach(q => {
+      let best = null;
+      kinks[i + 1][c].forEach(r => { if (Math.abs(r[1] - q[1]) < 2 && (!best || Math.abs(r[1] - q[1]) < Math.abs(best[1] - q[1]))) best = r; });
+      if (best) seg(s.at(q[0], q[2]), n.at(best[0], best[2]));
+    }));
+  }
+  [secs[0], secs[secs.length - 1]].forEach(s => seg(rim(s, -1), rim(s, 1)));
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  return geo;
+}
+
+// Kontaktschatten: Die Draufsicht wird Abschnitt für Abschnitt umso dunkler gezeichnet, je näher der Löffel dort am Boden liegt,
+// dann zweimal weichgezeichnet (eng und weit). Das Weichzeichnen geht über den Schatten von drawImage, das können alle Browser.
+function shadow3D(ring, M) {
+  const S = 2, B = 18;                                    // Pixel je mm, Rand in mm
+  let x0 = Infinity, x1 = -Infinity, z0 = Infinity, z1 = -Infinity, y0 = Infinity;
+  ring.forEach(r => r.forEach(([x, y, z]) => { x0 = Math.min(x0, x); x1 = Math.max(x1, x); z0 = Math.min(z0, z); z1 = Math.max(z1, z); y0 = Math.min(y0, y); }));
+  x0 -= B; x1 += B; z0 -= B; z1 += B;
+  const w = Math.ceil((x1 - x0) * S), h = Math.ceil((z1 - z0) * S);
+  const src = document.createElement("canvas"); src.width = w; src.height = h;
+  const c = src.getContext("2d");
+  // je Querschnitt die Breite (min/max z) und die Höhe der Unterseite über dem Boden
+  const sec = ring.map(r => {
+    let a = Infinity, b = -Infinity, lo = Infinity;
+    r.forEach(([, y, z]) => { a = Math.min(a, z); b = Math.max(b, z); lo = Math.min(lo, y); });
+    return { x: (r[0][0] + r[M][0]) / 2, a, b, hy: lo - y0 };
+  });
+  for (let i = 0; i < sec.length - 1; i++) {
+    const p = sec[i], q = sec[i + 1];
+    c.fillStyle = `rgba(0,0,0,${Math.max(0, 1 - (p.hy + q.hy) / 2 / 30).toFixed(3)})`;
+    c.beginPath();
+    c.moveTo((p.x - x0) * S, (p.a - z0) * S); c.lineTo((q.x - x0) * S, (q.a - z0) * S);
+    c.lineTo((q.x - x0) * S, (q.b - z0) * S); c.lineTo((p.x - x0) * S, (p.b - z0) * S);
+    c.closePath(); c.fill();
+  }
+  const out = document.createElement("canvas"); out.width = w; out.height = h;
+  const o = out.getContext("2d");
+  o.shadowOffsetX = w;
+  [[3, 0.45], [12, 0.3]].forEach(([blur, a]) => { o.shadowBlur = blur * S; o.shadowColor = `rgba(0,0,0,${a})`; o.drawImage(src, -w, 0); });
+  const tex = new THREE.CanvasTexture(out);
+  const m = V3.shadow.material;
+  if (m.map) m.map.dispose();
+  m.map = tex; m.needsUpdate = true;
+  V3.shadow.scale.set(x1 - x0, 1, z1 - z0);
+  V3.shadow.position.set((x0 + x1) / 2, y0 - 0.3, (z0 + z1) / 2);
+}
+
 // Baut aus Draufsicht und Seitenprofil einen geschlossenen Körper: je Längsschnitt eine obere und eine untere Querkurve
 function update3D(sc) {
   if (!V3.mesh) return;
-  const M = 18, pos = [], idx = [], g = sc.geo, L = sc.L;
+  const M = 36, pos = [], idx = [], g = sc.geo, L = sc.L;
   // Kiel unten: Die Unterseite läuft in geraden Flächen von den Seiten zu einer 2 mm breiten Kante zusammen (halbe Breite KB);
   // kh = Anteil der Seitenhöhe, auf dem die Schräge liegt (1 = von der Oberkante an: unter der Fase fc und 0,8 mm Mindestabstand)
   const kh = sc.kh / 100, KB = 1;
-  const ring = [];
+  const ring = [], secs = [];
   g.forEach(([px, pz, ps, hl, hr, top, bot, hol, hf, fc, fe]) => {
     const nx = -Math.sin(ps), nz = Math.cos(ps);
     const e = top + Math.min(bot - top, 2 * hf) / 2;
@@ -1714,24 +2109,22 @@ function update3D(sc) {
       if (kh > 0 && fe > 0 && y > KB) z = Math.min(z, bot - fe * kh * Math.max(0, bot - top - fc - 0.8) * (y - KB) / (w - KB));
       return z;
     };
-    const r = [];
-    for (let j = 0; j <= M; j++) {
-      const u = -1 + 2 * j / M, w = u < 0 ? hl : hr, uu = u * u;
+    // Ober- und Unterseite an der Stelle u (-1…1 quer), at = Punkt im Raum; die Oberseite bleibt 0,8 mm über der Unterseite
+    const up = u => {
+      const w = u < 0 ? hl : hr, uu = u * u;
       const ui = w > sc.wt + 1.5 ? (w - sc.wt) / w : 0;
       let z = e - (e - top) * Math.pow(1 - uu, 0.35);
       if (fe > 0) z += (top - z) * fe;
       if (hol > 0 && Math.abs(u) < ui) z += hol * (1 - uu / (ui * ui));
       if (fc > 0) z = Math.max(z, top + Math.abs(u) * w - (w - fc));
-      const zl = low(u, w, uu);
-      const n = Math.min(z, zl - 0.8);
-      r.push([px + n * nx - L / 2, -(pz + n * nz), u * w]);
-    }
-    for (let j = M; j >= 0; j--) {
-      const u = -1 + 2 * j / M, w = u < 0 ? hl : hr, uu = u * u;
-      const n = low(u, w, uu);
-      r.push([px + n * nx - L / 2, -(pz + n * nz), u * w]);
-    }
-    ring.push(r);
+      return Math.min(z, low(u, w, uu) - 0.8);
+    };
+    const dn = u => low(u, u < 0 ? hl : hr, u * u);
+    const at = (u, n) => [px + n * nx - L / 2, -(pz + n * nz), u * (u < 0 ? hl : hr)];
+    const r = [];
+    for (let j = 0; j <= M; j++) { const u = -1 + 2 * j / M; r.push(at(u, up(u))); }
+    for (let j = M; j >= 0; j--) { const u = -1 + 2 * j / M; r.push(at(u, dn(u))); }
+    ring.push(r); secs.push({ up, dn, at, w: Math.min(hl, hr) });
   });
   const R = 2 * (M + 1);
   ring.forEach(r => r.forEach(p => pos.push(p[0], p[1], p[2])));
@@ -1748,19 +2141,25 @@ function update3D(sc) {
   const geo = new THREE.BufferGeometry();
   geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
   geo.setIndex(idx); geo.computeVertexNormals();
-  V3.mesh.geometry.dispose(); V3.mesh.geometry = geo;
+  V3.mesh.geometry.dispose(); V3.mesh.geometry = geo; V3.secs = secs; V3.R = R;
+  lookLines(); shadow3D(ring, M);
   V3.dist = L * 2.2;
 }
 /* ---------- Oberfläche ---------- */
+// Gespeicherten Stand übernehmen (loeffel-state, Meine Löffel): fehlende Werte aus PRESETS, zusammengefasste und fehlende Formen ersetzen
+function fixState(s) {
+  const st = { type: s.type, P: { ...PRESETS[s.type], ...s.P } };
+  st.P.L = Math.min(st.P.L, 350);
+  if (st.P.bs[0] === "d" && BOWL_MERGED[st.P.bs.slice(1)]) st.P.bs = "d" + BOWL_MERGED[st.P.bs.slice(1)];
+  if (st.P.bs[0] === "u" && !bowlData(st.P.bs)) st.P.bs = PRESETS[st.type].bs;
+  if (st.P.he[0] === "w" && !endData(st.P.he)) st.P.he = PRESETS[st.type].he;
+  return st;
+}
 let state = { type: "ess", P: { ...PRESETS.ess } };
 try {
   const s = JSON.parse(localStorage.getItem("loeffel-state") || "null");
-  if (s && PRESETS[s.type] && s.P) state = { type: s.type, P: { ...PRESETS[s.type], ...s.P } };
-  state.P.L = Math.min(state.P.L, 350);
+  if (s && PRESETS[s.type] && s.P) state = fixState(s);
 } catch (e) {}
-if (state.P.bs[0] === "d" && BOWL_MERGED[state.P.bs.slice(1)]) state.P.bs = "d" + BOWL_MERGED[state.P.bs.slice(1)];
-if (state.P.bs[0] === "u" && !bowlData(state.P.bs)) state.P.bs = PRESETS[state.type].bs;
-if (state.P.he[0] === "w" && !endData(state.P.he)) state.P.he = PRESETS[state.type].he;
 const $ = id => document.getElementById(id);
 let scene;
 
@@ -1808,7 +2207,7 @@ function renderFields() {
   $("fields").innerHTML = GROUPS.map(g => { const on = g.id === openGroup; return `<div class="grp" data-g="${g.id}"><button type="button" class="grp-h" id="gh-${g.id}" data-acc="${g.id}" aria-expanded="${on}" aria-controls="gb-${g.id}"><span class="ico">${ico(g.id)}</span><span>${T("groups")[g.id]}</span>${chev()}</button><div class="grp-b" id="gb-${g.id}" role="region" aria-labelledby="gh-${g.id}"${on ? "" : " hidden"}>` + g.fields.map(fd =>
     fd.sub ? `<div class="subh">${T("groups")[fd.sub] || T(fd.sub)}</div>` : fd.gallery ?
     // Galerie: gewählte Form groß mit Kennung, Klapper „Formen“ öffnet Raster, Hochladen und Entfernen
-    `<div class="field"><div class="flabel-row"><span class="flabel" id="l-${fd.k}">${T("fields")[fd.k][0]}</span><button type="button" class="edit" data-edit="${fd.k}"><span aria-hidden="true">✎</span> ${T("edit")}</button></div>
+    `<div class="field"><div class="flabel-row"><span class="flabel" id="l-${fd.k}">${T("fields")[fd.k][0]}</span><button type="button" class="ctl edit" data-edit="${fd.k}"><span aria-hidden="true">✎</span> ${T("edit")}</button></div>
       <div class="galrow"><div class="bigshape" id="big-${fd.k}"></div><div class="gcode" id="code-${fd.k}"></div><button type="button" class="ctl sm galtog" data-galtog="${fd.k}" aria-expanded="${galOpen[fd.k]}" aria-controls="go-${fd.k}">${T("shapesLbl")}${chev()}</button></div>
       <div class="gal-open" id="go-${fd.k}"${galOpen[fd.k] ? "" : " hidden"}><div class="gallery" role="group" aria-labelledby="l-${fd.k}">` +
       (fd.k === "bs" ? SHAPES() : ENDSHAPES()).map(v => {
@@ -2093,10 +2492,11 @@ function applyLang() {
   document.querySelectorAll("[data-i]").forEach(el => { el.textContent = T(el.dataset.i); });
   document.querySelectorAll("[data-ia]").forEach(el => el.setAttribute("aria-label", T(el.dataset.ia)));
   $("dfBtn").title = T("dfTitle");
+  $("v3dSwap").title = T("swap");
   if ($("draft")) $("draft").title = T("draftHint");
   $("sheet").title = T("zoomHint");
   $("langSel").value = lang;
-  if (V3.mesh) $("v3dToggle").textContent = V3.on ? T("hide") : T("show");
+  if (V3.mesh) { toggleLabel3D(); lookLabel3D(); }
   status("");
   renderTypes(); renderFields(); syncFields(); update();
 }
@@ -2504,54 +2904,94 @@ window.addEventListener("resize", () => { if (ED.open) { edDraw(); edPreviewSoon
 /* ---------- Standardwerte (Dialog #df) ---------- */
 // Startwerte je Löffelart, Richtwert Laffenanteil und Warngrenzen. Gespeichert werden nur die Abweichungen von der
 // Werkseinstellung (FACTORY, presets.js). Startwerte gelten ab dem nächsten Klick auf eine Löffelart, der Entwurf bleibt.
+// Felder, die in der Werkseinstellung für alle Arten gleich sind (SHARED_KEYS), stehen oben in einem eigenen Abschnitt
+// mit einer Spalte (data-df="all"); beim Speichern gilt der Wert für alle Arten. Sind gespeicherte Werte je Art verschieden,
+// bleibt das Feld leer („verschieden“, data-mixed) und die Werte je Art bleiben, solange es leer bleibt.
 const DF_LIM = [["ca", "°", "dfCa"], ["mw", "mm", "dfMw"], ["ml", "mm", "dfMl"], ["md", "mm", "dfMd"]];
-// Eingabefeld; data-df = Bereich (P, share, lim), data-t = Löffelart, data-k = Wert
-function dfInput(df, t, k, min, max, step, val) {
-  return `<input type="number" inputmode="decimal" data-df="${df}" data-t="${t}" data-k="${k}" min="${min}" max="${max}" step="${step}" value="${val}" aria-label="${k}">`;
+let dfMixed = {}; // Werte je Art der Felder, die beim Öffnen verschieden waren: { k: { ess: …, … } }
+// Eingabefeld oder Auswahl samt ↺; data-df = Bereich (P, all, share, lim), data-t = Löffelart, data-k = Wert
+function dfControl(df, t, k, val, mixed, fd) {
+  const at = `data-df="${df}" data-t="${t}" data-k="${k}"${mixed ? ' data-mixed="1"' : ""}`;
+  const ctl = fd.choice
+    ? `<select ${at}>${mixed ? `<option value="">${T("dfMixed")}</option>` : ""}${fd.choice.map(([v, l]) => `<option value="${v}"${!mixed && v === val ? " selected" : ""}>${T(l) || l}</option>`).join("")}</select>`
+    : `<input type="number" inputmode="decimal" ${at} min="${fd.min}" max="${fd.max}" step="${fd.step || 1}" value="${mixed ? "" : val}"${mixed ? ` placeholder="${T("dfMixed")}"` : ""}>`;
+  return `<span class="df-c">${ctl}<button type="button" class="df-rs" data-rs hidden title="${T("dfReset")}">↺</button></span>`;
 }
-const dfFactoryVal = el => el.dataset.df === "P" ? FACTORY.PRESETS[el.dataset.t][el.dataset.k] : el.dataset.df === "share" ? FACTORY.SHARE[el.dataset.t][1] : FACTORY.LIMITS[el.dataset.k];
+const dfFactoryVal = el => el.dataset.df === "P" ? FACTORY.PRESETS[el.dataset.t][el.dataset.k] : el.dataset.df === "all" ? FACTORY.PRESETS.ess[el.dataset.k]
+  : el.dataset.df === "share" ? FACTORY.SHARE[el.dataset.t][1] : FACTORY.LIMITS[el.dataset.k];
+const dfIsChg = el => el.dataset.mixed && el.value === "" || el.value !== "" && (el.tagName === "SELECT" ? el.value : Number(el.value)) !== dfFactoryVal(el);
 function dfMark() {
-  $("dfBody").querySelectorAll("input").forEach(el => el.classList.toggle("chg", el.value !== "" && Number(el.value) !== dfFactoryVal(el)));
+  $("dfBody").querySelectorAll("[data-df]").forEach(el => {
+    const c = dfIsChg(el);
+    el.classList.toggle("chg", c);
+    el.parentNode.querySelector("[data-rs]").hidden = !c;
+  });
+  // Punkt an der Klapper, wenn darin etwas geändert ist
+  $("dfBody").querySelectorAll(".df-fh").forEach(b => { b.querySelector(".df-dot").hidden = !$("dfBody").querySelector(`tr[data-fold="${b.dataset.fold}"] .chg`); });
 }
-function dfRender() {
-  const types = Object.keys(PRESETS), unit = fd => fd.unit === "" ? "" : fd.unit || "mm";
-  const head = `<thead><tr><th></th>${types.map(t => `<th scope="col">${T("types")[t]}</th>`).join("")}</tr></thead>`;
-  const sub = s => `<tr class="df-sub"><th colspan="${types.length + 1}" scope="colgroup">${s}</th></tr>`;
-  let rows = "";
+// Zeilen einer Tabelle: cols = Spalten (Löffelarten, oder [""] für den gemeinsamen Abschnitt), shared = welche Felder
+// (gemeinsame oder je Art verschiedene). Erweitert und Facetten stehen in einer Klapper (id = scope + Name).
+function dfRows(scope, cols, shared) {
+  const buckets = { main: "", erweitert: "", facets: "" }, ncol = cols.length + 1;
   GROUPS.forEach(g => {
     const gn = T("groups")[g.id];
-    if (!g.fields[0].sub) rows += sub(gn);
-    g.fields.forEach((fd, i) => {
-      // Facetten-Werte unter eigener Zwischenzeile (vor dem ersten Feld mit fac)
-      if (fd.fac && !(i && g.fields[i - 1].fac)) rows += sub(`${gn} · ${T("facets")}`);
-      if (fd.sub) { rows += sub(`${gn} · ${T("groups")[fd.sub] || T(fd.sub)}`); return; }
-      if (fd.min === undefined) return;
-      rows += `<tr><th scope="row">${T("fields")[fd.k][0]} <small>${unit(fd)}</small></th>` +
-        types.map(t => `<td>${dfInput("P", t, fd.k, fd.min, fd.max, fd.step || 1, PRESETS[t][fd.k])}</td>`).join("") + "</tr>";
+    let pending = g.id === "erweitert" ? "" : gn;
+    g.fields.forEach(fd => {
+      const b = g.id === "erweitert" ? "erweitert" : fd.fac ? "facets" : "main", fold = b === "main" ? "" : ` data-fold="${scope}-${b}" hidden`;
+      if (fd.sub) { pending = T("groups")[fd.sub] || T(fd.sub); return; }
+      if ((fd.min === undefined && !DEFAULT_CHOICES.includes(fd.k)) || SHARED_KEYS.includes(fd.k) !== shared) return;
+      if (pending && b !== "facets") { buckets[b] += `<tr class="df-sub"${fold}><th colspan="${ncol}" scope="colgroup">${pending}</th></tr>`; pending = ""; }
+      const unit = fd.unit === "" || fd.choice ? "" : ` <small>${fd.unit || "mm"}</small>`;
+      let cells;
+      if (shared) {
+        const vals = Object.keys(PRESETS).map(t => PRESETS[t][fd.k]), mixed = vals.some(v => v !== vals[0]);
+        if (mixed) dfMixed[fd.k] = Object.fromEntries(Object.keys(PRESETS).map(t => [t, PRESETS[t][fd.k]]));
+        cells = `<td>${dfControl("all", "", fd.k, vals[0], mixed, fd)}</td>`;
+      } else cells = cols.map(t => `<td>${dfControl("P", t, fd.k, PRESETS[t][fd.k], false, fd)}</td>`).join("");
+      buckets[b] += `<tr${fold}><th scope="row">${T("fields")[fd.k][0]}${unit}</th>${cells}</tr>`;
     });
   });
+  const fold = (id, label) => buckets[id] ? `<tr class="df-fold"><th colspan="${ncol}" scope="colgroup"><button type="button" class="df-fh" data-fold="${scope}-${id}" aria-expanded="false">${label}<span class="df-dot" hidden aria-hidden="true">●</span>${chev()}</button></th></tr>${buckets[id]}` : "";
+  return buckets.main + fold("erweitert", T("groups").erweitert) + fold("facets", T("facets"));
+}
+function dfRender() {
+  dfMixed = {};
+  const types = Object.keys(PRESETS);
+  const head = `<thead><tr><th></th>${types.map(t => `<th scope="col">${T("types")[t]}</th>`).join("")}</tr></thead>`;
+  const all = dfRows("all", [""], true), own = dfRows("typ", types, false);
   $("dfBody").innerHTML = `<p class="hint">${T("dfHelp")}</p>
-    <h3>${T("dfStart")}</h3><table class="df-tab">${head}<tbody>${rows}</tbody></table>
+    <h3>${T("dfAll")}</h3><table class="df-tab df-one"><tbody>${all}</tbody></table>
+    <h3>${T("dfStart")}</h3><table class="df-tab">${head}<tbody>${own}</tbody></table>
     <h3>${T("dfLimits")}</h3><table class="df-tab">${head}<tbody>
-      <tr><th scope="row">${T("dfShare")} <small>%</small></th>${types.map(t => `<td>${dfInput("share", t, "share", ...SHARE_RANGE, 1, SHARE[t][1])}</td>`).join("")}</tr>
-      ${DF_LIM.map(([k, u, lbl]) => `<tr><th scope="row">${T(lbl)} <small>${u}</small></th><td>${dfInput("lim", "", k, ...LIMIT_RANGE[k], 1, LIMITS[k])}</td></tr>`).join("")}
+      <tr><th scope="row">${T("dfShare")} <small>%</small></th>${types.map(t => `<td>${dfControl("share", t, "share", SHARE[t][1], false, { min: SHARE_RANGE[0], max: SHARE_RANGE[1] })}</td>`).join("")}</tr>
+      ${DF_LIM.map(([k, u, lbl]) => `<tr><th scope="row">${T(lbl)} <small>${u}</small></th><td>${dfControl("lim", "", k, LIMITS[k], false, { min: LIMIT_RANGE[k][0], max: LIMIT_RANGE[k][1] })}</td></tr>`).join("")}
     </tbody></table>`;
   // Beschriftung der Felder für Bildschirmleser: Zeile · Spalte
-  $("dfBody").querySelectorAll("tbody tr:not(.df-sub)").forEach(tr => tr.querySelectorAll("input").forEach((el, i) => {
-    el.setAttribute("aria-label", tr.querySelector("th").textContent.trim() + (el.dataset.t ? " · " + T("types")[el.dataset.t] : ""));
+  $("dfBody").querySelectorAll("tbody tr:not(.df-sub):not(.df-fold)").forEach(tr => tr.querySelectorAll("[data-df]").forEach(el => {
+    const name = tr.querySelector("th").textContent.trim() + (el.dataset.t ? " · " + T("types")[el.dataset.t] : "");
+    el.setAttribute("aria-label", name);
+    el.parentNode.querySelector("[data-rs]").setAttribute("aria-label", T("dfReset") + ": " + name);
   }));
   dfMark();
 }
-// Abweichungen von der Werkseinstellung aus den Feldern lesen; leere oder ungültige Felder = Werkseinstellung
+// Abweichungen von der Werkseinstellung aus den Feldern lesen; leere oder ungültige Felder = Werkseinstellung,
+// leere „verschieden“-Felder behalten ihre Werte je Art
 function dfRead() {
   const d = { P: {}, share: {}, lim: {} };
-  $("dfBody").querySelectorAll("input").forEach(el => {
-    const { df, t, k } = el.dataset, f = dfFactoryVal(el);
-    const fd = df === "P" && NUM_FIELDS.find(x => x.k === k);
+  const put = (t, k, v) => { if (v !== null && v !== FACTORY.PRESETS[t][k]) (d.P[t] = d.P[t] || {})[k] = v; };
+  $("dfBody").querySelectorAll("[data-df]").forEach(el => {
+    const { df, t, k } = el.dataset, f = dfFactoryVal(el), fd = (df === "P" || df === "all") && NUM_FIELDS.find(x => x.k === k);
+    if (el.tagName === "SELECT") {
+      if (el.value === "") Object.keys(dfMixed[k]).forEach(t2 => put(t2, k, dfMixed[k][t2]));
+      else Object.keys(PRESETS).forEach(t2 => put(t2, k, el.value));
+      return;
+    }
     const r = fd ? [fd.min, fd.max, fd.step] : df === "share" ? SHARE_RANGE : LIMIT_RANGE[k];
+    if (el.value === "" && el.dataset.mixed) { Object.keys(dfMixed[k]).forEach(t2 => put(t2, k, dfMixed[k][t2])); return; }
     const v = el.value === "" ? null : fitNum(Number(el.value), ...r);
-    if (v === null || v === f) return;
-    if (df === "P") (d.P[t] = d.P[t] || {})[k] = v; else if (df === "share") d.share[t] = v; else d.lim[k] = v;
+    if (df === "all") Object.keys(PRESETS).forEach(t2 => put(t2, k, v));
+    else if (v === null || v === f) return;
+    else if (df === "P") put(t, k, v); else if (df === "share") d.share[t] = v; else d.lim[k] = v;
   });
   return d;
 }
@@ -2564,14 +3004,289 @@ function dfApply() {
   renderTypes(); update();
   status(T("dfSaved"));
 }
+// Feld auf Werkseinstellung; ein „verschieden“-Feld ist danach ein gewöhnliches Feld
+function dfReset(el) {
+  if (el.dataset.mixed) {
+    delete el.dataset.mixed; el.removeAttribute("placeholder");
+    const o = el.querySelector('option[value=""]'); if (o) o.remove();
+  }
+  el.value = dfFactoryVal(el);
+}
 $("dfBtn").addEventListener("click", () => { dfRender(); $("dfStatus").textContent = ""; $("df").showModal(); });
 $("dfBody").addEventListener("input", dfMark);
+$("dfBody").addEventListener("click", e => {
+  const rs = e.target.closest("[data-rs]"), fh = e.target.closest(".df-fh");
+  if (rs) { dfReset(rs.parentNode.querySelector("[data-df]")); dfMark(); rs.parentNode.querySelector("[data-df]").focus(); }
+  if (fh) {
+    const on = fh.getAttribute("aria-expanded") !== "true";
+    fh.setAttribute("aria-expanded", on);
+    $("dfBody").querySelectorAll(`tr[data-fold="${fh.dataset.fold}"]`).forEach(tr => { tr.hidden = !on; });
+  }
+});
 $("dfFactory").addEventListener("click", () => {
-  $("dfBody").querySelectorAll("input").forEach(el => { el.value = dfFactoryVal(el); });
+  $("dfBody").querySelectorAll("[data-df]").forEach(dfReset);
   dfMark(); $("dfStatus").textContent = T("dfFactoryDone");
 });
 $("dfCancel").addEventListener("click", () => $("df").close());
 $("dfApply").addEventListener("click", dfApply);
+/* ---------- Meine Löffel (Dialog #ml) ---------- */
+// Einträge mit Maßen (Kopie von state plus benutzte eigene Formen), Name, Datum, Notiz und bis zu 3 Fotos des fertigen Löffels.
+// Speicher: IndexedDB loeffel-db, Speicher loeffel (Schlüssel id); Fotos als JPEG-data-URL (0,85, längste Kante ≤ 1200 px).
+// Fotos landen nie auf der Schablone. Sicherung: meine-loeffel-<JJJJ-MM-TT>.json; Import fügt hinzu, vorhandene IDs werden übersprungen.
+const ML_MAX = 3, ML_EDGE = 1200;
+const ML = { list: [], ok: false, edit: null, draft: null };
+const mlEsc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const mlStatus = msg => { $("mlStatus").textContent = msg; };
+
+// Verbindung einmal öffnen; scheitert das Öffnen oder schließt der Browser sie (z. B. Safari im Hintergrund), beim nächsten Zugriff neu öffnen
+let mlDbP = null;
+function mlDb() {
+  return mlDbP = mlDbP || new Promise((res, rej) => {
+    const rq = indexedDB.open("loeffel-db", 1);
+    rq.onupgradeneeded = () => rq.result.createObjectStore("loeffel", { keyPath: "id" });
+    rq.onsuccess = () => {
+      const db = rq.result;
+      db.onclose = () => { mlDbP = null; };
+      db.onversionchange = () => { db.close(); mlDbP = null; };
+      res(db);
+    };
+    rq.onerror = () => rej(rq.error);
+  }).catch(err => { mlDbP = null; throw err; });
+}
+async function mlTx(mode, fn) {
+  const db = await mlDb();
+  return new Promise((res, rej) => {
+    const tx = db.transaction("loeffel", mode), r = fn(tx.objectStore("loeffel"));
+    tx.oncomplete = () => res(r.result);
+    tx.onerror = tx.onabort = () => rej(tx.error);
+  });
+}
+const mlAll = () => mlTx("readonly", st => st.getAll());
+const mlPut = e => mlTx("readwrite", st => st.put(e));
+const mlDelete = id => mlTx("readwrite", st => st.delete(id));
+
+// Eigene Formen des Stands (Laffe u<n>, Griffende w<n>) samt Punkten aus dem Formeditor
+function mlCustom(P) {
+  const c = { bowls: {}, ends: {}, edit: {} };
+  [["bs", "u", "bowls"], ["he", "w", "ends"]].forEach(([k, pre, coll]) => {
+    const v = P[k]; if (v[0] !== pre || !CUSTOM[coll][v.slice(1)]) return;
+    c[coll][v.slice(1)] = CUSTOM[coll][v.slice(1)];
+    if (CUSTOM.edit[v]) c.edit[v] = CUSTOM.edit[v];
+  });
+  return JSON.parse(JSON.stringify(c));
+}
+function mlNew() {
+  return { id: "m" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7), name: "", note: "", date: new Date().toISOString(),
+    state: JSON.parse(JSON.stringify(state)), custom: mlCustom(state.P), photos: [] };
+}
+// Vergleich „gespeichert“: JSON des Stands, eigene Formen mit ihren Daten statt der Nummer
+// (beim Laden kann eine gelöschte Form eine neue Nummer bekommen, der Formeditor überschreibt Formen unter derselben Nummer)
+function mlSig(st, cu) {
+  const P = { ...st.P };
+  if (P.bs[0] === "u") P.bs = cu.bowls[P.bs.slice(1)] || P.bs;
+  if (P.he[0] === "w") P.he = cu.ends[P.he.slice(1)] || P.he;
+  return JSON.stringify({ type: st.type, P });
+}
+const mlIsCur = e => mlSig(e.state, e.custom) === mlSig(state, CUSTOM);
+const mlAuto = e => `${T("types")[e.state.type]} ${e.state.P.L} mm`;
+const mlName = e => e.name || mlAuto(e);
+
+// Eintrag laden: eigene Formen mit gleichen Daten wiederverwenden, sonst unter neuer Nummer anlegen (Nummern nie wiederverwenden)
+function mlApply(e) {
+  const s = JSON.parse(JSON.stringify(e.state));
+  [["bs", "u", "bowls", "nb"], ["he", "w", "ends", "ne"]].forEach(([k, pre, coll, cnt]) => {
+    const v = s.P[k], d = v[0] === pre && e.custom[coll][v.slice(1)]; if (!d) return;
+    const js = JSON.stringify(d), same = n => JSON.stringify(CUSTOM[coll][n]) === js;
+    let n = same(v.slice(1)) ? v.slice(1) : Object.keys(CUSTOM[coll]).find(x => x !== "0" && same(x));
+    const isNew = n === undefined;
+    if (isNew) { n = CUSTOM[cnt]++; CUSTOM[coll][n] = JSON.parse(js); }
+    // Punkte aus dem Formeditor mitnehmen, wenn die Form sie noch nicht hat
+    const addEdit = e.custom.edit[v] && !CUSTOM.edit[pre + n];
+    if (addEdit) CUSTOM.edit[pre + n] = JSON.parse(JSON.stringify(e.custom.edit[v]));
+    if (isNew || addEdit) saveCustom();
+    s.P[k] = pre + n;
+  });
+  state = fixState(s);
+  renderTypes(); renderFields(); syncFields(); update();
+}
+
+// Foto verkleinern: längste Kante höchstens ML_EDGE, JPEG auf weißem Grund
+function mlPhoto(file) {
+  return new Promise((res, rej) => {
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => {
+      try {
+        const k = Math.min(1, ML_EDGE / Math.max(img.naturalWidth, img.naturalHeight)), cv = document.createElement("canvas");
+        cv.width = Math.max(1, Math.round(img.naturalWidth * k)); cv.height = Math.max(1, Math.round(img.naturalHeight * k));
+        const ctx = cv.getContext("2d");
+        ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, cv.width, cv.height); ctx.drawImage(img, 0, 0, cv.width, cv.height);
+        res(cv.toDataURL("image/jpeg", 0.85));
+      } catch (err) { rej(err); } finally { URL.revokeObjectURL(url); }
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(new Error("load")); };
+    img.src = url;
+  });
+}
+
+function mlCard(e) {
+  const cur = mlIsCur(e), ed = ML.edit === e.id, d = ed && ML.draft;
+  const date = new Date(e.date).toLocaleDateString(lang, { day: "numeric", month: "short", year: "numeric" });
+  const pics = e.photos.map((_, i) => `<span class="ml-ph"><img data-pic="${i}" alt="${mlEsc(T("mlPhotoN")(i + 1))}"><button type="button" data-phdel="${i}" aria-label="${mlEsc(T("mlPhotoDel"))}" title="${mlEsc(T("mlPhotoDel"))}">×</button></span>`).join("");
+  return `<li class="ml-item${cur ? " cur" : ""}" data-id="${e.id}">
+    <div class="ml-pic">${e.photos[0] ? `<img data-pic="0" alt="">` : ico("laffe")}</div>
+    <div class="ml-main">${ed ? `
+      <label class="ml-lbl"><span>${T("mlName")}</span><input type="text" id="mlNameIn" maxlength="80" value="${mlEsc(d.name)}" placeholder="${mlEsc(mlAuto(e))}"></label>
+      <label class="ml-lbl"><span>${T("mlNote")}</span><textarea id="mlNoteIn" rows="3" maxlength="2000" placeholder="${mlEsc(T("mlNotePh"))}">${mlEsc(d.note)}</textarea></label>` : `
+      <div class="ml-name">${mlEsc(mlName(e))}${cur ? `<span class="ml-cur">${T("mlCurrent")}</span>` : ""}</div>
+      <div class="ml-meta">${date} · ${T("types")[e.state.type]} · ${e.state.P.L} mm</div>
+      ${e.note ? `<p class="ml-note">${mlEsc(e.note)}</p>` : ""}`}
+      <div class="ml-photos" role="group" aria-label="${mlEsc(T("mlPhotos"))}">${pics}<label class="upbtn ml-add"><input type="file" accept="image/*" capture="environment" multiple data-ph>${T("mlPhotoAdd")} <small>${e.photos.length}/${ML_MAX}</small></label></div>
+      <div class="ml-acts">${ed ?
+        `<button type="button" class="btn primary" data-act="editok">${T("mlOk")}</button><button type="button" class="btn secondary" data-act="editno">${T("mlCancel")}</button>` :
+        `<button type="button" class="btn primary" data-act="load">${T("mlLoad")}</button><button type="button" class="btn secondary" data-act="edit">${T("mlEdit")}</button><button type="button" class="btn secondary" data-act="del">${T("mlDel")}</button>`}</div>
+    </div></li>`;
+}
+async function mlRender() {
+  // Ungespeicherte Eingaben in Name und Notiz bleiben beim Neuzeichnen erhalten
+  const ni = $("mlNameIn");
+  if (ni && ni.closest("[data-id]").dataset.id === ML.edit) ML.draft = { name: ni.value, note: $("mlNoteIn").value };
+  try { ML.list = (await mlAll()).sort((a, b) => a.date < b.date ? 1 : a.date > b.date ? -1 : a.id < b.id ? 1 : -1); ML.ok = true; }
+  catch (err) { ML.list = []; ML.ok = false; }
+  $("mlList").innerHTML = ML.list.length ? ML.list.map(mlCard).join("") : `<li class="ml-empty">${T(ML.ok ? "mlEmpty" : "mlNoDb")}</li>`;
+  // Fotos erst danach setzen: die data-URLs sind groß und gehören nicht ins HTML
+  $("mlList").querySelectorAll("img[data-pic]").forEach(img => { img.src = ML.list.find(x => x.id === img.closest("[data-id]").dataset.id).photos[img.dataset.pic]; });
+  $("mlSave").disabled = $("mlImport").disabled = !ML.ok;
+  $("mlExport").disabled = !ML.list.length;
+}
+// Rückfrage (#mlAsk): btns = [Wert, Text, Hauptknopf]; liefert den Wert des gewählten Knopfs, bei Esc ""
+function mlAsk(text, btns) {
+  const d = $("mlAsk");
+  $("mlAskText").textContent = text;
+  $("mlAskBtns").innerHTML = btns.map(([v, t, p]) => `<button type="button" class="btn ${p ? "primary" : "secondary"}" value="${v}">${t}</button>`).join("");
+  d.returnValue = "";
+  d.showModal();
+  return new Promise(res => d.addEventListener("close", () => res(d.returnValue), { once: true }));
+}
+$("mlAskBtns").addEventListener("click", e => { const b = e.target.closest("button"); if (b) $("mlAsk").close(b.value); });
+
+// Fehler beim Zugriff auf den Speicher melden, statt die Seite anzuhalten; die Liste kommt danach neu aus der Datenbank
+const mlRun = fn => async (...a) => { try { await fn(...a); } catch (err) { await mlRender(); mlStatus(T("mlFail")); } };
+
+const mlSaveCur = mlRun(async () => {
+  const e = mlNew();
+  await mlPut(e);
+  ML.edit = e.id; ML.draft = { name: "", note: "" };
+  await mlRender();
+  mlStatus(T("mlSaved"));
+  $("mlNameIn").focus();
+});
+const mlLoad = mlRun(async e => {
+  // Rückfrage nur, wenn der aktuelle Stand in keinem Eintrag steckt
+  if (!mlIsCur(e) && !ML.list.some(mlIsCur)) {
+    const a = await mlAsk(T("mlAskLoad"), [["save", T("mlSaveLoad"), true], ["load", T("mlLoadOnly")], ["cancel", T("mlCancel")]]);
+    if (a === "save") await mlPut(mlNew()); else if (a !== "load") return;
+  }
+  mlApply(e);
+  $("ml").close();
+  status(T("mlLoaded")(mlName(e)));
+});
+const mlDel = mlRun(async e => {
+  if (await mlAsk(T("mlAskDel")(mlName(e)), [["cancel", T("mlCancel")], ["del", T("mlDel"), true]]) !== "del") return;
+  await mlDelete(e.id);
+  if (ML.edit === e.id) ML.edit = null;
+  await mlRender(); mlStatus(T("mlDeleted"));
+});
+const mlPhotoDel = mlRun(async (e, i) => {
+  if (await mlAsk(T("mlAskPhotoDel"), [["cancel", T("mlCancel")], ["del", T("mlDel"), true]]) !== "del") return;
+  e.photos.splice(i, 1);
+  await mlPut(e); await mlRender();
+});
+const mlPhotoAdd = mlRun(async (e, files) => {
+  const free = ML_MAX - e.photos.length;
+  if (!free) { mlStatus(T("mlMax")(ML_MAX)); return; }
+  let fail = false;
+  // Platz nach jedem Foto neu prüfen: eine zweite Auswahl kann parallel laufen
+  for (const f of files.slice(0, free)) { try { const ph = await mlPhoto(f); if (e.photos.length < ML_MAX) e.photos.push(ph); } catch (err) { fail = true; } }
+  await mlPut(e); await mlRender();
+  mlStatus(fail ? T("mlPhotoFail") : files.length > free ? T("mlMax")(ML_MAX) : T("mlPhotoOk"));
+});
+const mlEditOk = mlRun(async e => {
+  e.name = $("mlNameIn").value.trim(); e.note = $("mlNoteIn").value.trim();
+  await mlPut(e);
+  ML.edit = null; await mlRender(); mlStatus("");
+});
+
+$("mlList").addEventListener("click", e => {
+  const li = e.target.closest("[data-id]"), it = li && ML.list.find(x => x.id === li.dataset.id); if (!it) return;
+  const ph = e.target.closest("[data-phdel]"); if (ph) { mlPhotoDel(it, Number(ph.dataset.phdel)); return; }
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  const a = b.dataset.act;
+  if (a === "load") mlLoad(it);
+  else if (a === "del") mlDel(it);
+  else if (a === "editok") mlEditOk(it);
+  else if (a === "edit" || a === "editno") { ML.edit = a === "edit" ? it.id : null; ML.draft = { name: it.name, note: it.note }; mlRender().then(() => { if (ML.edit) $("mlNameIn").focus(); }); }
+});
+$("mlList").addEventListener("change", e => {
+  if (!e.target.matches("[data-ph]")) return;
+  const li = e.target.closest("[data-id]"), it = ML.list.find(x => x.id === li.dataset.id), files = [...e.target.files];
+  e.target.value = "";
+  if (it && files.length) mlPhotoAdd(it, files);
+});
+
+/* Sicherung */
+async function mlExport() {
+  const d = new Date(), p = n => String(n).padStart(2, "0");
+  const filename = `meine-loeffel-${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}.json`;
+  const data = JSON.stringify({ kind: "meine-loeffel", version: 1, entries: ML.list });
+  if (!inClaude) { plainDownload(filename, data, "application/json"); mlStatus(T("saved")(filename, "")); return; }
+  const dl = await downloadsP;
+  if (!dl) { mlStatus(T("failed")); return; }
+  try { const res = await dl.save({ filename, data }); mlStatus(res.status === "saved" ? T("saved")(filename, "") : T("handed")); }
+  catch (err) { const c = err && err.code; mlStatus(c === "declined" ? T("declined") : c === "rate_limited" ? T("busy") : T("failed")); }
+}
+// Eintrag aus einer Sicherung prüfen: nur bekannte Werte im richtigen Typ, Regler auf ihren Bereich, Formen und Fotos im Speicherformat
+const ML_ID = /^[\w-]{1,40}$/, ML_PIC = /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/]+=*$/;
+const mlNums = (a, n) => Array.isArray(a) && a.length === n && a.every(Number.isFinite);
+function mlClean(e) {
+  if (!e || typeof e.id !== "string" || !ML_ID.test(e.id) || !e.state || !Object.hasOwn(PRESETS, e.state.type) || !e.state.P || typeof e.state.P !== "object") return null;
+  const B = PRESETS[e.state.type], src = e.state.P, P = {};
+  for (const k in B) {
+    const v = src[k], ok = typeof v === typeof B[k] && (typeof v === "string" ? /^[a-z0-9]{1,16}$/.test(v) : Number.isFinite(v));
+    const fd = ok && typeof v === "number" && NUM_FIELDS.find(x => x.k === k);
+    P[k] = !ok ? B[k] : fd ? fitNum(v, fd.min, fd.max, fd.step) : v;
+  }
+  const c = e.custom || {}, cu = { bowls: {}, ends: {}, edit: {} };
+  const pts = a => Array.isArray(a) && a.every(q => mlNums(q, 2));
+  [["bs", "u", "bowls", 101], ["he", "w", "ends", 61]].forEach(([k, pre, coll, n]) => {
+    const v = P[k], d = v[0] === pre && c[coll] && c[coll][v.slice(1)];
+    if (!(Array.isArray(d) && Number.isFinite(d[0]) && (d.length === 2 || d.length === 3 && pre === "u") && d.slice(1).every(a => mlNums(a, n)))) return;
+    cu[coll][v.slice(1)] = d;
+    const ed = c.edit && c.edit[v];
+    if (ed && typeof ed.sym === "boolean" && pts(ed.A) && (ed.B === null || pts(ed.B))) cu.edit[v] = { sym: ed.sym, A: ed.A, B: ed.B };
+  });
+  return {
+    id: e.id, name: typeof e.name === "string" ? e.name.slice(0, 80) : "", note: typeof e.note === "string" ? e.note.slice(0, 2000) : "",
+    date: typeof e.date === "string" && !isNaN(Date.parse(e.date)) ? e.date : new Date().toISOString(),
+    state: { type: e.state.type, P }, custom: cu,
+    photos: Array.isArray(e.photos) ? e.photos.filter(p => typeof p === "string" && ML_PIC.test(p)).slice(0, ML_MAX) : []
+  };
+}
+const mlImport = mlRun(async file => {
+  let d = null;
+  try { d = JSON.parse(await file.text()); } catch (err) {}
+  if (!d || d.kind !== "meine-loeffel" || !Array.isArray(d.entries)) { mlStatus(T("mlImportFail")); return; }
+  const list = d.entries.map(mlClean).filter(Boolean), have = new Set((await mlAll()).map(e => e.id));
+  let added = 0, skipped = 0;
+  for (const e of list) { if (have.has(e.id)) { skipped++; continue; } await mlPut(e); have.add(e.id); added++; }
+  await mlRender();
+  mlStatus(T("mlImported")(added, skipped));
+});
+
+$("mlBtn").addEventListener("click", () => { ML.edit = null; mlStatus(""); $("ml").showModal(); mlRender(); });
+$("mlClose").addEventListener("click", () => $("ml").close());
+$("mlSave").addEventListener("click", mlSaveCur);
+$("mlExport").addEventListener("click", mlRun(mlExport));
+$("mlImport").addEventListener("change", e => { const f = e.target.files[0]; e.target.value = ""; if (f) mlImport(f); });
 </script>
 </body>
 </html>
