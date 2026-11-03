@@ -1,0 +1,228 @@
+# SpoonDraft – Guide
+
+SpoonDraft creates carving templates for wooden spoons: top view, side profile and a 3D preview, saved as PDF, SVG or laser SVG at full size. This guide has two parts: [Getting started](#getting-started) takes you from the spoon type to the printout in five steps, the [Reference](#reference) describes each feature on its own.
+
+[Deutsche Version: ANLEITUNG.md](ANLEITUNG.md)
+
+The pictures show the English interface. You change the language at the top right, see [Language](#sprache).
+
+## Getting started
+
+### 1. Choose a spoon type
+
+At the top left you choose what you want to carve: eating spoon, cooking spoon, coffee spoon or ladle. Each type comes with its own start values. The sheet in the middle and the 3D view show the matching spoon right away.
+
+![Overview: spoon type, dimensions, preview, 3D view and save](anleitung/en-uebersicht.png)
+
+### 2. Adjust the dimensions
+
+Below the spoon type the dimensions sit in five groups: Overall, Bowl, Handle, Side profile and Advanced. Click a group to open it and drag the sliders. You see every change on the sheet at once. You pick the bowl shape and the handle end from a catalogue (button “Shapes”).
+
+![Bowl group with sliders and bowl shape](anleitung/en-masse.png)
+
+The sliders carry guide values: crank angle for cooking spoons 0–15°, eating spoons 15–20°, serving spoons up to 30°, ladles 60–90°; crank position for spoons 25–33 % of the bowl length, for ladles close to the neck. An eating spoon usually has a bowl share of about a third of the overall length; the details on the right show your value.
+
+### 3. Read the preview and the 3D view
+
+The sheet shows the template at full size. The side profile with the real bend is on the left, the top view as a flattened outline on the right. The horizontal crank line links both views; along the handle they line up. At the bottom, the title block lists the main dimensions, the blank and the shape codes.
+
+The mouse wheel zooms into the preview, dragging pans it, “Whole sheet” or a double-click shows everything again. The small 3D window shows the spoon as a solid: drag to rotate. The three buttons at the top of the window change the style (Wood, Technical, Wireframe), swap the places of the drawing and 3D, and hide 3D.
+
+![Zoom with overview and 3D view](anleitung/en-vorschau3d.png)
+
+### 4. Save as PDF, SVG or laser SVG
+
+At the top right you save the template:
+
+- **Save PDF**: for printing. The file is at full size.
+- **Save SVG**: for editing in a drawing program.
+- **Laser SVG**: for laser cutters. Red is cut, blue is engraved.
+
+Files are named like `spoondraft-eating-spoon-170mm.pdf`. The PDF export loads a library from the internet; without a connection, save as SVG.
+
+![Save buttons, details and warning](anleitung/en-speichern.png)
+
+### 5. Print at full size
+
+1. Open the PDF and choose “Actual size” or 100 % in the print dialog. “Fit to page” changes the dimensions.
+2. After printing, measure the 50 mm bar at the top left. If it is right, the whole template is right.
+3. If the template doesn’t fit on one A4 sheet, choose A3 or 2 × A4 under “Paper for long templates”. With 2 × A4 you print both pages, overlap them and place the second page at the line “Place edge of page 2 here”.
+4. The grain of the blank should run along the handle. Cut out the side profile first: it is the starting point, the top view follows.
+
+![50 mm bar, printing tips and paper choice](anleitung/en-drucken.png)
+
+## Reference
+
+Each feature has its own section. The **core set** is always on. You switch **extra features** off one by one in the “Default values” dialog ⚙ (at the bottom, under “Extra features”); they are on by default.
+
+### Core set
+
+<a id="loeffelart"></a>
+#### Spoon type
+
+**Core set.** Four buttons at the top of the settings panel: eating spoon, cooking spoon, coffee spoon, ladle. A click resets all dimensions to the start values of that type (the factory settings or your [default values](#standardwerte)). Changes you made so far are lost; save a design under [My spoons](#meine-loeffel) first.
+
+<a id="bedienfeld"></a>
+#### Settings panel
+
+**Core set.** Here you set all dimensions, in five groups:
+
+| Group | Content |
+|---|---|
+| Overall | Overall length (100–350 mm), paper for long templates |
+| Bowl | Length, width, depth, widest point, bowl shape, handedness |
+| Handle | Neck width, maximum handle width, handle end, facet lines at the neck |
+| Side profile | Handle thickness at the neck, crank angle, crank position |
+| Advanced | Handle thickness at the end, thickening at the neck, position of the widest handle point, transition at the crank, handle curve, wall thickness, minimum wall |
+
+The groups open and close. You choose the bowl shape and the handle end from a gallery with thumbnails; the codes (for example L01, G01) appear in the title block of the template. Handedness mirrors asymmetric bowl shapes.
+
+![Bowl group with sliders and bowl shape](anleitung/en-masse.png)
+
+<a id="formen"></a>
+#### Shapes
+
+**Core set.** The shape catalogue: bowls and handle ends, each with a code (bowls L…, handle ends G…). The shape presets Egg (LE), Fig (LF), Squoval (LS) and Oval (LO) come on top. Open the gallery with the “Shapes” button and click a shape. Your own shapes from the [shape editor](#editor) or from an image ([Your own shapes](#eigene-formen)) appear in the same gallery.
+
+![Gallery of bowl shapes](anleitung/en-formen.png)
+
+<a id="geometrie"></a>
+#### Geometry
+
+**Core set.** Calculates the template from the dimensions: top view with the flattened outline, side profile with the real bend, facet lines, crank line, centre lines and title block. All dimensions are in millimetres. The sheet is A4 if the template fits on it; otherwise your choice of A3 or 2 × A4 applies (slider “Paper for long templates”). If the template doesn’t fit on 2 × A4 either, SpoonDraft uses A3 and adds “too wide for A4”.
+
+Crank angle and crank position depend on each other: with the crank far back only a limited crank angle is possible, otherwise the bowl tip folds over. The details warn you in that case.
+
+<a id="vorschau"></a>
+#### Preview
+
+**Core set.** The sheet in the middle shows the template as it will be printed. It redraws with every change. On screen it also shows guides that don’t end up in PDF and SVG (for example those of the [wall thickness](#wandstaerke)).
+
+<a id="zoom"></a>
+#### Zoom
+
+**Core set.** Mouse wheel: zoom. Drag: pan. Double-click or “Whole sheet”: back to the full view. A mini overview shows which part you are looking at.
+
+![Zoom with mini overview](anleitung/en-vorschau3d.png)
+
+<a id="ansicht3d"></a>
+#### 3D view
+
+**Core set.** The spoon as a solid in the small window at the top right of the sheet. Dragging rotates it. Three buttons in the window header:
+
+- Change style: Wood, Technical (grey with lines at the outline, bowl rim, facets and keel), Wireframe.
+- Swap views: 3D large, drawing small, and back.
+- Hide: hides 3D (eye symbol).
+
+Your choice is kept in the browser. The 3D view loads a library from the internet.
+
+<a id="angaben"></a>
+#### Details and warnings
+
+**Core set.** To the right of the sheet you find the details: minimum blank (the smallest piece of wood the spoon fits in), drop, paper size and bowl share with a guide value. Warnings appear below:
+
+- Crank above 15° (limit can be changed): in straight-grained wood this creates short grain at the neck and the bowl tip. Use a bent branch.
+- Crank larger than the crank position allows.
+- Eating spoon bowl larger than 45 × 65 mm or deeper than 8 mm (limits can be changed): too big for the mouth, or hard to empty.
+
+Under “Printing tips” you find the notes on [printing](#5-print-at-full-size).
+
+![Details and warning](anleitung/en-speichern.png)
+
+<a id="export"></a>
+#### Save: PDF, SVG, laser SVG
+
+**Core set.** Three buttons at the top right:
+
+| Button | File | Content |
+|---|---|---|
+| Save PDF | `spoondraft-<spoon type>-<length>mm.pdf` | template at full size on A4, A3 or two A4 pages |
+| Save SVG | `….svg` | the same drawing as a vector file |
+| Laser SVG | `…-laser.svg` | one piece at full size in mm with a 5 mm margin, lines only |
+
+The laser SVG contains all lines of the template, so top view and side profile, in two colours. Red (0.01 mm) is cut: the outline. Blue (0.1 mm, continuous) is engraved: centre line, crank line, facets, reference lines and dashed lines. Laser software such as LightBurn or xTool assigns the colours to layers. Not included are texts, hatching, fills, the 50 mm bar, dimension arrow, title block, hollow lines and the placement lines of 2 × A4. Check the size in your laser software before you cut.
+
+Where saving isn’t possible (for example in the embedded view in claude.ai), “Copy SVG code” appears instead.
+
+![Save buttons](anleitung/en-speichern.png)
+
+<a id="sprache"></a>
+#### Language
+
+**Core set.** The selector at the top right switches the interface to German, Dutch, English, French, Swedish, Spanish, Italian, Norwegian, Danish or Polish. The title block of the template follows the language; for Polish it is in English. Your choice is kept in the browser.
+
+![Header with language, design, My spoons, default values and tour](anleitung/en-kopfzeile.png)
+
+<a id="design"></a>
+#### Design
+
+**Core set.** The “Design” menu offers four designs (Sage, Maple, Paper & Terracotta, Morning sky) and dark mode. Both change only the look of the page, not the template.
+
+![Design menu](anleitung/en-design.png)
+
+<a id="standardwerte"></a>
+#### Default values
+
+**Core set.** The ⚙ button opens the “Default values” dialog:
+
+- **For all spoon types**: fields that are the same for all types in the factory settings, here with one value for all.
+- **Start values per spoon type**: your own start values for the remaining fields. They apply from the next click on a spoon type.
+- **Guide values and warning limits**: bowl share, crank warning, limits for the eating spoon bowl.
+- **Extra features**: one switch per extra feature, see below.
+
+Changed values are marked, ↺ resets a field, “Factory settings” resets everything. “Apply” saves in the browser. The switches for the extra features take effect at once and are part of the core set so that you can always switch a feature back on.
+
+![Default values dialog](anleitung/en-standardwerte.png)
+
+### Extra features
+
+Extra features you switch off disappear from the interface, their values are kept, and the template doesn’t change.
+
+![Switches for the extra features](anleitung/en-zusatz.png)
+
+<a id="hinweise"></a>
+#### Grain and crank tip
+
+**Extra feature.** An expandable tip as the first row of the “Side profile” group. It says: cut out the side profile first, let the grain run along the handle, allow only a little crank in straight wood, and for more choose a naturally curved branch whose growth follows the profile.
+
+![Tip in the Side profile group](anleitung/en-seitenprofil.png)
+
+<a id="eigene-formen"></a>
+#### Your own shapes
+
+**Extra feature.** Upload a bowl or handle end from an image: “Upload your own shape” below the gallery. A suitable file is an SVG or image with a dark outline or a filled shape on a light or transparent background. For a bowl the tip points up and the neck down; for a handle end the joint with the handle is at the bottom. Size doesn’t matter, only the proportions count. You can remove your own shapes, and save, share and load them again as a file (`.json`).
+
+![Gallery with “Upload your own shape”](anleitung/en-formen.png)
+
+<a id="zufall"></a>
+#### Random design
+
+**Extra feature.** The “Random design” button next to the spoon type rolls a bowl shape, a handle end and dimensions within sensible limits around the start values of the chosen spoon type. Paper, facet lines and spoon type stay, own shapes are not picked. The button changes your dimensions; save designs you want to keep under [My spoons](#meine-loeffel) first.
+
+<a id="editor"></a>
+#### Shape editor
+
+**Extra feature.** “Edit shape” next to the bowl shape and the handle end opens the editor. You drag control points; a curve joins them. A double-click on the line adds a point, a double-click on a point (or Delete) removes it, Ctrl+Z undoes. Each half takes 4 to 16 points. “Symmetric” and “Asymmetric” decide whether both halves are the same. A live top view shows the whole spoon, and warnings point out overhangs, narrow points and unusual proportions. “Image to trace” puts an image behind the drawing area. “Apply” saves the shape as your own shape, “Save as SVG” exports it.
+
+![Shape editor](anleitung/en-editor.png)
+
+<a id="meine-loeffel"></a>
+#### My spoons
+
+**Extra feature.** The “My spoons” button opens a list of your designs. “Save current design” creates an entry with dimensions, name, note and up to three photos of the finished spoon. “Load” brings a design back, “Edit” changes name, note and photos, “Delete” removes it. Entries are stored in this browser only; photos never end up on the template. “Save backup” and “Load backup” protect against data loss, “Share as file” passes on a single design.
+
+![List with one saved design](anleitung/en-meine-loeffel.png)
+
+<a id="wandstaerke"></a>
+#### Wall thickness guides
+
+**Extra feature.** With the “Minimum wall” slider (Advanced group) the preview draws dashed blue guides: in the top view offset inwards from the bowl rim by that amount, in the side profile under the hollow. A depth mark at the deepest point shows the depth of the hollow and the remaining floor. If the floor is thinner than the minimum wall, the mark turns red and a warning appears: only hollow out as far as the dashed line. The guides appear on screen only, not in PDF and SVG.
+
+![Dashed guide and depth mark](anleitung/en-wandstaerke.png)
+
+<a id="rundgang"></a>
+#### Tour
+
+**Extra feature.** On your first visit SpoonDraft offers a short tour. It highlights spoon type, dimensions, preview, 3D view, save buttons and ⚙ one after another and explains each in a speech bubble; the last step shows the “?” button and links to this guide. “Next” and “Back” page through, Esc ends it. You can keep using the page during the tour. The “?” button next to the name starts the tour again at any time.
+
+![Tour: speech bubble at the dimensions](anleitung/en-rundgang.png)
