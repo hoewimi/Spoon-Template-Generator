@@ -226,3 +226,33 @@ Extra features you switch off disappear from the interface, their values are kep
 **Extra feature.** On your first visit SpoonDraft offers a short tour. It highlights spoon type, dimensions, preview, 3D view, save buttons and ⚙ one after another and explains each in a speech bubble; the last step shows the “?” button and links to this guide. “Next” and “Back” page through, Esc ends it. You can keep using the page during the tour. The “?” button next to the name starts the tour again at any time.
 
 ![Tour: speech bubble at the dimensions](anleitung/en-rundgang.png)
+
+<a id="stamm"></a>
+#### Blanks in the log
+
+**Extra feature.** The “Blanks in the log” button below the details opens the “Log cross-section” dialog. Enter the log diameter (cm), bark thickness (mm) and distance from the pith (mm); SpoonDraft shows how many blanks of the current spoon type fit in the log. The blank's width × height make up the cross-section, its length runs along the log. The drawing shows the blanks numbered with their bark side in orange, plus bark, pith and the distance from the pith as a dashed circle. No saw kerf is included. The browser remembers your input; the drawing appears on screen only, not in PDF and SVG.
+
+<a id="pfannenwender"></a>
+#### Spatula
+
+**Extra feature.** The spoon type bar ends with “Spatula”. Instead of a bowl it has a flat blade: set blade length, width and thickness in the “Blade” group, plus the front edge angle (0° = straight, otherwise the front corner is on the right). The underside of the blade stays flat; towards the front edge the blade thins out to about a third of its thickness, and the dashed line in the top view shows where the thinning starts. The crank (“Side profile” group) raises the handle by the set angle where the blade meets the neck. Handle and handle end work as for spoons. The details show blank and paper.
+
+<a id="spurtle"></a>
+#### Spurtle
+
+**Extra feature.** The spoon type bar ends with “Spurtle”, a round stirring stick without a bowl. In the “Shaft” group set the diameter at the handle and at the tip, plus the taper length: from the tip up to that point the stick gets thicker, after that it keeps the handle diameter. The tip is round (hemispherical) or flat oval; a flat oval tip is flattened to half the thickness towards the end and is thinner in the side profile only. Choose the handle end as for spoons. Because the stick is round, side profile and top view are the same; next to them two cross-sections show the diameters at the tip and the handle. The details show the square blank and the paper.
+
+<a id="buttermesser"></a>
+#### Butter knife
+
+**Extra feature.** The spoon type bar ends with “Butter knife”, a knife with a flat blade and a round tip. In the “Blade” group choose the blade shape and set blade length, blade width, the thickness at the spine and at the edge, and the tip rounding; the “Handle” group holds handle width and thickness. “Spreader” has a straight blade with a short transition to the handle that only thins out towards the edge. “Swedish” follows Jögge Sundqvist’s butter knife (smörkniv): a flat, flexible spreader without a sharp edge, thinning evenly from spine to edge; the handle gets gradually thinner towards the blade, and a little more wood stays at the transition. The defaults are his guide values: 175 mm long, handle 20 mm thick, blade 6 mm at the spine and 3 mm at the edge. The top view shows the outline with the spine on the left and the edge on the right, the side profile the thickness from handle to blade, dashed the thickness at the edge. Next to them are the grain arrow (the grain runs unbroken from handle to tip) and two cross-sections through blade and handle. The details show blank and paper.
+
+<a id="salatgabel"></a>
+#### Salad fork
+
+**Extra feature.** The spoon type bar ends with “Salad fork”, a flat fork for salad servers. Set the head like a flat bowl: bowl length, bowl width and a shape from the shapes. In the “Tines” group choose the number of tines (2 to 4), the tine length from the tip to the end of the slots, the slot width and the slot end: round if you drill a hole of slot width at the end and saw up to it, straight if you saw all the way. The slots run parallel to the centre line and all tines are equally wide at the slot end; if they are narrower than 4 mm there, the title block shows a note. Set handle, handle end and crank as for spoons. The top view shows the outline with the slots as one cut line, the side profile shows the head closed and slightly curved, half as thick as the handle at the neck. The details show blank and paper.
+
+<a id="kuksa"></a>
+#### Kuksa
+
+**Extra feature.** The spoon type bar ends with “Kuksa”, a drinking cup carved from one piece of wood, with a handle. In the “Cup” group set inner diameter, wall thickness, depth and bottom thickness, plus the shrinkage allowance across the grain. Green wood shrinks more across the grain than along it while drying, so the outer and inner circle in the top view are stretched across the grain by this share into ellipses; the kuksa then dries round. For birch about 5 % works well. The wall thickness applies at the rim along the grain; across the grain the allowance is added. In the “Handle” group choose a short handle with one finger hole, a handle with two finger holes one above the other, or an ear handle without a hole. The finger width is a hand measure: measure the finger that goes through the hole; the hole is 4 mm larger. The handle length runs from the outer wall to the end of the handle; if it is too short for the hole, SpoonDraft lengthens the handle and adds a note to the title block. The top view shows the outer circle, the inner circle dashed, centre, centre lines and the grain arrow, and the finger holes dashed as hidden lines. The side profile below shows the cup in section with wall and bottom, the handle at the rim and the finger holes as circles. If two holes need more height than the cup has, the handle rises above the rim. The details show blank, paper and the capacity up to the rim.

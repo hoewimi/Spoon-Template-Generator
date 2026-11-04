@@ -226,3 +226,33 @@ Abgeschaltete Zusatzfunktionen verschwinden aus der Oberfläche, ihre Werte blei
 **Zusatzfunktion.** Beim ersten Besuch bietet SpoonDraft einen kurzen Rundgang an. Er hebt nacheinander Löffelart, Maße, Vorschau, 3D-Ansicht, Speichern-Knöpfe und ⚙ hervor und erklärt sie in einer Sprechblase; der letzte Schritt zeigt den Knopf „?“ und verlinkt diese Anleitung. „Weiter“ und „Zurück“ blättern, Esc beendet. Du kannst die Seite währenddessen weiter bedienen. Über den Knopf „?“ neben dem Namen startest du den Rundgang jederzeit neu.
 
 ![Rundgang: Sprechblase an den Maßen](anleitung/de-rundgang.png)
+
+<a id="stamm"></a>
+#### Rohlinge im Stamm
+
+**Zusatzfunktion.** Der Knopf „Rohlinge im Stamm“ unter den Angaben öffnet den Dialog „Stammquerschnitt“. Du gibst Stammdurchmesser (cm), Rindendicke (mm) und den Abstand zum Mark (mm) ein; SpoonDraft zeigt, wie viele Rohlinge der aktuellen Löffelart in den Stamm passen. Der Rohling geht mit Breite × Höhe in den Querschnitt ein, seine Länge läuft längs des Stamms. Die Zeichnung zeigt die Rohlinge nummeriert, ihre Rindenseite orange, dazu Rinde, Mark und den Abstand zum Mark gestrichelt. Gerechnet wird ohne Sägefuge. Die Eingaben merkt sich der Browser; die Zeichnung erscheint nur am Bildschirm, nicht in PDF und SVG.
+
+<a id="pfannenwender"></a>
+#### Pfannenwender
+
+**Zusatzfunktion.** In der Löffelart-Leiste steht hinten „Pfannenwender“. Statt der Mulde hat er ein flaches Blatt: Blattlänge, Blattbreite und Blattdicke stellst du in der Gruppe „Blatt“ ein, dazu die Schräge der Vorderkante (0° = gerade, sonst liegt die vordere Ecke rechts). Die Unterseite des Blatts bleibt eben; zur Vorderkante hin läuft das Blatt auf etwa ein Drittel der Dicke aus, die gestrichelte Linie in der Draufsicht zeigt, wo das Ausdünnen beginnt. Die Kröpfung (Gruppe „Seitenprofil“) hebt den Stiel am Übergang zum Hals um den eingestellten Winkel an. Stiel und Griffende wählst du wie beim Löffel. Die Angaben zeigen Rohling und Papier.
+
+<a id="spurtle"></a>
+#### Spurtle
+
+**Zusatzfunktion.** In der Löffelart-Leiste steht hinten „Spurtle“, ein runder Rührstab ohne Mulde. In der Gruppe „Stab“ stellst du den Durchmesser am Griff und an der Spitze ein, dazu die Länge der Verjüngung: Von der Spitze bis dorthin wird der Stab dicker, danach bleibt er beim Griffdurchmesser. Die Spitze ist rund (halbkugelig) oder flach-oval; flach-oval wird sie zur Spitze hin auf die halbe Dicke abgeflacht und ist dann nur im Seitenprofil dünner. Das Griffende wählst du wie beim Löffel. Weil der Stab rund ist, sind Seitenprofil und Draufsicht gleich; daneben zeigen zwei Querschnitte die Durchmesser an Spitze und Griff. Die Angaben zeigen den quadratischen Rohling und das Papier.
+
+<a id="buttermesser"></a>
+#### Buttermesser
+
+**Zusatzfunktion.** In der Löffelart-Leiste steht hinten „Buttermesser“, ein Messer mit flacher Klinge und runder Spitze. In der Gruppe „Klinge“ wählst du die Klingenform und stellst Klingenlänge, Klingenbreite, die Dicke am Rücken und an der Kante sowie die Rundung der Spitze ein; in der Gruppe „Griff“ Griffbreite und Griffdicke. „Streichmesser“ hat eine gerade Klinge mit kurzem Übergang zum Griff, die erst zur Schneide hin dünn ausläuft. „Schwedisch“ folgt dem Buttermesser (smörkniv) von Jögge Sundqvist: ein flacher, biegsamer Streicher ohne scharfe Schneide, gleichmäßig vom Rücken zur Kante dünner, der Griff wird zur Klinge hin allmählich dünner und am Übergang bleibt etwas mehr Holz stehen. Die Werkseinstellung sind seine Richtwerte: 175 mm lang, Griff 20 mm dick, Klinge vom Rücken 6 mm zur Kante 3 mm. Die Draufsicht zeigt den Umriss mit dem Rücken links und der Kante rechts, das Seitenprofil die Dicke vom Griff über die Klinge, gestrichelt die Dicke an der Kante. Daneben stehen der Faserpfeil (die Faser läuft ohne Unterbrechung vom Griff bis zur Spitze) und zwei Querschnitte durch Klinge und Griff. Die Angaben zeigen Rohling und Papier.
+
+<a id="salatgabel"></a>
+#### Salatgabel
+
+**Zusatzfunktion.** In der Löffelart-Leiste steht hinten „Salatgabel“, eine flache Gabel fürs Salatbesteck. Den Kopf stellst du wie eine flache Laffe ein: Laffenlänge, Laffenbreite und eine Form aus den Formen. In der Gruppe „Zinken“ wählst du die Zinkenzahl (2 bis 4), die Zinkenlänge von der Spitze bis zum Ende der Schlitze, die Schlitzbreite und das Schlitzende: rund, wenn du am Ende ein Loch in Schlitzbreite bohrst und bis dorthin sägst, gerade, wenn du ganz mit der Säge schneidest. Die Schlitze laufen parallel zur Mittellinie, an ihrem Ende sind alle Zinken gleich breit; sind sie dort schmaler als 4 mm, steht ein Hinweis im Schriftfeld. Stiel, Griffende und Kröpfung stellst du wie beim Löffel ein. Die Draufsicht zeigt den Umriss mit den Schlitzen als eine Schnittlinie, das Seitenprofil den Kopf geschlossen und leicht gewölbt, halb so dick wie der Stiel am Hals. Die Angaben zeigen Rohling und Papier.
+
+<a id="kuksa"></a>
+#### Kuksa
+
+**Zusatzfunktion.** In der Löffelart-Leiste steht hinten „Kuksa“, eine Trinkschale aus einem Stück Holz mit Griff. In der Gruppe „Schale“ stellst du Innendurchmesser, Wandstärke, Tiefe und Bodenstärke ein, dazu den Schwundzuschlag quer zur Faser. Frisches Holz schwindet beim Trocknen quer zur Faser stärker als längs; deshalb sind Außen- und Innenkreis in der Draufsicht quer zur Faser um diesen Anteil zur Ellipse gestreckt, damit die Kuksa trocken rund wird. Für Birke sind etwa 5 % ein guter Wert. Die Wandstärke gilt am Rand längs zur Faser, quer kommt der Zuschlag dazu. In der Gruppe „Griff“ wählst du einen kurzen Griff mit einem Fingerloch, einen Griff mit zwei Fingerlöchern übereinander oder einen Ohrgriff ohne Loch. Die Fingerbreite ist ein Handmaß: Miss den Finger, der durchs Loch soll; das Loch wird 4 mm größer. Die Grifflänge zählt von der Außenwand bis zum Griffende; ist sie zu kurz für das Loch, verlängert SpoonDraft den Griff und schreibt einen Hinweis ins Schriftfeld. Die Draufsicht zeigt den Außenkreis, gestrichelt den Innenkreis, Mittelpunkt, Mittellinien und den Faserpfeil, die Fingerlöcher verdeckt gestrichelt. Das Seitenprofil darunter zeigt die Schale im Schnitt mit Wand und Boden, den Griff am Rand und die Fingerlöcher als Kreise. Brauchen zwei Löcher mehr Höhe, als die Schale hat, steht der Griff über den Rand. Die Angaben zeigen Rohling, Papier und das Fassungsvermögen bis zum Rand.
