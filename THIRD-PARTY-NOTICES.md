@@ -6,15 +6,15 @@ SpoonDraft (`index.html`) enthält oder lädt die folgenden Bestandteile. SpoonD
 
 | Component | Version | How it is used | License |
 |---|---|---|---|
-| [jsPDF](#jspdf) | 2.5.1 | loaded from cdnjs (`jspdf.umd.min.js`) | MIT, with embedded libraries listed below |
-| [three.js](#threejs) | r128 | loaded from cdnjs (`three.min.js`) | MIT |
+| [jsPDF](#jspdf) | 2.5.1 | embedded in the page (`jspdf.umd.min.js`, unmodified) | MIT, with embedded libraries listed below |
+| [three.js](#threejs) | r128 | embedded in the page (`three.min.js`, unmodified) | MIT |
 | [Bricolage Grotesque](#bricolage-grotesque) | Google Fonts v9, latin and latin-ext | embedded in the page | SIL OFL 1.1 |
 | [IBM Plex Sans](#ibm-plex-sans-and-ibm-plex-mono) | Google Fonts v23, latin and latin-ext | embedded in the page | SIL OFL 1.1 |
 | [IBM Plex Mono](#ibm-plex-sans-and-ibm-plex-mono) | Google Fonts v20, latin and latin-ext | embedded in the page | SIL OFL 1.1 |
 | [Lucide](#lucide) | icon "settings" (gear) | embedded in the page as SVG | ISC |
 | [GoatCounter count.js](#goatcounter-countjs) | current script | loaded from `gc.zgo.at` only if the operator has switched on the counter | ISC |
 
-The font files are unmodified `woff2` files as served by Google Fonts.
+The font files are unmodified `woff2` files as served by Google Fonts. `jspdf.umd.min.js` and `three.min.js` are the unmodified files of the npm packages `jspdf` 2.5.1 and `three` 0.128.0 (identical to the files on cdnjs); the page contains them word for word, including their license comments.
 
 Not part of SpoonDraft: Leaflet, Source Sans, Material Icons, OpenStreetMap. jsPDF can use html2canvas, DOMPurify and canvg if they are present; SpoonDraft neither contains nor loads them.
 

@@ -38,7 +38,7 @@ Rechts oben speicherst du die Schablone:
 - **SVG speichern**: zum Weiterbearbeiten in einem Zeichenprogramm.
 - **Laser-SVG**: für Laserschneider. Rot wird geschnitten, Blau graviert.
 
-Die Dateien heißen zum Beispiel `spoondraft-essloeffel-170mm.pdf`. Der PDF-Export lädt eine Bibliothek aus dem Internet; ohne Verbindung speicherst du als SVG.
+Die Dateien heißen zum Beispiel `spoondraft-essloeffel-170mm.pdf`. Alle Exporte funktionieren auch ohne Internetverbindung.
 
 ![Speichern-Knöpfe, Angaben und Warnung](anleitung/de-speichern.png)
 
@@ -73,7 +73,7 @@ Jede Funktion hat einen eigenen Abschnitt. Das **Grundset** ist immer an. **Zusa
 | Laffe | Länge, Breite, Tiefe, breiteste Stelle, Laffenform, Händigkeit |
 | Stiel | Halsbreite, größte Griffbreite, Griffende, Facettenlinien am Hals |
 | Seitenprofil | Stielstärke am Hals, Crank-Winkel, Knickposition |
-| Erweitert | Stielstärke am Griffende, Verdickung am Hals, Lage der größten Griffbreite, Übergang am Knick, Stielkrümmung, Wandstärke, Mindestwandstärke |
+| Erweitert | Stielstärke am Griffende, Verdickung am Hals, Lage der größten Griffbreite, Übergang am Knick, Stielkrümmung, Laffe glätten, Wandstärke, Mindestwandstärke |
 
 Die Gruppen klappen auf und zu. Laffenform und Griffende wählst du aus einer Galerie mit Vorschaubildern; die Kennungen (z. B. L01, G01) stehen im Schriftfeld der Schablone. Händigkeit spiegelt asymmetrische Laffenformen.
 
@@ -91,7 +91,9 @@ Die Gruppen klappen auf und zu. Laffenform und Griffende wählst du aus einer Ga
 
 **Grundset.** Rechnet aus den Maßen die Schablone: Draufsicht mit abgewickeltem Umriss, Seitenprofil mit der echten Biegung, Facettenlinien, Knicklinie, Mittellinien und Schriftfeld. Alle Maße sind in Millimetern. Das Blatt ist A4, wenn die Schablone darauf passt; sonst gilt deine Wahl A3 oder 2 × A4 (Regler „Papier bei langen Schablonen“). Passt die Schablone auch nicht auf 2 × A4, nimmt SpoonDraft A3 und vermerkt „zu breit für A4“.
 
-Die Facetten beginnen bis zu 10 mm (höchstens ein Fünftel der Laffenlänge) unter der Laffe als Fase an der Unterseite; in der Draufsicht ist dieses Stück gestrichelt.
+Die Facetten beginnen bis zu 10 mm (höchstens ein Fünftel der Laffenlänge) unter der Laffe als Fase an der Unterseite; in der Draufsicht ist dieses Stück gestrichelt. Die Breite der Fase stellst du mit dem Regler „Facettenbreite“ von 10 bis 60 % ein (in Schritten von 1 %); „Leicht“ (30 %) und „Achteckig“ bleiben als Schnellwahl, und sobald du den Regler verschiebst, steht die Facettenstärke auf „Eigene“.
+
+Der Schalter „Laffe glätten“ (Gruppe „Erweitert“, ab Werk an) zeichnet die Unterseite der Laffe im Seitenprofil und in der 3D-Ansicht ohne Knicke; größte Tiefe, tiefste Stelle und Draufsicht bleiben, „Aus“ zeigt die bisherige Kontur.
 
 Crank-Winkel und Knickposition hängen zusammen: Liegt der Knick weit hinten, ist nur ein begrenzter Crank möglich, sonst klappt die Laffenspitze über. Die Angaben warnen dann.
 
@@ -116,7 +118,7 @@ Crank-Winkel und Knickposition hängen zusammen: Liegt der Knick weit hinten, is
 - Ansichten tauschen: 3D groß, Zeichnung klein, und zurück.
 - Ausblenden: blendet 3D aus (Augensymbol).
 
-Deine Wahl bleibt im Browser gespeichert. Die 3D-Ansicht lädt eine Bibliothek aus dem Internet.
+Deine Wahl bleibt im Browser gespeichert.
 
 <a id="angaben"></a>
 #### Angaben und Warnungen
@@ -142,7 +144,7 @@ Unter „Drucktipps“ stehen die Hinweise zum [Drucken](#5-in-originalgröße-d
 | SVG speichern | `….svg` | dieselbe Zeichnung als Vektordatei |
 | Laser-SVG | `…-laser.svg` | ein Stück in Originalgröße in mm mit 5 mm Rand, nur Linien |
 
-Das Laser-SVG enthält alle Linien der Schablone, also Draufsicht und Seitenprofil, in zwei Farben. Rot (0,01 mm) wird geschnitten: der Umriss. Blau (0,1 mm, durchgehend) wird graviert: Mittellinie (nur als kurze Marken von 8 mm innerhalb des Umrisses, damit die Schablone beim Schneiden nicht zerfällt; bei der Kuksa bleibt die Mittellinie durchgehend und kann die Schablone beim Lasern zerteilen), Knicklinie, Facetten, Bezugslinien und Strichlinien. Laser-Programme wie LightBurn oder xTool ordnen die Farben Ebenen zu. Nicht enthalten sind Texte, Schraffur, Füllungen, 50-mm-Balken, Maßpfeil, Schriftfeld, Muldenlinien und die Anlegelinien von 2 × A4. Prüfe die Größe in deiner Laser-Software, bevor du schneidest.
+Das Laser-SVG zeigt dieselbe Zeichnung wie das SVG, also Draufsicht und Seitenprofil, abgeschnitten am Umriss jeder Ansicht, in zwei Farben. Rot (0,01 mm) wird geschnitten: der Umriss. Blau (0,1 mm) wird graviert: alle Linien innerhalb des Umrisses, also Mittellinie, Knicklinie, Facetten, Muldenlinie, Bezugslinien, Strichlinien und Schraffur; gestrichelte Linien bleiben gestrichelt. Was über den Umriss hinausragt, fällt weg, ebenso Reststücke unter 0,5 mm. Die blauen Linien reichen bis an den Umriss; stelle die Gravur so ein, dass sie nicht durchschneidet, sonst zerfällt die Schablone. Laser-Programme wie LightBurn oder xTool ordnen die Farben Ebenen zu. Nicht enthalten sind Texte, Füllungen, 50-mm-Balken, Maßpfeile, Schriftfeld und die Anlegelinien und Passkreuze von 2 × A4. Prüfe die Größe in deiner Laser-Software, bevor du schneidest.
 
 Wo das Speichern nicht möglich ist (etwa in der eingebetteten Ansicht in claude.ai), gibt es stattdessen „SVG-Code kopieren“.
 
@@ -179,7 +181,7 @@ Geänderte Werte sind markiert, ↺ setzt ein Feld zurück, „Auf Werkseinstell
 <a id="spende"></a>
 #### Spende und Zähler
 
-**Grundset.** Ist der Betreiber bei Ko-fi angemeldet, steht in der Kopfzeile ein Herz-Symbol; es führt in einem neuen Tab zur Spendenseite. In der Seite selbst wird nichts bezahlt. Der Dienst GoatCounter kann auf der öffentlichen Seite Seitenaufrufe und Exporte (PDF, SVG, Laser-SVG, SVG-Code kopieren) ohne Cookies und ohne dauerhafte Kennung zählen; derzeit ist er ausgeschaltet. Ist er eingeschaltet, steht im Dialog [Über SpoonDraft](#ueber), was der Dienst dabei erhält. Wer die Seite als Datei öffnet, bekommt weder Zähler noch Spendenknopf; auch im Entwurf, solange Name und Adresse nicht eingetragen sind, bleiben beide aus.
+**Grundset.** Ist der Betreiber bei Ko-fi angemeldet, steht in der Kopfzeile ein Herz-Symbol, in der Fußzeile und im Über-Dialog ein blauer Knopf „Unterstütze mich auf Ko-fi“; beide führen in einem neuen Tab zur Spendenseite. In der Seite selbst wird nichts bezahlt. Der Dienst GoatCounter kann auf der öffentlichen Seite Seitenaufrufe und Exporte (PDF, SVG, Laser-SVG, SVG-Code kopieren) ohne Cookies und ohne dauerhafte Kennung zählen; derzeit ist er ausgeschaltet. Ist er eingeschaltet, steht im Dialog [Über SpoonDraft](#ueber), was der Dienst dabei erhält. Wer die Seite als Datei öffnet, bekommt weder Zähler noch Spendenknopf; auch im Entwurf, solange Name und Adresse nicht eingetragen sind, bleiben beide aus.
 
 <a id="ueber"></a>
 #### Über SpoonDraft
@@ -214,7 +216,7 @@ Abgeschaltete Zusatzfunktionen verschwinden aus der Oberfläche, ihre Werte blei
 <a id="editor"></a>
 #### Formeditor
 
-**Zusatzfunktion.** „Form bearbeiten“ neben Laffenform und Griffende öffnet den Editor. Du ziehst Kontrollpunkte; eine Kurve verbindet sie. Ein Doppelklick auf die Linie fügt einen Punkt hinzu, ein Doppelklick auf einen Punkt (oder Entf) entfernt ihn, Strg+Z macht rückgängig. Je Hälfte sind 4 bis 16 Punkte möglich. „Symmetrisch“ und „Asymmetrisch“ legen fest, ob beide Hälften gleich sind. Eine Live-Draufsicht zeigt den ganzen Löffel, Warnungen weisen auf Überhang, Engstellen und ungewöhnliche Proportionen hin. „Bild zum Nachzeichnen“ legt ein Bild hinter die Zeichenfläche. „Übernehmen“ speichert die Form als eigene Form, „Als SVG speichern“ exportiert sie.
+**Zusatzfunktion.** „Form bearbeiten“ neben Laffenform und Griffende öffnet den Editor. Du ziehst Kontrollpunkte; eine Kurve verbindet sie. Die Knöpfe „Punkt einfügen“ und „Punkt löschen“ fügen hinter dem gewählten Punkt einen neuen ein bzw. entfernen den gewählten; darunter steht, wie viele Punkte die Hälfte hat. Ein Doppelklick auf die Linie fügt ebenfalls einen Punkt hinzu, ein Doppelklick auf einen Punkt (oder Entf) entfernt ihn, Strg+Z macht rückgängig. Je Hälfte sind 4 bis 32 Punkte möglich. „Symmetrisch“ und „Asymmetrisch“ legen fest, ob beide Hälften gleich sind. Eine Live-Draufsicht zeigt den ganzen Löffel, Warnungen weisen auf Überhang, Engstellen und ungewöhnliche Proportionen hin. „Bild zum Nachzeichnen“ legt ein Bild hinter die Zeichenfläche. „Übernehmen“ speichert die Form als eigene Form, „Als SVG speichern“ exportiert sie.
 
 ![Formeditor](anleitung/de-editor.png)
 

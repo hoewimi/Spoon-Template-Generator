@@ -38,7 +38,7 @@ At the top right you save the template:
 - **Save SVG**: for editing in a drawing program.
 - **Laser SVG**: for laser cutters. Red is cut, blue is engraved.
 
-Files are named like `spoondraft-eating-spoon-170mm.pdf`. The PDF export loads a library from the internet; without a connection, save as SVG.
+Files are named like `spoondraft-eating-spoon-170mm.pdf`. All exports also work without an internet connection.
 
 ![Save buttons, details and warning](anleitung/en-speichern.png)
 
@@ -73,7 +73,7 @@ Each feature has its own section. The **core set** is always on. You switch **ex
 | Bowl | Length, width, depth, widest point, bowl shape, handedness |
 | Handle | Neck width, maximum handle width, handle end, facet lines at the neck |
 | Side profile | Handle thickness at the neck, crank angle, crank position |
-| Advanced | Handle thickness at the end, thickening at the neck, position of the widest handle point, transition at the crank, handle curve, wall thickness, minimum wall |
+| Advanced | Handle thickness at the end, thickening at the neck, position of the widest handle point, transition at the crank, handle curve, smooth bowl, wall thickness, minimum wall |
 
 The groups open and close. You choose the bowl shape and the handle end from a gallery with thumbnails; the codes (for example L01, G01) appear in the title block of the template. Handedness mirrors asymmetric bowl shapes.
 
@@ -91,7 +91,9 @@ The groups open and close. You choose the bowl shape and the handle end from a g
 
 **Core set.** Calculates the template from the dimensions: top view with the flattened outline, side profile with the real bend, facet lines, crank line, centre lines and title block. All dimensions are in millimetres. The sheet is A4 if the template fits on it; otherwise your choice of A3 or 2 × A4 applies (slider “Paper for long templates”). If the template doesn’t fit on 2 × A4 either, SpoonDraft uses A3 and adds “too wide for A4”.
 
-The facets start up to 10 mm (at most a fifth of the bowl length) under the bowl as a chamfer on the underside; in the top view this part is dashed.
+The facets start up to 10 mm (at most a fifth of the bowl length) under the bowl as a chamfer on the underside; in the top view this part is dashed. You set the chamfer width from 10 to 60 % (in steps of 1 %) with the “Facet width” slider; “Light” (30 %) and “Octagonal” remain as quick choices, and as soon as you move the slider, the facet size switches to “Custom”.
+
+The “Smooth bowl” switch (Advanced group, on by default) draws the underside of the bowl in the side profile and the 3D view without kinks; greatest depth, deepest point and top view stay the same, “Off” shows the previous contour.
 
 Crank angle and crank position depend on each other: with the crank far back only a limited crank angle is possible, otherwise the bowl tip folds over. The details warn you in that case.
 
@@ -116,7 +118,7 @@ Crank angle and crank position depend on each other: with the crank far back onl
 - Swap views: 3D large, drawing small, and back.
 - Hide: hides 3D (eye symbol).
 
-Your choice is kept in the browser. The 3D view loads a library from the internet.
+Your choice is kept in the browser.
 
 <a id="angaben"></a>
 #### Details and warnings
@@ -142,7 +144,7 @@ Under “Printing tips” you find the notes on [printing](#5-print-at-full-size
 | Save SVG | `….svg` | the same drawing as a vector file |
 | Laser SVG | `…-laser.svg` | one piece at full size in mm with a 5 mm margin, lines only |
 
-The laser SVG contains all lines of the template, so top view and side profile, in two colours. Red (0.01 mm) is cut: the outline. Blue (0.1 mm, continuous) is engraved: centre line (only as short 8 mm marks inside the outline, so the template does not fall apart when cut; on the kuksa the centre line stays continuous and can split the template when lasered), crank line, facets, reference lines and dashed lines. Laser software such as LightBurn or xTool assigns the colours to layers. Not included are texts, hatching, fills, the 50 mm bar, dimension arrow, title block, hollow lines and the placement lines of 2 × A4. Check the size in your laser software before you cut.
+The laser SVG shows the same drawing as the SVG, so top view and side profile, trimmed at the outline of each view, in two colours. Red (0.01 mm) is cut: the outline. Blue (0.1 mm) is engraved: all lines inside the outline, so centre line, crank line, facets, hollow line, reference lines, dashed lines and hatching; dashed lines stay dashed. Anything reaching past the outline is dropped, as are leftover pieces under 0.5 mm. The blue lines run up to the outline; set the engraving so it does not cut through, or the template falls apart. Laser software such as LightBurn or xTool assigns the colours to layers. Not included are texts, fills, the 50 mm bar, dimension arrows, title block and the placement lines and registration marks of 2 × A4. Check the size in your laser software before you cut.
 
 Where saving isn’t possible (for example in the embedded view in claude.ai), “Copy SVG code” appears instead.
 
@@ -179,7 +181,7 @@ Changed values are marked, ↺ resets a field, “Factory settings” resets eve
 <a id="spende"></a>
 #### Donations and counter
 
-**Core set.** Once the operator has a Ko-fi page, a heart icon appears in the header; it opens the donation page in a new tab. Nothing is paid inside the page itself. On the public site the service GoatCounter can count page views and exports (PDF, SVG, laser SVG, copy SVG code) without cookies and without a permanent identifier; it is currently switched off. When it is on, the [About SpoonDraft](#ueber) dialog says what the service receives. If you open the page as a file, you get neither counter nor donation button; both also stay off as long as the name and address are not set.
+**Core set.** Once the operator has a Ko-fi page, a heart icon appears in the header, and a blue “Support me on Ko-fi” button in the footer and the About dialog; each opens the donation page in a new tab. Nothing is paid inside the page itself. On the public site the service GoatCounter can count page views and exports (PDF, SVG, laser SVG, copy SVG code) without cookies and without a permanent identifier; it is currently switched off. When it is on, the [About SpoonDraft](#ueber) dialog says what the service receives. If you open the page as a file, you get neither counter nor donation button; both also stay off as long as the name and address are not set.
 
 <a id="ueber"></a>
 #### About SpoonDraft
@@ -214,7 +216,7 @@ Extra features you switch off disappear from the interface, their values are kep
 <a id="editor"></a>
 #### Shape editor
 
-**Extra feature.** “Edit shape” next to the bowl shape and the handle end opens the editor. You drag control points; a curve joins them. A double-click on the line adds a point, a double-click on a point (or Delete) removes it, Ctrl+Z undoes. Each half takes 4 to 16 points. “Symmetric” and “Asymmetric” decide whether both halves are the same. A live top view shows the whole spoon, and warnings point out overhangs, narrow points and unusual proportions. “Image to trace” puts an image behind the drawing area. “Apply” saves the shape as your own shape, “Save as SVG” exports it.
+**Extra feature.** “Edit shape” next to the bowl shape and the handle end opens the editor. You drag control points; a curve joins them. The “Insert point” and “Delete point” buttons add a new point after the selected one or remove the selected one; below them a counter shows how many points the half has. A double-click on the line also adds a point, a double-click on a point (or Delete) removes it, Ctrl+Z undoes. Each half takes 4 to 32 points. “Symmetric” and “Asymmetric” decide whether both halves are the same. A live top view shows the whole spoon, and warnings point out overhangs, narrow points and unusual proportions. “Image to trace” puts an image behind the drawing area. “Apply” saves the shape as your own shape, “Save as SVG” exports it.
 
 ![Shape editor](anleitung/en-editor.png)
 
