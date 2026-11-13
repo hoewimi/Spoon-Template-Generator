@@ -11,7 +11,7 @@ Direkt im Browser: https://hoewimi.github.io/Spoon-Template-Generator/
 
 Oder `index.html` herunterladen und im Browser öffnen – keine Installation nötig. Die Datei funktioniert auch ohne Internetverbindung, mit PDF-Export und 3D-Ansicht.
 
-Aktuelle Version: 38
+Aktuelle Version: 39
 
 ## Datenschutz
 Die Seite liegt bei GitHub Pages; GitHub verarbeitet beim Aufruf Protokolldaten, darunter die IP-Adresse. jsPDF, three.js und die Schriften stecken in der Datei selbst, es gibt keinen Abruf bei cdnjs (Cloudflare) oder Google.
